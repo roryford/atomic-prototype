@@ -1,0 +1,52 @@
+{
+  "color": {
+    "brand": {
+      "indigo": {
+        "$type": "color",
+        "$value": "#4338CA",
+        "$description": "Primary brand color"
+      },
+      "indigo-light": {
+        "$type": "color",
+        "$value": "#6366F1"
+      },
+      "indigo-dark": {
+        "$type": "color",
+        "$value": "#3730A3"
+      }
+    },
+    "danger": {
+      "$type": "color",
+      "$value": "#DC2626"
+    },
+    "success": {
+      "$type": "color",
+      "$value": "#16A34A"
+    },
+    "warning": {
+      "$type": "color",
+      "$value": "#D97706"
+    },
+    "surface": {
+      "warm": { "$type": "color", "$value": "#FAFAF9" },
+      "card": { "$type": "color", "$value": "#FFFFFF" },
+      "muted": { "$type": "color", "$value": "#F5F5F4" },
+      "border": { "$type": "color", "$value": "#E7E5E4" }
+    },
+    "text": {
+      "primary": { "$type": "color", "$value": "#1C1917" },
+      "secondary": { "$type": "color", "$value": "#78716C" }
+    }
+  },
+  "spacing": {
+    "xs": { "$type": "dimension", "$value": "4px" },
+    "sm": { "$type": "dimension", "$value": "8px" },
+    "md": { "$type": "dimension", "$value": "16px" },
+    "lg": { "$type": "dimension", "$value": "24px" }
+  },
+  "borderRadius": {
+    "default": { "$type": "dimension", "$value": "6px" },
+    "rounded": { "$type": "dimension", "$value": "12px" },
+    "pill": { "$type": "dimension", "$value": "9999px" }
+  }
+}

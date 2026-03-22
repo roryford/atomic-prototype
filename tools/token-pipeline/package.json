@@ -1,0 +1,11 @@
+{
+  "name": "token-pipeline",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "style-dictionary build --config config.mjs"
+  },
+  "dependencies": {
+    "style-dictionary": "^5.3.0"
+  }
+}
