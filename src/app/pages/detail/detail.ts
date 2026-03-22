@@ -56,7 +56,7 @@ import { DsInput } from '../../design-system/atoms/input/input';
               [label]="p.ownerInitials"
               size="xlarge"
               shape="circle"
-              [style]="{ 'background-color': p.color, color: '#ffffff' }"
+              [style]="{ 'background-color': p.color, color: 'var(--p-surface-0)' }"
             />
             <div class="entity-title">
               <h1>{{ p.name }}</h1>

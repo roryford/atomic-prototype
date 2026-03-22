@@ -30,15 +30,15 @@ import { Button } from 'primeng/button';
       align-items: center;
       gap: 24px;
       padding: 8px 24px;
-      background: #FFFFFF;
-      border-bottom: 1px solid #E7E5E4;
+      background: var(--p-surface-0);
+      border-bottom: 1px solid var(--p-surface-200);
     }
 
     .nav-brand {
       font-family: Inter, sans-serif;
       font-size: 18px;
       font-weight: 700;
-      color: #4338CA;
+      color: var(--p-primary-color);
     }
 
     .nav-links {
@@ -49,7 +49,7 @@ import { Button } from 'primeng/button';
     .app-content {
       flex: 1;
       padding: 24px;
-      background: #FAFAF9;
+      background: var(--p-surface-50);
     }
   `,
 })

@@ -18,8 +18,8 @@ import { Component, input } from '@angular/core';
       display: flex;
       align-items: center;
       gap: 16px;
-      background: #FFFFFF;
-      border: 1px solid #E7E5E4;
+      background: var(--p-surface-0);
+      border: 1px solid var(--p-surface-200);
       border-radius: 12px;
       padding: 24px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -32,7 +32,7 @@ import { Component, input } from '@angular/core';
 
       .pi {
         font-size: 32px;
-        color: #4338CA;
+        color: var(--p-primary-color);
       }
     }
 
@@ -46,7 +46,7 @@ import { Component, input } from '@angular/core';
       font-size: 24px;
       font-weight: 700;
       line-height: 32px;
-      color: #1C1917;
+      color: var(--p-text-color);
     }
 
     .stat-label {
@@ -54,7 +54,7 @@ import { Component, input } from '@angular/core';
       font-size: 12px;
       font-weight: 400;
       line-height: 18px;
-      color: #78716C;
+      color: var(--p-text-muted-color);
     }
   `,
 })

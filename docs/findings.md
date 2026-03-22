@@ -109,3 +109,44 @@ MSW adds two new lazy chunks to the dev build: `chunk-N64DA4IT.js` (249.63 kB ra
   4. After setup, `npx ng test --no-watch` correctly runs and reports "No tests found" (expected since no `.spec.ts` files exist yet).
 - **Impact:** Teams scaffolding with `--skip-tests` will need to manually add the test target and install vitest + jsdom. The builder is experimental and the error messages are clear ("DOM environment required", "no tests found"). The `--watch=false` flag syntax from older Angular/Karma does not work — the correct flag is `--no-watch`.
 - **Hypothesis:** Test infrastructure requires manual setup when `--skip-tests` was used at scaffold time
+
+---
+
+## Hex color remediation — replacing hardcoded values with CSS custom properties (H6)
+
+- **Doc ref:** 06-tooling-workflows.md, design tokens section
+- **Type:** confirmed-works (with known limitation)
+- **Detail:** Searched all `.ts`, `.html`, and `.scss` files in `src/app/` for hardcoded hex color values (`#[0-9A-Fa-f]{3,8}`). Found **11 hex values** across 4 files that needed replacement. Replaced all with `var(--p-*)` CSS custom properties. Left `preset.ts` (token definitions), fixture JSON, stories (test fixture data), and `app.html` SVG gradients untouched as instructed.
+- **Files remediated (by violation count):**
+  - `src/app/design-system/molecules/stat-card/stat-card.ts` — 5 hex values (`#FFFFFF`, `#E7E5E4`, `#4338CA`, `#1C1917`, `#78716C`)
+  - `src/app/app.ts` — 4 hex values (`#FFFFFF`, `#E7E5E4`, `#4338CA`, `#FAFAF9`)
+  - `src/app/pages/detail/detail.ts` — 1 hex value (`#ffffff` in inline template `[style]` binding)
+  - `src/app/design-system/organisms/project-card-grid/project-card-grid.html` — 1 hex value (`#ffffff` in inline template `[style]` binding)
+- **SCSS files were clean:** All 4 `.scss` files (`app.scss`, `stat-grid.scss`, `project-card-grid.scss`, `project-table.scss`) already used `var(--p-*)` tokens with no hex violations.
+- **Stylelint inline-style limitation (H6):** Stylelint's `color-no-hex` rule only processes `.scss`/`.css` files on disk. It cannot detect hex values inside Angular component `styles:` arrays (inline CSS in TypeScript decorators) or in `[style]` template bindings. All 11 violations found in this remediation pass were in inline styles or template bindings — exactly the gap Stylelint cannot cover. A custom ESLint rule or pre-commit grep script would be needed to enforce token usage in these locations.
+- **Dark mode verification:** After remediation, all component styles reference `var(--p-*)` tokens. When the dark mode toggle adds `dark-mode` class to `<html>`, PrimeNG's theme system swaps the underlying CSS custom property values (e.g., `--p-surface-0` changes from `#FFFFFF` to `#0C0A09`). The nav bar, stat cards, and content background all now respond to dark mode correctly because they reference tokens rather than hardcoded hex values.
+- **Build verification:** `npx ng build` succeeds with zero errors after all replacements.
+- **Impact:** The stat-card molecule and the app shell (nav bar) were the worst offenders — these were likely written early in the prototype before the token system was fully wired up. A real team should establish a lint-on-save workflow that catches hex values before they reach code review.
+- **Hypothesis:** H6 (Stylelint enforces token usage in stylesheets but not in inline component styles — confirmed and quantified: 100% of violations were in inline styles/templates)
+
+---
+
+## Unit and integration test results (Worker 3B)
+
+- **Doc ref:** acceptance-criteria.md, all sections
+- **Type:** confirmed-works
+- **Detail:** Wrote 36 tests across 13 spec files covering atoms (13 tests), molecules (7 tests), organisms (13 tests), and page smoke tests (3 tests). All tests pass via `npx ng test --no-watch` using Vitest 4.1.0 + jsdom 29.0.1.
+- **Test breakdown:**
+  - **Atoms:** DsButton (4), DsTag (3), DsInput (3), DsEmptyState (3)
+  - **Molecules:** DsStatCard (2), DsSearchBar (3), DsFormField (2)
+  - **Organisms:** DsStatGrid (4), DsProjectCardGrid (4), DsProjectTable (5) — each covers loading/error/empty/data states
+  - **Pages:** Dashboard (1), ListPage (1), Detail (1) — smoke tests confirming render without error
+- **Notable findings:**
+  1. **PrimeNG p-button (onClick) does not fire via DOM click in jsdom.** The `(onClick)` output on PrimeNG's `p-button` component requires PrimeNG's internal click handling, which does not trigger from `MouseEvent('click')` dispatches in jsdom. Button emission is tested by verifying the output wiring. Full click-through behavior should be validated in Storybook play functions or Playwright.
+  2. **Standard DOM events on PrimeNG p-card work fine.** The `(click)` binding on `p-card` in ProjectCardGrid fires correctly from dispatched DOM events.
+  3. **httpResource in page tests requires only `provideHttpClient()`.** Resources initialize in loading state, which is a valid render path — no need to mock the service for smoke tests.
+  4. **Detail page requires ActivatedRoute mock.** The component reads `route.snapshot.paramMap.get('id')` eagerly, so ActivatedRoute must include a snapshot mock.
+  5. **No zone.js or custom setup needed.** Angular 21 + Vitest works with standard TestBed — no polyfills or shims required.
+- **Not covered (deferred to Storybook play functions / E2E):** focus ring visibility, responsive column counts, hover shadow, full navigation journeys
+- **Impact:** Test coverage validates that all documented acceptance criteria for rendering states are met. The PrimeNG jsdom limitation means click-through tests for wrapped PrimeNG components need a browser-based runner.
+- **Hypothesis:** H8 (component API contracts are testable via standard Angular TestBed + Vitest without custom infrastructure)
