@@ -1,0 +1,82 @@
+@if (isLoading()) {
+  <div class="skeleton-table">
+    <p-skeleton width="100%" height="40px" borderRadius="12px 12px 0 0" />
+    @for (i of [1, 2, 3, 4, 5]; track i) {
+      <p-skeleton width="100%" height="48px" styleClass="skeleton-row" />
+    }
+  </div>
+} @else if (error()) {
+  <div class="state-container">
+    <p-message severity="error" [text]="error()!" />
+    <ds-button
+      label="Retry"
+      severity="secondary"
+      [outlined]="true"
+      (clicked)="retryClicked.emit()"
+    />
+  </div>
+} @else if (projects().length === 0) {
+  <ds-empty-state message="No projects found" />
+} @else {
+  <ds-search-bar
+    [(value)]="searchTerm"
+    placeholder="Search projects..."
+    (searched)="onSearch($event)"
+  />
+
+  @if (filteredProjects().length === 0) {
+    <ds-empty-state
+      icon="pi-search"
+      [message]="'No results for \'' + searchTerm() + '\''"
+      actionLabel="Clear search"
+      (actionClicked)="clearSearch()"
+    />
+  } @else {
+    <div class="table-container">
+      <p-table
+        [value]="filteredProjects()"
+        [tableStyle]="{ 'min-width': '60rem' }"
+        [rowHover]="true"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
+            <th pSortableColumn="name">Name <p-sortIcon field="name" /></th>
+            <th>Owner</th>
+            <th>Status</th>
+            <th pSortableColumn="createdDate">Created <p-sortIcon field="createdDate" /></th>
+            <th>Action</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-project>
+          <tr>
+            <td>{{ project.id }}</td>
+            <td class="name-cell">{{ project.name }}</td>
+            <td>
+              <div class="owner-cell">
+                <p-avatar
+                  [label]="project.ownerInitials"
+                  shape="circle"
+                  size="normal"
+                />
+                <span>{{ project.owner }}</span>
+              </div>
+            </td>
+            <td>
+              <ds-tag [value]="project.status" [severity]="project.statusSeverity" />
+            </td>
+            <td class="date-cell">{{ project.createdDate }}</td>
+            <td>
+              <ds-button
+                label="View"
+                severity="secondary"
+                [outlined]="true"
+                (clicked)="projectSelected.emit(project)"
+              />
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+}

@@ -1,0 +1,47 @@
+@if (isLoading()) {
+  <div class="card-grid">
+    @for (i of [1, 2, 3]; track i) {
+      <p-skeleton width="100%" height="180px" borderRadius="12px" />
+    }
+  </div>
+} @else if (error()) {
+  <div class="state-container">
+    <p-message severity="error" [text]="error()!" />
+    <ds-button
+      label="Retry"
+      severity="secondary"
+      [outlined]="true"
+      (clicked)="retryClicked.emit()"
+    />
+  </div>
+} @else if (projects().length === 0) {
+  <ds-empty-state message="No projects found" />
+} @else {
+  <div class="card-grid">
+    @for (project of projects(); track project.id) {
+      <p-card
+        class="project-card"
+        tabindex="0"
+        (click)="projectSelected.emit(project)"
+        (keydown)="onCardKeydown($event, project)"
+      >
+        <div class="project-card-body">
+          <div class="project-header">
+            <p-avatar
+              [label]="project.avatar"
+              shape="circle"
+              [style]="{ 'background-color': project.color, color: '#ffffff' }"
+            />
+            <ds-tag [value]="project.status" [severity]="project.statusSeverity" />
+          </div>
+          <h3 class="project-name">{{ project.name }}</h3>
+          <p class="project-description">{{ project.description }}</p>
+          <div class="project-meta">
+            <span class="meta-item"><i class="pi pi-users"></i> {{ project.members }} members</span>
+            <span class="meta-item"><i class="pi pi-calendar"></i> {{ project.deadline }}</span>
+          </div>
+        </div>
+      </p-card>
+    }
+  </div>
+}

@@ -1,0 +1,57 @@
+:host {
+  display: block;
+}
+
+ds-search-bar {
+  display: block;
+  max-width: 28rem;
+  margin-bottom: 1.5rem;
+}
+
+.skeleton-table {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+:host ::ng-deep .skeleton-row {
+  margin-bottom: 4px;
+}
+
+.state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px;
+}
+
+.table-container {
+  background: var(--p-surface-0);
+  border: 1px solid var(--p-content-border-color);
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.name-cell {
+  font-weight: 500;
+  color: var(--p-text-color);
+}
+
+.date-cell {
+  color: var(--p-text-muted-color);
+  font-size: 13px;
+}
+
+.owner-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 639px) {
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}

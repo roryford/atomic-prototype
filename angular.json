@@ -112,6 +112,13 @@
             "port": 6006
           }
         },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "buildTarget": "atomic-prototype:build",
+            "tsConfig": "tsconfig.spec.json"
+          }
+        },
         "build-storybook": {
           "builder": "@storybook/angular:build-storybook",
           "options": {

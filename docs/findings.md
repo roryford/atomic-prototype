@@ -83,3 +83,29 @@ MSW adds two new lazy chunks to the dev build: `chunk-N64DA4IT.js` (249.63 kB ra
 - **Known limitation:** Stylelint only processes `.scss` and `.css` files on disk. It does **not** inspect inline `styles:` arrays in Angular component TypeScript decorators. If a developer writes `styles: ['h1 { color: #FF0000; }']` in a component's `@Component()` decorator, Stylelint will not flag it. This is a fundamental limitation — Stylelint is a CSS/SCSS linter, not a TypeScript AST parser. To catch hex values in inline styles, an ESLint rule or custom script would be needed.
 - **Impact:** For this PrimeNG-based prototype, Stylelint's `color-no-hex` rule has minimal impact because colors flow through the design token preset (TypeScript), not through stylesheets. The rule becomes more valuable when teams write custom SCSS overrides. The inability to lint inline styles is a gap teams should be aware of.
 - **Hypothesis:** H6 (Stylelint enforces token usage in stylesheets but not in inline component styles)
+
+---
+
+## httpResource() import path and API shape (H1, H8)
+
+- **Doc ref:** 04-data-layer.md, service layer section
+- **Type:** confirmed-works
+- **Detail:** `httpResource` is exported from `@angular/common/http` in Angular 21.2.5. The import `import { httpResource } from '@angular/common/http';` works without issue. It is **not** exported from `@angular/core` or `@angular/core/rxjs-interop`. The function is marked `@experimental 19.2` in the type definitions, indicating it was introduced in Angular 19.2 and remains experimental through Angular 21.
+- **API shape:** `httpResource<T>(() => url)` returns an `HttpResourceRef<T>` which extends `WritableResource<T>` and `ResourceRef<T>`. The reactive API exposes: `resource.value()` (signal of the response data), `resource.status()` (signal of `ResourceStatus`), `resource.error()` (signal of `Error | undefined`), `resource.isLoading()` (signal of boolean), `resource.headers()` (signal of response headers), `resource.statusCode()` (signal of HTTP status code), `resource.hasValue()` (type-narrowing guard), `resource.reload()` (triggers re-fetch), and `resource.destroy()`. There is no `.data()` alias — it is `.value()`. Sub-constructors `httpResource.text()`, `httpResource.blob()`, and `httpResource.arrayBuffer()` are available for non-JSON responses.
+- **Impact:** The docs should specify `@angular/common/http` as the import path. Any doc referencing `.data()` should be corrected to `.value()`. The experimental status means the API could change in future Angular versions.
+- **Hypothesis:** H1 (import path discoverable), H8 (signal-based resource API shape matches documented patterns)
+
+---
+
+## Test runner setup — Angular 21 uses Vitest via @angular/build:unit-test
+
+- **Doc ref:** 06-tooling-workflows.md, testing section
+- **Type:** workflow-gap
+- **Detail:** The POC was scaffolded with `--skip-tests`, so `angular.json` had no `test` target and no test infrastructure. Angular 21's `@angular/build` package includes a `unit-test` builder (experimental) that defaults to **Vitest** as the test runner (also supports Karma via `"runner": "karma"`). A `tsconfig.spec.json` already existed with `"types": ["vitest/globals"]`, but the `test` architect target was missing from `angular.json` and `vitest` + `jsdom` were not installed.
+- **Setup required:**
+  1. Added `"test"` target to `angular.json` using `@angular/build:unit-test` builder with `buildTarget: "atomic-prototype:build"` and `tsConfig: "tsconfig.spec.json"`.
+  2. Added `tsconfig.spec.json` reference to root `tsconfig.json`.
+  3. Installed `vitest` and `jsdom` as devDependencies (`npm install --save-dev vitest jsdom`).
+  4. After setup, `npx ng test --no-watch` correctly runs and reports "No tests found" (expected since no `.spec.ts` files exist yet).
+- **Impact:** Teams scaffolding with `--skip-tests` will need to manually add the test target and install vitest + jsdom. The builder is experimental and the error messages are clear ("DOM environment required", "no tests found"). The `--watch=false` flag syntax from older Angular/Karma does not work — the correct flag is `--no-watch`.
+- **Hypothesis:** Test infrastructure requires manual setup when `--skip-tests` was used at scaffold time

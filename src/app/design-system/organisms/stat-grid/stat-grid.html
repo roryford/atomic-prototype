@@ -1,0 +1,25 @@
+@if (isLoading()) {
+  <div class="stat-grid">
+    @for (i of [1, 2, 3, 4]; track i) {
+      <p-skeleton width="100%" height="88px" borderRadius="12px" />
+    }
+  </div>
+} @else if (error()) {
+  <div class="state-container">
+    <p-message severity="error" [text]="error()!" />
+    <ds-button
+      label="Retry"
+      severity="secondary"
+      [outlined]="true"
+      (clicked)="retryClicked.emit()"
+    />
+  </div>
+} @else if (stats().length === 0) {
+  <ds-empty-state message="No stats available" />
+} @else {
+  <div class="stat-grid">
+    @for (stat of stats(); track stat.label) {
+      <ds-stat-card [label]="stat.label" [value]="stat.value" [icon]="stat.icon" />
+    }
+  </div>
+}
