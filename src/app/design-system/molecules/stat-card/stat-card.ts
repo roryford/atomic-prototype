@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 
 @Component({
-  selector: 'app-stat-card',
+  selector: 'ds-stat-card',
   template: `
     <div class="stat-card">
       <div class="stat-icon">
@@ -58,7 +58,7 @@ import { Component, input } from '@angular/core';
     }
   `,
 })
-export class StatCard {
+export class DsStatCard {
   label = input.required<string>();
   value = input.required<string>();
   icon = input<string>('pi-chart-bar');

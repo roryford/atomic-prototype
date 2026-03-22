@@ -4,7 +4,7 @@ import { Button } from 'primeng/button';
 type ButtonSeverity = 'success' | 'info' | 'warn' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast';
 
 @Component({
-  selector: 'app-button',
+  selector: 'ds-button',
   imports: [Button],
   template: `
     <p-button
@@ -15,7 +15,7 @@ type ButtonSeverity = 'success' | 'info' | 'warn' | 'danger' | 'help' | 'primary
     />
   `,
 })
-export class AppButton {
+export class DsButton {
   label = input<string>();
   severity = input<ButtonSeverity>('primary');
   outlined = input(false);

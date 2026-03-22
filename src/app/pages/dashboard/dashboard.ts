@@ -1,9 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { StatCard } from '../../molecules/stat-card';
-import { AppButton } from '../../atoms/button';
-import { AppInputText } from '../../atoms/input-text';
-import { AppTag } from '../../atoms/tag';
+import { DsStatCard } from '../../design-system/molecules';
+import { DsButton, DsTag, DsInput } from '../../design-system/atoms';
 import { Card } from 'primeng/card';
 import { Avatar } from 'primeng/avatar';
 import { TableModule } from 'primeng/table';
@@ -17,7 +15,7 @@ interface ActivityRow {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [StatCard, AppButton, AppInputText, AppTag, Card, Avatar, TableModule, FormsModule],
+  imports: [DsStatCard, DsButton, DsInput, DsTag, Card, Avatar, TableModule, FormsModule],
   template: `
     <div class="dashboard">
       <!-- Page Header -->
@@ -26,13 +24,13 @@ interface ActivityRow {
           <h1 class="dashboard-title">Dashboard</h1>
           <p class="dashboard-subtitle">Welcome back. Here's what's happening today.</p>
         </div>
-        <app-button label="Export Report" severity="primary" [outlined]="true" />
+        <ds-button label="Export Report" severity="primary" [outlined]="true" />
       </header>
 
       <!-- Stat Cards Row -->
       <section class="stat-grid">
         @for (stat of stats(); track stat.label) {
-          <app-stat-card [label]="stat.label" [value]="stat.value" [icon]="stat.icon" />
+          <ds-stat-card [label]="stat.label" [value]="stat.value" [icon]="stat.icon" />
         }
       </section>
 
@@ -49,7 +47,7 @@ interface ActivityRow {
                     shape="circle"
                     [style]="{ 'background-color': project.color, color: '#ffffff' }"
                   />
-                  <app-tag [value]="project.status" [severity]="project.severity" />
+                  <ds-tag [value]="project.status" [severity]="project.severity" />
                 </div>
                 <h3 class="project-name">{{ project.name }}</h3>
                 <p class="project-description">{{ project.description }}</p>
@@ -85,11 +83,11 @@ interface ActivityRow {
               <tr>
                 <td class="name-cell">{{ row.name }}</td>
                 <td>
-                  <app-tag [value]="row.status" [severity]="row.statusSeverity" />
+                  <ds-tag [value]="row.status" [severity]="row.statusSeverity" />
                 </td>
                 <td class="date-cell">{{ row.date }}</td>
                 <td>
-                  <app-button label="View" severity="secondary" [outlined]="true" />
+                  <ds-button label="View" severity="secondary" [outlined]="true" />
                 </td>
               </tr>
             </ng-template>
@@ -100,7 +98,7 @@ interface ActivityRow {
       <!-- Dark Mode Test (Spike 3) -->
       <section class="section">
         <h2 class="section-title">Dark Mode Test</h2>
-        <app-button
+        <ds-button
           label="Toggle Dark Mode"
           severity="secondary"
           [outlined]="true"
@@ -110,17 +108,17 @@ interface ActivityRow {
           <p-card>
             <div class="dark-mode-form">
               <label class="form-label">Nested Composition Test</label>
-              <app-input-text placeholder="Type something..." [(value)]="demoInput" />
+              <ds-input placeholder="Type something..." [(value)]="demoInput" />
               <div class="form-actions">
-                <app-button label="Submit" severity="primary" />
-                <app-button label="Cancel" severity="secondary" [outlined]="true" />
-                <app-button label="Delete" severity="danger" />
+                <ds-button label="Submit" severity="primary" />
+                <ds-button label="Cancel" severity="secondary" [outlined]="true" />
+                <ds-button label="Delete" severity="danger" />
               </div>
               <div class="tag-row">
-                <app-tag value="Success" severity="success" />
-                <app-tag value="Warning" severity="warn" />
-                <app-tag value="Error" severity="danger" />
-                <app-tag value="Info" severity="info" />
+                <ds-tag value="Success" severity="success" />
+                <ds-tag value="Warning" severity="warn" />
+                <ds-tag value="Error" severity="danger" />
+                <ds-tag value="Info" severity="info" />
               </div>
             </div>
           </p-card>

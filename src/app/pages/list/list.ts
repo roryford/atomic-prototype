@@ -2,9 +2,7 @@ import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { Avatar } from 'primeng/avatar';
-import { AppButton } from '../../atoms/button';
-import { AppTag } from '../../atoms/tag';
-import { AppInputText } from '../../atoms/input-text';
+import { DsButton, DsTag, DsInput } from '../../design-system/atoms';
 
 type TagSeverity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast';
 
@@ -20,15 +18,15 @@ interface Project {
 
 @Component({
   selector: 'app-list',
-  imports: [RouterLink, TableModule, Avatar, AppButton, AppTag, AppInputText],
+  imports: [RouterLink, TableModule, Avatar, DsButton, DsTag, DsInput],
   template: `
     <div class="list-page">
       <div class="search-bar">
-        <app-input-text
+        <ds-input
           [(value)]="searchTerm"
           placeholder="Search projects..."
         />
-        <app-button
+        <ds-button
           label="Search"
           severity="primary"
           (clicked)="onSearch()"
@@ -71,11 +69,11 @@ interface Project {
               </div>
             </td>
             <td>
-              <app-tag [value]="project.status" [severity]="project.statusSeverity" />
+              <ds-tag [value]="project.status" [severity]="project.statusSeverity" />
             </td>
             <td>{{ project.createdDate }}</td>
             <td>
-              <app-button
+              <ds-button
                 label="View"
                 severity="secondary"
                 [outlined]="true"
@@ -106,7 +104,7 @@ interface Project {
       align-items: center;
     }
 
-    .search-bar app-input-text {
+    .search-bar ds-input {
       flex: 1;
       max-width: 28rem;
     }

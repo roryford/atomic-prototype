@@ -1,0 +1,1555 @@
+{
+    "pipes": [],
+    "interfaces": [
+        {
+            "name": "ActivityRow",
+            "id": "interface-ActivityRow-637a465557f1fab7ba0f42a1d844780cbb3759cfbe5ba560ef0042f0b6b921c02d76bd88abe6fa7f6f7a52b79863b4f1fca3bd1b6224a334163b7fbfe4bfd19e",
+            "file": "src/app/pages/dashboard/dashboard.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import { Component, signal } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\nimport { DsStatCard } from '../../design-system/molecules';\nimport { DsButton, DsTag, DsInput } from '../../design-system/atoms';\nimport { Card } from 'primeng/card';\nimport { Avatar } from 'primeng/avatar';\nimport { TableModule } from 'primeng/table';\n\ninterface ActivityRow {\n  name: string;\n  status: string;\n  statusSeverity: 'success' | 'info' | 'warn' | 'danger';\n  date: string;\n}\n\n@Component({\n  selector: 'app-dashboard',\n  imports: [DsStatCard, DsButton, DsInput, DsTag, Card, Avatar, TableModule, FormsModule],\n  template: `\n    <div class=\"dashboard\">\n      <!-- Page Header -->\n      <header class=\"dashboard-header\">\n        <div>\n          <h1 class=\"dashboard-title\">Dashboard</h1>\n          <p class=\"dashboard-subtitle\">Welcome back. Here's what's happening today.</p>\n        </div>\n        <ds-button label=\"Export Report\" severity=\"primary\" [outlined]=\"true\" />\n      </header>\n\n      <!-- Stat Cards Row -->\n      <section class=\"stat-grid\">\n        @for (stat of stats(); track stat.label) {\n          <ds-stat-card [label]=\"stat.label\" [value]=\"stat.value\" [icon]=\"stat.icon\" />\n        }\n      </section>\n\n      <!-- Project Cards Row -->\n      <section class=\"section\">\n        <h2 class=\"section-title\">Active Projects</h2>\n        <div class=\"card-grid\">\n          @for (project of projects(); track project.name) {\n            <p-card>\n              <div class=\"project-card-body\">\n                <div class=\"project-header\">\n                  <p-avatar\n                    [label]=\"project.avatar\"\n                    shape=\"circle\"\n                    [style]=\"{ 'background-color': project.color, color: '#ffffff' }\"\n                  />\n                  <ds-tag [value]=\"project.status\" [severity]=\"project.severity\" />\n                </div>\n                <h3 class=\"project-name\">{{ project.name }}</h3>\n                <p class=\"project-description\">{{ project.description }}</p>\n                <div class=\"project-meta\">\n                  <span class=\"meta-item\"><i class=\"pi pi-users\"></i> {{ project.members }} members</span>\n                  <span class=\"meta-item\"><i class=\"pi pi-calendar\"></i> {{ project.deadline }}</span>\n                </div>\n              </div>\n            </p-card>\n          }\n        </div>\n      </section>\n\n      <!-- Data Table -->\n      <section class=\"section\">\n        <h2 class=\"section-title\">Recent Activity</h2>\n        <div class=\"table-container\">\n          <p-table\n            [value]=\"activities()\"\n            [rows]=\"10\"\n            [tableStyle]=\"{ 'min-width': '40rem' }\"\n            [pt]=\"{ thead: { style: 'text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em' } }\"\n          >\n            <ng-template pTemplate=\"header\">\n              <tr>\n                <th>Name</th>\n                <th>Status</th>\n                <th>Date</th>\n                <th>Action</th>\n              </tr>\n            </ng-template>\n            <ng-template pTemplate=\"body\" let-row>\n              <tr>\n                <td class=\"name-cell\">{{ row.name }}</td>\n                <td>\n                  <ds-tag [value]=\"row.status\" [severity]=\"row.statusSeverity\" />\n                </td>\n                <td class=\"date-cell\">{{ row.date }}</td>\n                <td>\n                  <ds-button label=\"View\" severity=\"secondary\" [outlined]=\"true\" />\n                </td>\n              </tr>\n            </ng-template>\n          </p-table>\n        </div>\n      </section>\n\n      <!-- Dark Mode Test (Spike 3) -->\n      <section class=\"section\">\n        <h2 class=\"section-title\">Dark Mode Test</h2>\n        <ds-button\n          label=\"Toggle Dark Mode\"\n          severity=\"secondary\"\n          [outlined]=\"true\"\n          (clicked)=\"toggleDarkMode()\"\n        />\n        <div class=\"dark-mode-demo\">\n          <p-card>\n            <div class=\"dark-mode-form\">\n              <label class=\"form-label\">Nested Composition Test</label>\n              <ds-input placeholder=\"Type something...\" [(value)]=\"demoInput\" />\n              <div class=\"form-actions\">\n                <ds-button label=\"Submit\" severity=\"primary\" />\n                <ds-button label=\"Cancel\" severity=\"secondary\" [outlined]=\"true\" />\n                <ds-button label=\"Delete\" severity=\"danger\" />\n              </div>\n              <div class=\"tag-row\">\n                <ds-tag value=\"Success\" severity=\"success\" />\n                <ds-tag value=\"Warning\" severity=\"warn\" />\n                <ds-tag value=\"Error\" severity=\"danger\" />\n                <ds-tag value=\"Info\" severity=\"info\" />\n              </div>\n            </div>\n          </p-card>\n        </div>\n      </section>\n    </div>\n  `,\n  styles: `\n    .dashboard {\n      padding: 32px;\n      background: #FAFAF9;\n      min-height: 100vh;\n      font-family: Inter, sans-serif;\n    }\n\n    /* Header */\n    .dashboard-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 32px;\n      flex-wrap: wrap;\n      gap: 16px;\n    }\n\n    .dashboard-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: #1C1917;\n      margin: 0 0 4px 0;\n    }\n\n    .dashboard-subtitle {\n      font-size: 14px;\n      color: #78716C;\n      margin: 0;\n    }\n\n    /* Stat Cards — responsive grid */\n    .stat-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n      margin-bottom: 40px;\n    }\n\n    @media (min-width: 640px) {\n      .stat-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .stat-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    @media (min-width: 1440px) {\n      .stat-grid {\n        grid-template-columns: repeat(4, 1fr);\n      }\n    }\n\n    /* Sections */\n    .section {\n      margin-bottom: 40px;\n    }\n\n    .section-title {\n      font-size: 18px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0 0 20px 0;\n    }\n\n    /* Project Card Grid — same responsive breakpoints */\n    .card-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n    }\n\n    @media (min-width: 640px) {\n      .card-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .card-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    /* Project card inner layout */\n    .project-card-body {\n      display: flex;\n      flex-direction: column;\n      gap: 12px;\n    }\n\n    .project-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n\n    .project-name {\n      font-size: 16px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0;\n    }\n\n    .project-description {\n      font-size: 13px;\n      color: #78716C;\n      margin: 0;\n      line-height: 1.5;\n    }\n\n    .project-meta {\n      display: flex;\n      gap: 16px;\n      padding-top: 8px;\n      border-top: 1px solid #E7E5E4;\n    }\n\n    .meta-item {\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      font-size: 12px;\n      color: #78716C;\n    }\n\n    .meta-item .pi {\n      font-size: 12px;\n    }\n\n    /* Table container */\n    .table-container {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      overflow: hidden;\n    }\n\n    .name-cell {\n      font-weight: 500;\n      color: #1C1917;\n    }\n\n    .date-cell {\n      color: #78716C;\n      font-size: 13px;\n    }\n\n    /* Dark Mode Demo */\n    .dark-mode-demo {\n      margin-top: 16px;\n    }\n\n    .dark-mode-form {\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    .form-label {\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--p-text-color);\n    }\n\n    .form-actions {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n\n    .tag-row {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n  `,\n})\nexport class Dashboard {\n  stats = signal([\n    { label: 'Total Users', value: '12,847', icon: 'pi-users' },\n    { label: 'Active Projects', value: '284', icon: 'pi-briefcase' },\n    { label: 'Open Tasks', value: '1,429', icon: 'pi-check-square' },\n    { label: 'Revenue', value: '$847K', icon: 'pi-dollar' },\n  ]);\n\n  projects = signal([\n    {\n      name: 'Project Alpha',\n      description: 'Next-gen platform rebuild with new component architecture and CI/CD pipeline.',\n      status: 'On Track',\n      severity: 'success' as const,\n      avatar: 'A',\n      color: '#4338CA',\n      members: 8,\n      deadline: 'Apr 15',\n    },\n    {\n      name: 'Design System',\n      description: 'Unified token library and component catalog across web and mobile products.',\n      status: 'In Review',\n      severity: 'info' as const,\n      avatar: 'D',\n      color: '#0891B2',\n      members: 5,\n      deadline: 'Mar 30',\n    },\n    {\n      name: 'API Migration',\n      description: 'REST-to-GraphQL migration for core services with backward compatibility layer.',\n      status: 'At Risk',\n      severity: 'warn' as const,\n      avatar: 'M',\n      color: '#D97706',\n      members: 6,\n      deadline: 'May 01',\n    },\n  ]);\n\n  demoInput = signal('');\n\n  toggleDarkMode() {\n    document.documentElement.classList.toggle('dark-mode');\n  }\n\n  activities = signal<ActivityRow[]>([\n    { name: 'Homepage Redesign', status: 'Completed', statusSeverity: 'success', date: 'Mar 22, 2026' },\n    { name: 'User Auth Flow', status: 'In Progress', statusSeverity: 'info', date: 'Mar 21, 2026' },\n    { name: 'Payment Integration', status: 'At Risk', statusSeverity: 'warn', date: 'Mar 20, 2026' },\n    { name: 'Mobile Responsive', status: 'Completed', statusSeverity: 'success', date: 'Mar 19, 2026' },\n    { name: 'Search Indexing', status: 'In Progress', statusSeverity: 'info', date: 'Mar 18, 2026' },\n    { name: 'Data Export Feature', status: 'Blocked', statusSeverity: 'danger', date: 'Mar 17, 2026' },\n    { name: 'Notification System', status: 'In Progress', statusSeverity: 'info', date: 'Mar 16, 2026' },\n    { name: 'Performance Audit', status: 'Completed', statusSeverity: 'success', date: 'Mar 15, 2026' },\n  ]);\n}\n",
+            "properties": [
+                {
+                    "name": "date",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 13
+                },
+                {
+                    "name": "name",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                },
+                {
+                    "name": "status",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11
+                },
+                {
+                    "name": "statusSeverity",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "\"success\" | \"info\" | \"warn\" | \"danger\"",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 172,
+            "methods": [],
+            "extends": []
+        },
+        {
+            "name": "DashboardStats",
+            "id": "interface-DashboardStats-777ef7a3660e5cc6fd8547e452abedfbfe7ba5d0f0b072c1eea413782a7613e72c29b068d3aab40f126bb3d6193cf0613a8bb7bfc1bd6b4f46e7a4bc7e34f96c",
+            "file": "src/app/models/index.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "export interface Project {\n  id: number;\n  name: string;\n  description: string;\n  owner: string;\n  ownerInitials: string;\n  status: string;\n  statusSeverity: 'success' | 'info' | 'warn' | 'danger';\n  avatar: string;\n  color: string;\n  members: number;\n  deadline: string;\n  createdDate: string;\n  category: string;\n}\n\nexport interface DashboardStats {\n  label: string;\n  value: string;\n  icon: string;\n}\n\nexport interface User {\n  id: number;\n  name: string;\n  email: string;\n  role: string;\n  initials: string;\n}\n",
+            "properties": [
+                {
+                    "name": "icon",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                },
+                {
+                    "name": "label",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 18
+                },
+                {
+                    "name": "value",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 19
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 172,
+            "methods": [],
+            "extends": []
+        },
+        {
+            "name": "Project",
+            "id": "interface-Project-777ef7a3660e5cc6fd8547e452abedfbfe7ba5d0f0b072c1eea413782a7613e72c29b068d3aab40f126bb3d6193cf0613a8bb7bfc1bd6b4f46e7a4bc7e34f96c",
+            "file": "src/app/models/index.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "export interface Project {\n  id: number;\n  name: string;\n  description: string;\n  owner: string;\n  ownerInitials: string;\n  status: string;\n  statusSeverity: 'success' | 'info' | 'warn' | 'danger';\n  avatar: string;\n  color: string;\n  members: number;\n  deadline: string;\n  createdDate: string;\n  category: string;\n}\n\nexport interface DashboardStats {\n  label: string;\n  value: string;\n  icon: string;\n}\n\nexport interface User {\n  id: number;\n  name: string;\n  email: string;\n  role: string;\n  initials: string;\n}\n",
+            "properties": [
+                {
+                    "name": "avatar",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                },
+                {
+                    "name": "category",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 14
+                },
+                {
+                    "name": "color",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                },
+                {
+                    "name": "createdDate",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 13
+                },
+                {
+                    "name": "deadline",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                },
+                {
+                    "name": "description",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 4
+                },
+                {
+                    "name": "id",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 2
+                },
+                {
+                    "name": "members",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11
+                },
+                {
+                    "name": "name",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 3
+                },
+                {
+                    "name": "owner",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                },
+                {
+                    "name": "ownerInitials",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 6
+                },
+                {
+                    "name": "status",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                },
+                {
+                    "name": "statusSeverity",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "\"success\" | \"info\" | \"warn\" | \"danger\"",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 8
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 172,
+            "methods": [],
+            "extends": []
+        },
+        {
+            "name": "Project",
+            "id": "interface-Project-327fa117679974c30fb0877bc86f847c93e8e414d1c2010322ebb7c1366190df4adcc5ea43e7044262e9ca4ee11e692d1949b58c88cfb87a40b1c84195e8ff2f-1",
+            "file": "src/app/pages/list/list.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import { Component, computed, signal } from '@angular/core';\nimport { RouterLink } from '@angular/router';\nimport { TableModule } from 'primeng/table';\nimport { Avatar } from 'primeng/avatar';\nimport { DsButton, DsTag, DsInput } from '../../design-system/atoms';\n\ntype TagSeverity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast';\n\ninterface Project {\n  id: number;\n  name: string;\n  owner: string;\n  ownerInitials: string;\n  status: string;\n  statusSeverity: TagSeverity;\n  createdDate: string;\n}\n\n@Component({\n  selector: 'app-list',\n  imports: [RouterLink, TableModule, Avatar, DsButton, DsTag, DsInput],\n  template: `\n    <div class=\"list-page\">\n      <div class=\"search-bar\">\n        <ds-input\n          [(value)]=\"searchTerm\"\n          placeholder=\"Search projects...\"\n        />\n        <ds-button\n          label=\"Search\"\n          severity=\"primary\"\n          (clicked)=\"onSearch()\"\n        />\n      </div>\n\n      <p-table\n        [value]=\"filteredProjects()\"\n        [tableStyle]=\"{ 'min-width': '60rem' }\"\n        styleClass=\"list-table\"\n        [rowHover]=\"true\"\n      >\n        <ng-template #header>\n          <tr>\n            <th>ID</th>\n            <th pSortableColumn=\"name\">Name <p-sortIcon field=\"name\" /></th>\n            <th>Owner</th>\n            <th>Status</th>\n            <th pSortableColumn=\"createdDate\">Created <p-sortIcon field=\"createdDate\" /></th>\n            <th>Action</th>\n          </tr>\n        </ng-template>\n        <ng-template #body let-project>\n          <tr>\n            <td>{{ project.id }}</td>\n            <td>\n              <a [routerLink]=\"['/detail', project.id]\" class=\"project-link\">\n                {{ project.name }}\n              </a>\n            </td>\n            <td>\n              <div class=\"owner-cell\">\n                <p-avatar\n                  [label]=\"project.ownerInitials\"\n                  shape=\"circle\"\n                  size=\"normal\"\n                  styleClass=\"owner-avatar\"\n                />\n                <span>{{ project.owner }}</span>\n              </div>\n            </td>\n            <td>\n              <ds-tag [value]=\"project.status\" [severity]=\"project.statusSeverity\" />\n            </td>\n            <td>{{ project.createdDate }}</td>\n            <td>\n              <ds-button\n                label=\"View\"\n                severity=\"secondary\"\n                [outlined]=\"true\"\n                (clicked)=\"onView(project.id)\"\n              />\n            </td>\n          </tr>\n        </ng-template>\n        <ng-template #emptymessage>\n          <tr>\n            <td colspan=\"6\" class=\"empty-message\">No projects found.</td>\n          </tr>\n        </ng-template>\n      </p-table>\n    </div>\n  `,\n  styles: `\n    .list-page {\n      width: 100%;\n      padding: 2rem;\n      box-sizing: border-box;\n    }\n\n    .search-bar {\n      display: flex;\n      gap: 0.75rem;\n      margin-bottom: 1.5rem;\n      align-items: center;\n    }\n\n    .search-bar ds-input {\n      flex: 1;\n      max-width: 28rem;\n    }\n\n    :host ::ng-deep .list-table {\n      border: 1px solid #E7E5E4;\n      border-radius: 0.5rem;\n      overflow: hidden;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-thead > tr > th {\n      background: #F5F5F4;\n      color: #1C1917;\n      font-weight: 600;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr > td {\n      color: #1C1917;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr:hover {\n      background: #FAFAF9;\n    }\n\n    .project-link {\n      color: #1C1917;\n      text-decoration: none;\n      font-weight: 500;\n    }\n\n    .project-link:hover {\n      text-decoration: underline;\n    }\n\n    .owner-cell {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    :host ::ng-deep .owner-avatar {\n      background: #E7E5E4;\n      color: #1C1917;\n      font-size: 0.75rem;\n      width: 2rem;\n      height: 2rem;\n    }\n\n    .empty-message {\n      text-align: center;\n      padding: 2rem 1rem;\n      color: #78716c;\n    }\n  `,\n})\nexport class ListPage {\n  searchTerm = signal('');\n\n  private readonly projects = signal<Project[]>([\n    { id: 1, name: 'Acme Redesign', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-01-05' },\n    { id: 2, name: 'Bolt Migration', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Active', statusSeverity: 'success', createdDate: '2026-01-12' },\n    { id: 3, name: 'Cedar Analytics', owner: 'James Wu', ownerInitials: 'JW', status: 'Review', statusSeverity: 'info', createdDate: '2026-01-18' },\n    { id: 4, name: 'Delta Platform', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-01-22' },\n    { id: 5, name: 'Echo Dashboard', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-01' },\n    { id: 6, name: 'Falcon API', owner: 'Priya Patel', ownerInitials: 'PP', status: 'Cancelled', statusSeverity: 'danger', createdDate: '2026-02-04' },\n    { id: 7, name: 'Granite CMS', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Review', statusSeverity: 'info', createdDate: '2026-02-10' },\n    { id: 8, name: 'Horizon Mobile', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-15' },\n    { id: 9, name: 'Iris Onboarding', owner: 'James Wu', ownerInitials: 'JW', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-02-19' },\n    { id: 10, name: 'Jade Payments', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-25' },\n    { id: 11, name: 'Kite Scheduler', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Review', statusSeverity: 'info', createdDate: '2026-03-01' },\n    { id: 12, name: 'Lunar Reporting', owner: 'Priya Patel', ownerInitials: 'PP', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-04' },\n    { id: 13, name: 'Mesa Auth', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Cancelled', statusSeverity: 'danger', createdDate: '2026-03-07' },\n    { id: 14, name: 'Nova Search', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-10' },\n    { id: 15, name: 'Orbit Sync', owner: 'James Wu', ownerInitials: 'JW', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-03-12' },\n    { id: 16, name: 'Pulse Monitor', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'Review', statusSeverity: 'info', createdDate: '2026-03-14' },\n    { id: 17, name: 'Quartz Billing', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-16' },\n    { id: 18, name: 'Ridge Infra', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-18' },\n  ]);\n\n  filteredProjects = computed(() => {\n    const term = this.searchTerm().toLowerCase().trim();\n    if (!term) return this.projects();\n    return this.projects().filter(\n      (p) =>\n        p.name.toLowerCase().includes(term) ||\n        p.owner.toLowerCase().includes(term) ||\n        p.status.toLowerCase().includes(term)\n    );\n  });\n\n  onSearch(): void {\n    // Filtering is reactive via the computed signal; this hook exists\n    // for future enhancements (e.g. server-side search).\n  }\n\n  onView(id: number): void {\n    // Navigation could also be handled here programmatically if needed.\n  }\n}\n",
+            "properties": [
+                {
+                    "name": "createdDate",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 16
+                },
+                {
+                    "name": "id",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                },
+                {
+                    "name": "name",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11
+                },
+                {
+                    "name": "owner",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                },
+                {
+                    "name": "ownerInitials",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 13
+                },
+                {
+                    "name": "status",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 14
+                },
+                {
+                    "name": "statusSeverity",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "TagSeverity",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 15
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 172,
+            "methods": [],
+            "extends": [],
+            "isDuplicate": true,
+            "duplicateId": 1,
+            "duplicateName": "Project-1"
+        },
+        {
+            "name": "User",
+            "id": "interface-User-777ef7a3660e5cc6fd8547e452abedfbfe7ba5d0f0b072c1eea413782a7613e72c29b068d3aab40f126bb3d6193cf0613a8bb7bfc1bd6b4f46e7a4bc7e34f96c",
+            "file": "src/app/models/index.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "export interface Project {\n  id: number;\n  name: string;\n  description: string;\n  owner: string;\n  ownerInitials: string;\n  status: string;\n  statusSeverity: 'success' | 'info' | 'warn' | 'danger';\n  avatar: string;\n  color: string;\n  members: number;\n  deadline: string;\n  createdDate: string;\n  category: string;\n}\n\nexport interface DashboardStats {\n  label: string;\n  value: string;\n  icon: string;\n}\n\nexport interface User {\n  id: number;\n  name: string;\n  email: string;\n  role: string;\n  initials: string;\n}\n",
+            "properties": [
+                {
+                    "name": "email",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 26
+                },
+                {
+                    "name": "id",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 24
+                },
+                {
+                    "name": "initials",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 28
+                },
+                {
+                    "name": "name",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 25
+                },
+                {
+                    "name": "role",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 27
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 172,
+            "methods": [],
+            "extends": []
+        }
+    ],
+    "injectables": [],
+    "guards": [],
+    "interceptors": [],
+    "classes": [],
+    "directives": [],
+    "components": [
+        {
+            "name": "App",
+            "id": "component-App-f0f3c53b050165cdee58a9078dcb1a278e14e97e0df7da7a3eb21ec46c9f19e26ce005add59cb98185f05567f165bdd4d3edacdb5c27de986d7b10732cffb01b",
+            "file": "src/app/app.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-root",
+            "styleUrls": [],
+            "styles": [
+                "\n    :host {\n      display: flex;\n      flex-direction: column;\n      min-height: 100vh;\n    }\n\n    .app-nav {\n      display: flex;\n      align-items: center;\n      gap: 24px;\n      padding: 8px 24px;\n      background: #FFFFFF;\n      border-bottom: 1px solid #E7E5E4;\n    }\n\n    .nav-brand {\n      font-family: Inter, sans-serif;\n      font-size: 18px;\n      font-weight: 700;\n      color: #4338CA;\n    }\n\n    .nav-links {\n      display: flex;\n      gap: 8px;\n    }\n\n    .app-content {\n      flex: 1;\n      padding: 24px;\n      background: #FAFAF9;\n    }\n  "
+            ],
+            "template": "<nav class=\"app-nav\">\n  <div class=\"nav-brand\">Atomic POC</div>\n  <div class=\"nav-links\">\n    <p-button label=\"Dashboard\" [link]=\"true\" routerLink=\"/dashboard\" severity=\"secondary\" [text]=\"true\" />\n    <p-button label=\"List\" [link]=\"true\" routerLink=\"/list\" severity=\"secondary\" [text]=\"true\" />\n    <p-button label=\"Detail\" [link]=\"true\" routerLink=\"/detail/1\" severity=\"secondary\" [text]=\"true\" />\n  </div>\n</nav>\n<main class=\"app-content\">\n  <router-outlet />\n</main>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "RouterOutlet"
+                },
+                {
+                    "name": "RouterLink"
+                },
+                {
+                    "name": "Button"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { RouterOutlet, RouterLink } from '@angular/router';\nimport { Button } from 'primeng/button';\n\n@Component({\n  selector: 'app-root',\n  imports: [RouterOutlet, RouterLink, Button],\n  template: `\n    <nav class=\"app-nav\">\n      <div class=\"nav-brand\">Atomic POC</div>\n      <div class=\"nav-links\">\n        <p-button label=\"Dashboard\" [link]=\"true\" routerLink=\"/dashboard\" severity=\"secondary\" [text]=\"true\" />\n        <p-button label=\"List\" [link]=\"true\" routerLink=\"/list\" severity=\"secondary\" [text]=\"true\" />\n        <p-button label=\"Detail\" [link]=\"true\" routerLink=\"/detail/1\" severity=\"secondary\" [text]=\"true\" />\n      </div>\n    </nav>\n    <main class=\"app-content\">\n      <router-outlet />\n    </main>\n  `,\n  styles: `\n    :host {\n      display: flex;\n      flex-direction: column;\n      min-height: 100vh;\n    }\n\n    .app-nav {\n      display: flex;\n      align-items: center;\n      gap: 24px;\n      padding: 8px 24px;\n      background: #FFFFFF;\n      border-bottom: 1px solid #E7E5E4;\n    }\n\n    .nav-brand {\n      font-family: Inter, sans-serif;\n      font-size: 18px;\n      font-weight: 700;\n      color: #4338CA;\n    }\n\n    .nav-links {\n      display: flex;\n      gap: 8px;\n    }\n\n    .app-content {\n      flex: 1;\n      padding: 24px;\n      background: #FAFAF9;\n    }\n  `,\n})\nexport class App {}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "\n    :host {\n      display: flex;\n      flex-direction: column;\n      min-height: 100vh;\n    }\n\n    .app-nav {\n      display: flex;\n      align-items: center;\n      gap: 24px;\n      padding: 8px 24px;\n      background: #FFFFFF;\n      border-bottom: 1px solid #E7E5E4;\n    }\n\n    .nav-brand {\n      font-family: Inter, sans-serif;\n      font-size: 18px;\n      font-weight: 700;\n      color: #4338CA;\n    }\n\n    .nav-links {\n      display: flex;\n      gap: 8px;\n    }\n\n    .app-content {\n      flex: 1;\n      padding: 24px;\n      background: #FAFAF9;\n    }\n  \n",
+            "extends": []
+        },
+        {
+            "name": "Dashboard",
+            "id": "component-Dashboard-637a465557f1fab7ba0f42a1d844780cbb3759cfbe5ba560ef0042f0b6b921c02d76bd88abe6fa7f6f7a52b79863b4f1fca3bd1b6224a334163b7fbfe4bfd19e",
+            "file": "src/app/pages/dashboard/dashboard.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-dashboard",
+            "styleUrls": [],
+            "styles": [
+                "\n    .dashboard {\n      padding: 32px;\n      background: #FAFAF9;\n      min-height: 100vh;\n      font-family: Inter, sans-serif;\n    }\n\n    /* Header */\n    .dashboard-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 32px;\n      flex-wrap: wrap;\n      gap: 16px;\n    }\n\n    .dashboard-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: #1C1917;\n      margin: 0 0 4px 0;\n    }\n\n    .dashboard-subtitle {\n      font-size: 14px;\n      color: #78716C;\n      margin: 0;\n    }\n\n    /* Stat Cards — responsive grid */\n    .stat-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n      margin-bottom: 40px;\n    }\n\n    @media (min-width: 640px) {\n      .stat-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .stat-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    @media (min-width: 1440px) {\n      .stat-grid {\n        grid-template-columns: repeat(4, 1fr);\n      }\n    }\n\n    /* Sections */\n    .section {\n      margin-bottom: 40px;\n    }\n\n    .section-title {\n      font-size: 18px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0 0 20px 0;\n    }\n\n    /* Project Card Grid — same responsive breakpoints */\n    .card-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n    }\n\n    @media (min-width: 640px) {\n      .card-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .card-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    /* Project card inner layout */\n    .project-card-body {\n      display: flex;\n      flex-direction: column;\n      gap: 12px;\n    }\n\n    .project-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n\n    .project-name {\n      font-size: 16px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0;\n    }\n\n    .project-description {\n      font-size: 13px;\n      color: #78716C;\n      margin: 0;\n      line-height: 1.5;\n    }\n\n    .project-meta {\n      display: flex;\n      gap: 16px;\n      padding-top: 8px;\n      border-top: 1px solid #E7E5E4;\n    }\n\n    .meta-item {\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      font-size: 12px;\n      color: #78716C;\n    }\n\n    .meta-item .pi {\n      font-size: 12px;\n    }\n\n    /* Table container */\n    .table-container {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      overflow: hidden;\n    }\n\n    .name-cell {\n      font-weight: 500;\n      color: #1C1917;\n    }\n\n    .date-cell {\n      color: #78716C;\n      font-size: 13px;\n    }\n\n    /* Dark Mode Demo */\n    .dark-mode-demo {\n      margin-top: 16px;\n    }\n\n    .dark-mode-form {\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    .form-label {\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--p-text-color);\n    }\n\n    .form-actions {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n\n    .tag-row {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n  "
+            ],
+            "template": "<div class=\"dashboard\">\n  <!-- Page Header -->\n  <header class=\"dashboard-header\">\n    <div>\n      <h1 class=\"dashboard-title\">Dashboard</h1>\n      <p class=\"dashboard-subtitle\">Welcome back. Here's what's happening today.</p>\n    </div>\n    <ds-button label=\"Export Report\" severity=\"primary\" [outlined]=\"true\" />\n  </header>\n\n  <!-- Stat Cards Row -->\n  <section class=\"stat-grid\">\n    @for (stat of stats(); track stat.label) {\n      <ds-stat-card [label]=\"stat.label\" [value]=\"stat.value\" [icon]=\"stat.icon\" />\n    }\n  </section>\n\n  <!-- Project Cards Row -->\n  <section class=\"section\">\n    <h2 class=\"section-title\">Active Projects</h2>\n    <div class=\"card-grid\">\n      @for (project of projects(); track project.name) {\n        <p-card>\n          <div class=\"project-card-body\">\n            <div class=\"project-header\">\n              <p-avatar\n                [label]=\"project.avatar\"\n                shape=\"circle\"\n                [style]=\"{ 'background-color': project.color, color: '#ffffff' }\"\n              />\n              <ds-tag [value]=\"project.status\" [severity]=\"project.severity\" />\n            </div>\n            <h3 class=\"project-name\">{{ project.name }}</h3>\n            <p class=\"project-description\">{{ project.description }}</p>\n            <div class=\"project-meta\">\n              <span class=\"meta-item\"><i class=\"pi pi-users\"></i> {{ project.members }} members</span>\n              <span class=\"meta-item\"><i class=\"pi pi-calendar\"></i> {{ project.deadline }}</span>\n            </div>\n          </div>\n        </p-card>\n      }\n    </div>\n  </section>\n\n  <!-- Data Table -->\n  <section class=\"section\">\n    <h2 class=\"section-title\">Recent Activity</h2>\n    <div class=\"table-container\">\n      <p-table\n        [value]=\"activities()\"\n        [rows]=\"10\"\n        [tableStyle]=\"{ 'min-width': '40rem' }\"\n        [pt]=\"{ thead: { style: 'text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em' } }\"\n      >\n        <ng-template pTemplate=\"header\">\n          <tr>\n            <th>Name</th>\n            <th>Status</th>\n            <th>Date</th>\n            <th>Action</th>\n          </tr>\n        </ng-template>\n        <ng-template pTemplate=\"body\" let-row>\n          <tr>\n            <td class=\"name-cell\">{{ row.name }}</td>\n            <td>\n              <ds-tag [value]=\"row.status\" [severity]=\"row.statusSeverity\" />\n            </td>\n            <td class=\"date-cell\">{{ row.date }}</td>\n            <td>\n              <ds-button label=\"View\" severity=\"secondary\" [outlined]=\"true\" />\n            </td>\n          </tr>\n        </ng-template>\n      </p-table>\n    </div>\n  </section>\n\n  <!-- Dark Mode Test (Spike 3) -->\n  <section class=\"section\">\n    <h2 class=\"section-title\">Dark Mode Test</h2>\n    <ds-button\n      label=\"Toggle Dark Mode\"\n      severity=\"secondary\"\n      [outlined]=\"true\"\n      (clicked)=\"toggleDarkMode()\"\n    />\n    <div class=\"dark-mode-demo\">\n      <p-card>\n        <div class=\"dark-mode-form\">\n          <label class=\"form-label\">Nested Composition Test</label>\n          <ds-input placeholder=\"Type something...\" [(value)]=\"demoInput\" />\n          <div class=\"form-actions\">\n            <ds-button label=\"Submit\" severity=\"primary\" />\n            <ds-button label=\"Cancel\" severity=\"secondary\" [outlined]=\"true\" />\n            <ds-button label=\"Delete\" severity=\"danger\" />\n          </div>\n          <div class=\"tag-row\">\n            <ds-tag value=\"Success\" severity=\"success\" />\n            <ds-tag value=\"Warning\" severity=\"warn\" />\n            <ds-tag value=\"Error\" severity=\"danger\" />\n            <ds-tag value=\"Info\" severity=\"info\" />\n          </div>\n        </div>\n      </p-card>\n    </div>\n  </section>\n</div>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "activities",
+                    "defaultValue": "signal<ActivityRow[]>([\n    { name: 'Homepage Redesign', status: 'Completed', statusSeverity: 'success', date: 'Mar 22, 2026' },\n    { name: 'User Auth Flow', status: 'In Progress', statusSeverity: 'info', date: 'Mar 21, 2026' },\n    { name: 'Payment Integration', status: 'At Risk', statusSeverity: 'warn', date: 'Mar 20, 2026' },\n    { name: 'Mobile Responsive', status: 'Completed', statusSeverity: 'success', date: 'Mar 19, 2026' },\n    { name: 'Search Indexing', status: 'In Progress', statusSeverity: 'info', date: 'Mar 18, 2026' },\n    { name: 'Data Export Feature', status: 'Blocked', statusSeverity: 'danger', date: 'Mar 17, 2026' },\n    { name: 'Notification System', status: 'In Progress', statusSeverity: 'info', date: 'Mar 16, 2026' },\n    { name: 'Performance Audit', status: 'Completed', statusSeverity: 'success', date: 'Mar 15, 2026' },\n  ])",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 358
+                },
+                {
+                    "name": "demoInput",
+                    "defaultValue": "signal('')",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 352
+                },
+                {
+                    "name": "projects",
+                    "defaultValue": "signal([\n    {\n      name: 'Project Alpha',\n      description: 'Next-gen platform rebuild with new component architecture and CI/CD pipeline.',\n      status: 'On Track',\n      severity: 'success' as const,\n      avatar: 'A',\n      color: '#4338CA',\n      members: 8,\n      deadline: 'Apr 15',\n    },\n    {\n      name: 'Design System',\n      description: 'Unified token library and component catalog across web and mobile products.',\n      status: 'In Review',\n      severity: 'info' as const,\n      avatar: 'D',\n      color: '#0891B2',\n      members: 5,\n      deadline: 'Mar 30',\n    },\n    {\n      name: 'API Migration',\n      description: 'REST-to-GraphQL migration for core services with backward compatibility layer.',\n      status: 'At Risk',\n      severity: 'warn' as const,\n      avatar: 'M',\n      color: '#D97706',\n      members: 6,\n      deadline: 'May 01',\n    },\n  ])",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 319
+                },
+                {
+                    "name": "stats",
+                    "defaultValue": "signal([\n    { label: 'Total Users', value: '12,847', icon: 'pi-users' },\n    { label: 'Active Projects', value: '284', icon: 'pi-briefcase' },\n    { label: 'Open Tasks', value: '1,429', icon: 'pi-check-square' },\n    { label: 'Revenue', value: '$847K', icon: 'pi-dollar' },\n  ])",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 312
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "toggleDarkMode",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 354,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "DsStatCard"
+                },
+                {
+                    "name": "DsButton"
+                },
+                {
+                    "name": "DsInput"
+                },
+                {
+                    "name": "DsTag"
+                },
+                {
+                    "name": "Card"
+                },
+                {
+                    "name": "Avatar"
+                },
+                {
+                    "name": "TableModule",
+                    "type": "module"
+                },
+                {
+                    "name": "FormsModule",
+                    "type": "module"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, signal } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\nimport { DsStatCard } from '../../design-system/molecules';\nimport { DsButton, DsTag, DsInput } from '../../design-system/atoms';\nimport { Card } from 'primeng/card';\nimport { Avatar } from 'primeng/avatar';\nimport { TableModule } from 'primeng/table';\n\ninterface ActivityRow {\n  name: string;\n  status: string;\n  statusSeverity: 'success' | 'info' | 'warn' | 'danger';\n  date: string;\n}\n\n@Component({\n  selector: 'app-dashboard',\n  imports: [DsStatCard, DsButton, DsInput, DsTag, Card, Avatar, TableModule, FormsModule],\n  template: `\n    <div class=\"dashboard\">\n      <!-- Page Header -->\n      <header class=\"dashboard-header\">\n        <div>\n          <h1 class=\"dashboard-title\">Dashboard</h1>\n          <p class=\"dashboard-subtitle\">Welcome back. Here's what's happening today.</p>\n        </div>\n        <ds-button label=\"Export Report\" severity=\"primary\" [outlined]=\"true\" />\n      </header>\n\n      <!-- Stat Cards Row -->\n      <section class=\"stat-grid\">\n        @for (stat of stats(); track stat.label) {\n          <ds-stat-card [label]=\"stat.label\" [value]=\"stat.value\" [icon]=\"stat.icon\" />\n        }\n      </section>\n\n      <!-- Project Cards Row -->\n      <section class=\"section\">\n        <h2 class=\"section-title\">Active Projects</h2>\n        <div class=\"card-grid\">\n          @for (project of projects(); track project.name) {\n            <p-card>\n              <div class=\"project-card-body\">\n                <div class=\"project-header\">\n                  <p-avatar\n                    [label]=\"project.avatar\"\n                    shape=\"circle\"\n                    [style]=\"{ 'background-color': project.color, color: '#ffffff' }\"\n                  />\n                  <ds-tag [value]=\"project.status\" [severity]=\"project.severity\" />\n                </div>\n                <h3 class=\"project-name\">{{ project.name }}</h3>\n                <p class=\"project-description\">{{ project.description }}</p>\n                <div class=\"project-meta\">\n                  <span class=\"meta-item\"><i class=\"pi pi-users\"></i> {{ project.members }} members</span>\n                  <span class=\"meta-item\"><i class=\"pi pi-calendar\"></i> {{ project.deadline }}</span>\n                </div>\n              </div>\n            </p-card>\n          }\n        </div>\n      </section>\n\n      <!-- Data Table -->\n      <section class=\"section\">\n        <h2 class=\"section-title\">Recent Activity</h2>\n        <div class=\"table-container\">\n          <p-table\n            [value]=\"activities()\"\n            [rows]=\"10\"\n            [tableStyle]=\"{ 'min-width': '40rem' }\"\n            [pt]=\"{ thead: { style: 'text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em' } }\"\n          >\n            <ng-template pTemplate=\"header\">\n              <tr>\n                <th>Name</th>\n                <th>Status</th>\n                <th>Date</th>\n                <th>Action</th>\n              </tr>\n            </ng-template>\n            <ng-template pTemplate=\"body\" let-row>\n              <tr>\n                <td class=\"name-cell\">{{ row.name }}</td>\n                <td>\n                  <ds-tag [value]=\"row.status\" [severity]=\"row.statusSeverity\" />\n                </td>\n                <td class=\"date-cell\">{{ row.date }}</td>\n                <td>\n                  <ds-button label=\"View\" severity=\"secondary\" [outlined]=\"true\" />\n                </td>\n              </tr>\n            </ng-template>\n          </p-table>\n        </div>\n      </section>\n\n      <!-- Dark Mode Test (Spike 3) -->\n      <section class=\"section\">\n        <h2 class=\"section-title\">Dark Mode Test</h2>\n        <ds-button\n          label=\"Toggle Dark Mode\"\n          severity=\"secondary\"\n          [outlined]=\"true\"\n          (clicked)=\"toggleDarkMode()\"\n        />\n        <div class=\"dark-mode-demo\">\n          <p-card>\n            <div class=\"dark-mode-form\">\n              <label class=\"form-label\">Nested Composition Test</label>\n              <ds-input placeholder=\"Type something...\" [(value)]=\"demoInput\" />\n              <div class=\"form-actions\">\n                <ds-button label=\"Submit\" severity=\"primary\" />\n                <ds-button label=\"Cancel\" severity=\"secondary\" [outlined]=\"true\" />\n                <ds-button label=\"Delete\" severity=\"danger\" />\n              </div>\n              <div class=\"tag-row\">\n                <ds-tag value=\"Success\" severity=\"success\" />\n                <ds-tag value=\"Warning\" severity=\"warn\" />\n                <ds-tag value=\"Error\" severity=\"danger\" />\n                <ds-tag value=\"Info\" severity=\"info\" />\n              </div>\n            </div>\n          </p-card>\n        </div>\n      </section>\n    </div>\n  `,\n  styles: `\n    .dashboard {\n      padding: 32px;\n      background: #FAFAF9;\n      min-height: 100vh;\n      font-family: Inter, sans-serif;\n    }\n\n    /* Header */\n    .dashboard-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 32px;\n      flex-wrap: wrap;\n      gap: 16px;\n    }\n\n    .dashboard-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: #1C1917;\n      margin: 0 0 4px 0;\n    }\n\n    .dashboard-subtitle {\n      font-size: 14px;\n      color: #78716C;\n      margin: 0;\n    }\n\n    /* Stat Cards — responsive grid */\n    .stat-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n      margin-bottom: 40px;\n    }\n\n    @media (min-width: 640px) {\n      .stat-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .stat-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    @media (min-width: 1440px) {\n      .stat-grid {\n        grid-template-columns: repeat(4, 1fr);\n      }\n    }\n\n    /* Sections */\n    .section {\n      margin-bottom: 40px;\n    }\n\n    .section-title {\n      font-size: 18px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0 0 20px 0;\n    }\n\n    /* Project Card Grid — same responsive breakpoints */\n    .card-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n    }\n\n    @media (min-width: 640px) {\n      .card-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .card-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    /* Project card inner layout */\n    .project-card-body {\n      display: flex;\n      flex-direction: column;\n      gap: 12px;\n    }\n\n    .project-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n\n    .project-name {\n      font-size: 16px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0;\n    }\n\n    .project-description {\n      font-size: 13px;\n      color: #78716C;\n      margin: 0;\n      line-height: 1.5;\n    }\n\n    .project-meta {\n      display: flex;\n      gap: 16px;\n      padding-top: 8px;\n      border-top: 1px solid #E7E5E4;\n    }\n\n    .meta-item {\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      font-size: 12px;\n      color: #78716C;\n    }\n\n    .meta-item .pi {\n      font-size: 12px;\n    }\n\n    /* Table container */\n    .table-container {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      overflow: hidden;\n    }\n\n    .name-cell {\n      font-weight: 500;\n      color: #1C1917;\n    }\n\n    .date-cell {\n      color: #78716C;\n      font-size: 13px;\n    }\n\n    /* Dark Mode Demo */\n    .dark-mode-demo {\n      margin-top: 16px;\n    }\n\n    .dark-mode-form {\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    .form-label {\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--p-text-color);\n    }\n\n    .form-actions {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n\n    .tag-row {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n  `,\n})\nexport class Dashboard {\n  stats = signal([\n    { label: 'Total Users', value: '12,847', icon: 'pi-users' },\n    { label: 'Active Projects', value: '284', icon: 'pi-briefcase' },\n    { label: 'Open Tasks', value: '1,429', icon: 'pi-check-square' },\n    { label: 'Revenue', value: '$847K', icon: 'pi-dollar' },\n  ]);\n\n  projects = signal([\n    {\n      name: 'Project Alpha',\n      description: 'Next-gen platform rebuild with new component architecture and CI/CD pipeline.',\n      status: 'On Track',\n      severity: 'success' as const,\n      avatar: 'A',\n      color: '#4338CA',\n      members: 8,\n      deadline: 'Apr 15',\n    },\n    {\n      name: 'Design System',\n      description: 'Unified token library and component catalog across web and mobile products.',\n      status: 'In Review',\n      severity: 'info' as const,\n      avatar: 'D',\n      color: '#0891B2',\n      members: 5,\n      deadline: 'Mar 30',\n    },\n    {\n      name: 'API Migration',\n      description: 'REST-to-GraphQL migration for core services with backward compatibility layer.',\n      status: 'At Risk',\n      severity: 'warn' as const,\n      avatar: 'M',\n      color: '#D97706',\n      members: 6,\n      deadline: 'May 01',\n    },\n  ]);\n\n  demoInput = signal('');\n\n  toggleDarkMode() {\n    document.documentElement.classList.toggle('dark-mode');\n  }\n\n  activities = signal<ActivityRow[]>([\n    { name: 'Homepage Redesign', status: 'Completed', statusSeverity: 'success', date: 'Mar 22, 2026' },\n    { name: 'User Auth Flow', status: 'In Progress', statusSeverity: 'info', date: 'Mar 21, 2026' },\n    { name: 'Payment Integration', status: 'At Risk', statusSeverity: 'warn', date: 'Mar 20, 2026' },\n    { name: 'Mobile Responsive', status: 'Completed', statusSeverity: 'success', date: 'Mar 19, 2026' },\n    { name: 'Search Indexing', status: 'In Progress', statusSeverity: 'info', date: 'Mar 18, 2026' },\n    { name: 'Data Export Feature', status: 'Blocked', statusSeverity: 'danger', date: 'Mar 17, 2026' },\n    { name: 'Notification System', status: 'In Progress', statusSeverity: 'info', date: 'Mar 16, 2026' },\n    { name: 'Performance Audit', status: 'Completed', statusSeverity: 'success', date: 'Mar 15, 2026' },\n  ]);\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "\n    .dashboard {\n      padding: 32px;\n      background: #FAFAF9;\n      min-height: 100vh;\n      font-family: Inter, sans-serif;\n    }\n\n    /* Header */\n    .dashboard-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 32px;\n      flex-wrap: wrap;\n      gap: 16px;\n    }\n\n    .dashboard-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: #1C1917;\n      margin: 0 0 4px 0;\n    }\n\n    .dashboard-subtitle {\n      font-size: 14px;\n      color: #78716C;\n      margin: 0;\n    }\n\n    /* Stat Cards — responsive grid */\n    .stat-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n      margin-bottom: 40px;\n    }\n\n    @media (min-width: 640px) {\n      .stat-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .stat-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    @media (min-width: 1440px) {\n      .stat-grid {\n        grid-template-columns: repeat(4, 1fr);\n      }\n    }\n\n    /* Sections */\n    .section {\n      margin-bottom: 40px;\n    }\n\n    .section-title {\n      font-size: 18px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0 0 20px 0;\n    }\n\n    /* Project Card Grid — same responsive breakpoints */\n    .card-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n    }\n\n    @media (min-width: 640px) {\n      .card-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .card-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    /* Project card inner layout */\n    .project-card-body {\n      display: flex;\n      flex-direction: column;\n      gap: 12px;\n    }\n\n    .project-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n\n    .project-name {\n      font-size: 16px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0;\n    }\n\n    .project-description {\n      font-size: 13px;\n      color: #78716C;\n      margin: 0;\n      line-height: 1.5;\n    }\n\n    .project-meta {\n      display: flex;\n      gap: 16px;\n      padding-top: 8px;\n      border-top: 1px solid #E7E5E4;\n    }\n\n    .meta-item {\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      font-size: 12px;\n      color: #78716C;\n    }\n\n    .meta-item .pi {\n      font-size: 12px;\n    }\n\n    /* Table container */\n    .table-container {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      overflow: hidden;\n    }\n\n    .name-cell {\n      font-weight: 500;\n      color: #1C1917;\n    }\n\n    .date-cell {\n      color: #78716C;\n      font-size: 13px;\n    }\n\n    /* Dark Mode Demo */\n    .dark-mode-demo {\n      margin-top: 16px;\n    }\n\n    .dark-mode-form {\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    .form-label {\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--p-text-color);\n    }\n\n    .form-actions {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n\n    .tag-row {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n  \n",
+            "extends": []
+        },
+        {
+            "name": "Detail",
+            "id": "component-Detail-fa87bfac8a4056e72150151fa597d890afed6e436ae8f264560a8b7e3584e12f03793853856206a1f6b72baf0ec2d0f95a010935ebe4e1d85b811f9abed43f3c",
+            "file": "src/app/pages/detail/detail.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-detail",
+            "styleUrls": [],
+            "styles": [
+                "\n    .detail-page {\n      max-width: 720px;\n      margin: 2rem auto;\n      padding: 0 1rem;\n    }\n\n    .detail-card {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      padding: 2rem;\n    }\n\n    .entity-header {\n      display: flex;\n      align-items: center;\n      gap: 1rem;\n    }\n\n    .entity-title {\n      display: flex;\n      align-items: center;\n      gap: 0.75rem;\n    }\n\n    .entity-title h1 {\n      margin: 0;\n      font-size: 1.5rem;\n      font-weight: 600;\n      color: #1C1917;\n    }\n\n    .info-section {\n      display: grid;\n      grid-template-columns: 1fr 1fr;\n      gap: 1.25rem;\n    }\n\n    .info-section .full-width {\n      grid-column: 1 / -1;\n    }\n\n    .field {\n      display: flex;\n      flex-direction: column;\n      gap: 0.375rem;\n    }\n\n    .field label {\n      font-size: 0.875rem;\n      font-weight: 500;\n      color: #78716C;\n    }\n\n    .action-buttons {\n      display: flex;\n      gap: 0.75rem;\n    }\n  "
+            ],
+            "template": "<div class=\"detail-page\">\n  <div class=\"detail-card\">\n\n    <!-- Entity Header -->\n    <div class=\"entity-header\">\n      <p-avatar label=\"PA\" size=\"xlarge\" shape=\"circle\" />\n      <div class=\"entity-title\">\n        <h1>Project Alpha</h1>\n        <ds-tag value=\"Active\" severity=\"success\" />\n      </div>\n    </div>\n\n    <p-divider />\n\n    <!-- Info Section -->\n    <div class=\"info-section\">\n      <div class=\"field\">\n        <label>Project Name</label>\n        <ds-input [value]=\"'Project Alpha'\" placeholder=\"Project Name\" />\n      </div>\n      <div class=\"field\">\n        <label>Owner</label>\n        <ds-input [value]=\"'Sarah Chen'\" placeholder=\"Owner\" />\n      </div>\n      <div class=\"field\">\n        <label>Created</label>\n        <ds-input [value]=\"'January 15, 2026'\" placeholder=\"Created\" />\n      </div>\n      <div class=\"field\">\n        <label>Category</label>\n        <ds-input [value]=\"'Engineering'\" placeholder=\"Category\" />\n      </div>\n      <div class=\"field full-width\">\n        <label>Description</label>\n        <ds-input\n          [value]=\"'Core platform redesign and API modernization initiative'\"\n          placeholder=\"Description\"\n        />\n      </div>\n    </div>\n\n    <p-divider />\n\n    <!-- Action Buttons -->\n    <div class=\"action-buttons\">\n      <ds-button label=\"Edit\" severity=\"primary\" />\n      <ds-button label=\"Delete\" severity=\"danger\" />\n      <ds-button label=\"Back to List\" severity=\"secondary\" [outlined]=\"true\" (clicked)=\"goBack()\" />\n    </div>\n\n  </div>\n</div>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "router",
+                    "defaultValue": "inject(Router)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 126,
+                    "modifierKind": [
+                        123
+                    ]
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "goBack",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 128,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "Avatar"
+                },
+                {
+                    "name": "Divider"
+                },
+                {
+                    "name": "DsButton"
+                },
+                {
+                    "name": "DsTag"
+                },
+                {
+                    "name": "DsInput"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, inject } from '@angular/core';\nimport { Router } from '@angular/router';\nimport { Avatar } from 'primeng/avatar';\nimport { Divider } from 'primeng/divider';\nimport { DsButton, DsTag, DsInput } from '../../design-system/atoms';\n\n@Component({\n  selector: 'app-detail',\n  imports: [Avatar, Divider, DsButton, DsTag, DsInput],\n  template: `\n    <div class=\"detail-page\">\n      <div class=\"detail-card\">\n\n        <!-- Entity Header -->\n        <div class=\"entity-header\">\n          <p-avatar label=\"PA\" size=\"xlarge\" shape=\"circle\" />\n          <div class=\"entity-title\">\n            <h1>Project Alpha</h1>\n            <ds-tag value=\"Active\" severity=\"success\" />\n          </div>\n        </div>\n\n        <p-divider />\n\n        <!-- Info Section -->\n        <div class=\"info-section\">\n          <div class=\"field\">\n            <label>Project Name</label>\n            <ds-input [value]=\"'Project Alpha'\" placeholder=\"Project Name\" />\n          </div>\n          <div class=\"field\">\n            <label>Owner</label>\n            <ds-input [value]=\"'Sarah Chen'\" placeholder=\"Owner\" />\n          </div>\n          <div class=\"field\">\n            <label>Created</label>\n            <ds-input [value]=\"'January 15, 2026'\" placeholder=\"Created\" />\n          </div>\n          <div class=\"field\">\n            <label>Category</label>\n            <ds-input [value]=\"'Engineering'\" placeholder=\"Category\" />\n          </div>\n          <div class=\"field full-width\">\n            <label>Description</label>\n            <ds-input\n              [value]=\"'Core platform redesign and API modernization initiative'\"\n              placeholder=\"Description\"\n            />\n          </div>\n        </div>\n\n        <p-divider />\n\n        <!-- Action Buttons -->\n        <div class=\"action-buttons\">\n          <ds-button label=\"Edit\" severity=\"primary\" />\n          <ds-button label=\"Delete\" severity=\"danger\" />\n          <ds-button label=\"Back to List\" severity=\"secondary\" [outlined]=\"true\" (clicked)=\"goBack()\" />\n        </div>\n\n      </div>\n    </div>\n  `,\n  styles: `\n    .detail-page {\n      max-width: 720px;\n      margin: 2rem auto;\n      padding: 0 1rem;\n    }\n\n    .detail-card {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      padding: 2rem;\n    }\n\n    .entity-header {\n      display: flex;\n      align-items: center;\n      gap: 1rem;\n    }\n\n    .entity-title {\n      display: flex;\n      align-items: center;\n      gap: 0.75rem;\n    }\n\n    .entity-title h1 {\n      margin: 0;\n      font-size: 1.5rem;\n      font-weight: 600;\n      color: #1C1917;\n    }\n\n    .info-section {\n      display: grid;\n      grid-template-columns: 1fr 1fr;\n      gap: 1.25rem;\n    }\n\n    .info-section .full-width {\n      grid-column: 1 / -1;\n    }\n\n    .field {\n      display: flex;\n      flex-direction: column;\n      gap: 0.375rem;\n    }\n\n    .field label {\n      font-size: 0.875rem;\n      font-weight: 500;\n      color: #78716C;\n    }\n\n    .action-buttons {\n      display: flex;\n      gap: 0.75rem;\n    }\n  `,\n})\nexport class Detail {\n  private router = inject(Router);\n\n  goBack() {\n    this.router.navigate(['/list']);\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "\n    .detail-page {\n      max-width: 720px;\n      margin: 2rem auto;\n      padding: 0 1rem;\n    }\n\n    .detail-card {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      padding: 2rem;\n    }\n\n    .entity-header {\n      display: flex;\n      align-items: center;\n      gap: 1rem;\n    }\n\n    .entity-title {\n      display: flex;\n      align-items: center;\n      gap: 0.75rem;\n    }\n\n    .entity-title h1 {\n      margin: 0;\n      font-size: 1.5rem;\n      font-weight: 600;\n      color: #1C1917;\n    }\n\n    .info-section {\n      display: grid;\n      grid-template-columns: 1fr 1fr;\n      gap: 1.25rem;\n    }\n\n    .info-section .full-width {\n      grid-column: 1 / -1;\n    }\n\n    .field {\n      display: flex;\n      flex-direction: column;\n      gap: 0.375rem;\n    }\n\n    .field label {\n      font-size: 0.875rem;\n      font-weight: 500;\n      color: #78716C;\n    }\n\n    .action-buttons {\n      display: flex;\n      gap: 0.75rem;\n    }\n  \n",
+            "extends": []
+        },
+        {
+            "name": "DsButton",
+            "id": "component-DsButton-f7391d13dbd509fa85d9a1081bb57d5117d553020610299c060179cb9f591cc39f5d994f21bd7995f2a3b04b488ce9c9381eb19b5f995973b1f18cf0a257608f",
+            "file": "src/app/design-system/atoms/button/button.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "ds-button",
+            "styleUrls": [],
+            "styles": [],
+            "template": "<p-button\n  [label]=\"label()\"\n  [severity]=\"severity()\"\n  [outlined]=\"outlined()\"\n  (onClick)=\"clicked.emit()\"\n/>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "label",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 19,
+                    "required": false
+                },
+                {
+                    "name": "outlined",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 21,
+                    "required": false
+                },
+                {
+                    "name": "severity",
+                    "defaultValue": "'primary'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ButtonSeverity",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 20,
+                    "required": false
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "clicked",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "void",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 22,
+                    "required": false
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "Button"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, input, output } from '@angular/core';\nimport { Button } from 'primeng/button';\n\ntype ButtonSeverity = 'success' | 'info' | 'warn' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast';\n\n@Component({\n  selector: 'ds-button',\n  imports: [Button],\n  template: `\n    <p-button\n      [label]=\"label()\"\n      [severity]=\"severity()\"\n      [outlined]=\"outlined()\"\n      (onClick)=\"clicked.emit()\"\n    />\n  `,\n})\nexport class DsButton {\n  label = input<string>();\n  severity = input<ButtonSeverity>('primary');\n  outlined = input(false);\n  clicked = output<void>();\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": []
+        },
+        {
+            "name": "DsInput",
+            "id": "component-DsInput-09480c94dc32473825785ed31f0ba31b01dfbb2b79e1e0aa7d85c454f6b9a025828c4e2129fd826e1045ac0ea44d23a5827d84225a42be2a818d7bb42a030608",
+            "file": "src/app/design-system/atoms/input/input.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "ds-input",
+            "styleUrls": [],
+            "styles": [],
+            "template": "<input pInputText [(ngModel)]=\"value\" [placeholder]=\"placeholder()\" />\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "placeholder",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 14,
+                    "required": false
+                },
+                {
+                    "name": "value",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 13,
+                    "required": false
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "value",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 13,
+                    "required": false
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "InputText"
+                },
+                {
+                    "name": "FormsModule",
+                    "type": "module"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, input, model } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\nimport { InputText } from 'primeng/inputtext';\n\n@Component({\n  selector: 'ds-input',\n  imports: [InputText, FormsModule],\n  template: `\n    <input pInputText [(ngModel)]=\"value\" [placeholder]=\"placeholder()\" />\n  `,\n})\nexport class DsInput {\n  value = model<string>('');\n  placeholder = input<string>('');\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": []
+        },
+        {
+            "name": "DsStatCard",
+            "id": "component-DsStatCard-dd1de689d32c089a8c1cbf5be4e912f45eab35e3c91454adbe09bf9a816077ae2c1d2387db5038fe11648c62190be7704ea5c7309f052ca0723b47de909bb41b",
+            "file": "src/app/design-system/molecules/stat-card/stat-card.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "ds-stat-card",
+            "styleUrls": [],
+            "styles": [
+                "\n    .stat-card {\n      display: flex;\n      align-items: center;\n      gap: 16px;\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      padding: 24px;\n      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n    }\n\n    .stat-icon {\n      display: flex;\n      align-items: center;\n      justify-content: center;\n\n      .pi {\n        font-size: 32px;\n        color: #4338CA;\n      }\n    }\n\n    .stat-content {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .stat-value {\n      font-family: Inter, sans-serif;\n      font-size: 24px;\n      font-weight: 700;\n      line-height: 32px;\n      color: #1C1917;\n    }\n\n    .stat-label {\n      font-family: Inter, sans-serif;\n      font-size: 12px;\n      font-weight: 400;\n      line-height: 18px;\n      color: #78716C;\n    }\n  "
+            ],
+            "template": "<div class=\"stat-card\">\n  <div class=\"stat-icon\">\n    <i class=\"pi\" [class]=\"icon()\"></i>\n  </div>\n  <div class=\"stat-content\">\n    <span class=\"stat-value\">{{ value() }}</span>\n    <span class=\"stat-label\">{{ label() }}</span>\n  </div>\n</div>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "icon",
+                    "defaultValue": "'pi-chart-bar'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 64,
+                    "required": false
+                },
+                {
+                    "name": "label",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 62,
+                    "required": true
+                },
+                {
+                    "name": "value",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 63,
+                    "required": true
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, input } from '@angular/core';\n\n@Component({\n  selector: 'ds-stat-card',\n  template: `\n    <div class=\"stat-card\">\n      <div class=\"stat-icon\">\n        <i class=\"pi\" [class]=\"icon()\"></i>\n      </div>\n      <div class=\"stat-content\">\n        <span class=\"stat-value\">{{ value() }}</span>\n        <span class=\"stat-label\">{{ label() }}</span>\n      </div>\n    </div>\n  `,\n  styles: `\n    .stat-card {\n      display: flex;\n      align-items: center;\n      gap: 16px;\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      padding: 24px;\n      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n    }\n\n    .stat-icon {\n      display: flex;\n      align-items: center;\n      justify-content: center;\n\n      .pi {\n        font-size: 32px;\n        color: #4338CA;\n      }\n    }\n\n    .stat-content {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .stat-value {\n      font-family: Inter, sans-serif;\n      font-size: 24px;\n      font-weight: 700;\n      line-height: 32px;\n      color: #1C1917;\n    }\n\n    .stat-label {\n      font-family: Inter, sans-serif;\n      font-size: 12px;\n      font-weight: 400;\n      line-height: 18px;\n      color: #78716C;\n    }\n  `,\n})\nexport class DsStatCard {\n  label = input.required<string>();\n  value = input.required<string>();\n  icon = input<string>('pi-chart-bar');\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "\n    .stat-card {\n      display: flex;\n      align-items: center;\n      gap: 16px;\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      padding: 24px;\n      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n    }\n\n    .stat-icon {\n      display: flex;\n      align-items: center;\n      justify-content: center;\n\n      .pi {\n        font-size: 32px;\n        color: #4338CA;\n      }\n    }\n\n    .stat-content {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .stat-value {\n      font-family: Inter, sans-serif;\n      font-size: 24px;\n      font-weight: 700;\n      line-height: 32px;\n      color: #1C1917;\n    }\n\n    .stat-label {\n      font-family: Inter, sans-serif;\n      font-size: 12px;\n      font-weight: 400;\n      line-height: 18px;\n      color: #78716C;\n    }\n  \n",
+            "extends": []
+        },
+        {
+            "name": "DsTag",
+            "id": "component-DsTag-97e2dd2fdb27804548969c6fbc0b0c41eafc0b522b6a950eaa030726ce16851897da982815dd42f92c9c356003cc6401630cfcf9731a3b716412c1fd39eea2a3",
+            "file": "src/app/design-system/atoms/tag/tag.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "ds-tag",
+            "styleUrls": [],
+            "styles": [],
+            "template": "<p-tag [value]=\"value()\" [severity]=\"severity()\" />\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "severity",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "TagSeverity",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 15,
+                    "required": false
+                },
+                {
+                    "name": "value",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 14,
+                    "required": true
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "Tag"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, input } from '@angular/core';\nimport { Tag } from 'primeng/tag';\n\ntype TagSeverity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast';\n\n@Component({\n  selector: 'ds-tag',\n  imports: [Tag],\n  template: `\n    <p-tag [value]=\"value()\" [severity]=\"severity()\" />\n  `,\n})\nexport class DsTag {\n  value = input.required<string>();\n  severity = input<TagSeverity>();\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": []
+        },
+        {
+            "name": "ListPage",
+            "id": "component-ListPage-327fa117679974c30fb0877bc86f847c93e8e414d1c2010322ebb7c1366190df4adcc5ea43e7044262e9ca4ee11e692d1949b58c88cfb87a40b1c84195e8ff2f",
+            "file": "src/app/pages/list/list.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-list",
+            "styleUrls": [],
+            "styles": [
+                "\n    .list-page {\n      width: 100%;\n      padding: 2rem;\n      box-sizing: border-box;\n    }\n\n    .search-bar {\n      display: flex;\n      gap: 0.75rem;\n      margin-bottom: 1.5rem;\n      align-items: center;\n    }\n\n    .search-bar ds-input {\n      flex: 1;\n      max-width: 28rem;\n    }\n\n    :host ::ng-deep .list-table {\n      border: 1px solid #E7E5E4;\n      border-radius: 0.5rem;\n      overflow: hidden;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-thead > tr > th {\n      background: #F5F5F4;\n      color: #1C1917;\n      font-weight: 600;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr > td {\n      color: #1C1917;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr:hover {\n      background: #FAFAF9;\n    }\n\n    .project-link {\n      color: #1C1917;\n      text-decoration: none;\n      font-weight: 500;\n    }\n\n    .project-link:hover {\n      text-decoration: underline;\n    }\n\n    .owner-cell {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    :host ::ng-deep .owner-avatar {\n      background: #E7E5E4;\n      color: #1C1917;\n      font-size: 0.75rem;\n      width: 2rem;\n      height: 2rem;\n    }\n\n    .empty-message {\n      text-align: center;\n      padding: 2rem 1rem;\n      color: #78716c;\n    }\n  "
+            ],
+            "template": "<div class=\"list-page\">\n  <div class=\"search-bar\">\n    <ds-input\n      [(value)]=\"searchTerm\"\n      placeholder=\"Search projects...\"\n    />\n    <ds-button\n      label=\"Search\"\n      severity=\"primary\"\n      (clicked)=\"onSearch()\"\n    />\n  </div>\n\n  <p-table\n    [value]=\"filteredProjects()\"\n    [tableStyle]=\"{ 'min-width': '60rem' }\"\n    styleClass=\"list-table\"\n    [rowHover]=\"true\"\n  >\n    <ng-template #header>\n      <tr>\n        <th>ID</th>\n        <th pSortableColumn=\"name\">Name <p-sortIcon field=\"name\" /></th>\n        <th>Owner</th>\n        <th>Status</th>\n        <th pSortableColumn=\"createdDate\">Created <p-sortIcon field=\"createdDate\" /></th>\n        <th>Action</th>\n      </tr>\n    </ng-template>\n    <ng-template #body let-project>\n      <tr>\n        <td>{{ project.id }}</td>\n        <td>\n          <a [routerLink]=\"['/detail', project.id]\" class=\"project-link\">\n            {{ project.name }}\n          </a>\n        </td>\n        <td>\n          <div class=\"owner-cell\">\n            <p-avatar\n              [label]=\"project.ownerInitials\"\n              shape=\"circle\"\n              size=\"normal\"\n              styleClass=\"owner-avatar\"\n            />\n            <span>{{ project.owner }}</span>\n          </div>\n        </td>\n        <td>\n          <ds-tag [value]=\"project.status\" [severity]=\"project.statusSeverity\" />\n        </td>\n        <td>{{ project.createdDate }}</td>\n        <td>\n          <ds-button\n            label=\"View\"\n            severity=\"secondary\"\n            [outlined]=\"true\"\n            (clicked)=\"onView(project.id)\"\n          />\n        </td>\n      </tr>\n    </ng-template>\n    <ng-template #emptymessage>\n      <tr>\n        <td colspan=\"6\" class=\"empty-message\">No projects found.</td>\n      </tr>\n    </ng-template>\n  </p-table>\n</div>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "filteredProjects",
+                    "defaultValue": "computed(() => {\n    const term = this.searchTerm().toLowerCase().trim();\n    if (!term) return this.projects();\n    return this.projects().filter(\n      (p) =>\n        p.name.toLowerCase().includes(term) ||\n        p.owner.toLowerCase().includes(term) ||\n        p.status.toLowerCase().includes(term)\n    );\n  })",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 191
+                },
+                {
+                    "name": "projects",
+                    "defaultValue": "signal<Project[]>([\n    { id: 1, name: 'Acme Redesign', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-01-05' },\n    { id: 2, name: 'Bolt Migration', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Active', statusSeverity: 'success', createdDate: '2026-01-12' },\n    { id: 3, name: 'Cedar Analytics', owner: 'James Wu', ownerInitials: 'JW', status: 'Review', statusSeverity: 'info', createdDate: '2026-01-18' },\n    { id: 4, name: 'Delta Platform', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-01-22' },\n    { id: 5, name: 'Echo Dashboard', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-01' },\n    { id: 6, name: 'Falcon API', owner: 'Priya Patel', ownerInitials: 'PP', status: 'Cancelled', statusSeverity: 'danger', createdDate: '2026-02-04' },\n    { id: 7, name: 'Granite CMS', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Review', statusSeverity: 'info', createdDate: '2026-02-10' },\n    { id: 8, name: 'Horizon Mobile', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-15' },\n    { id: 9, name: 'Iris Onboarding', owner: 'James Wu', ownerInitials: 'JW', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-02-19' },\n    { id: 10, name: 'Jade Payments', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-25' },\n    { id: 11, name: 'Kite Scheduler', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Review', statusSeverity: 'info', createdDate: '2026-03-01' },\n    { id: 12, name: 'Lunar Reporting', owner: 'Priya Patel', ownerInitials: 'PP', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-04' },\n    { id: 13, name: 'Mesa Auth', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Cancelled', statusSeverity: 'danger', createdDate: '2026-03-07' },\n    { id: 14, name: 'Nova Search', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-10' },\n    { id: 15, name: 'Orbit Sync', owner: 'James Wu', ownerInitials: 'JW', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-03-12' },\n    { id: 16, name: 'Pulse Monitor', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'Review', statusSeverity: 'info', createdDate: '2026-03-14' },\n    { id: 17, name: 'Quartz Billing', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-16' },\n    { id: 18, name: 'Ridge Infra', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-18' },\n  ])",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 170,
+                    "modifierKind": [
+                        123,
+                        148
+                    ]
+                },
+                {
+                    "name": "searchTerm",
+                    "defaultValue": "signal('')",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 168
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "onSearch",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 202,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onView",
+                    "args": [
+                        {
+                            "name": "id",
+                            "type": "number",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 207,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "id",
+                            "type": "number",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "RouterLink"
+                },
+                {
+                    "name": "TableModule",
+                    "type": "module"
+                },
+                {
+                    "name": "Avatar"
+                },
+                {
+                    "name": "DsButton"
+                },
+                {
+                    "name": "DsTag"
+                },
+                {
+                    "name": "DsInput"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, computed, signal } from '@angular/core';\nimport { RouterLink } from '@angular/router';\nimport { TableModule } from 'primeng/table';\nimport { Avatar } from 'primeng/avatar';\nimport { DsButton, DsTag, DsInput } from '../../design-system/atoms';\n\ntype TagSeverity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast';\n\ninterface Project {\n  id: number;\n  name: string;\n  owner: string;\n  ownerInitials: string;\n  status: string;\n  statusSeverity: TagSeverity;\n  createdDate: string;\n}\n\n@Component({\n  selector: 'app-list',\n  imports: [RouterLink, TableModule, Avatar, DsButton, DsTag, DsInput],\n  template: `\n    <div class=\"list-page\">\n      <div class=\"search-bar\">\n        <ds-input\n          [(value)]=\"searchTerm\"\n          placeholder=\"Search projects...\"\n        />\n        <ds-button\n          label=\"Search\"\n          severity=\"primary\"\n          (clicked)=\"onSearch()\"\n        />\n      </div>\n\n      <p-table\n        [value]=\"filteredProjects()\"\n        [tableStyle]=\"{ 'min-width': '60rem' }\"\n        styleClass=\"list-table\"\n        [rowHover]=\"true\"\n      >\n        <ng-template #header>\n          <tr>\n            <th>ID</th>\n            <th pSortableColumn=\"name\">Name <p-sortIcon field=\"name\" /></th>\n            <th>Owner</th>\n            <th>Status</th>\n            <th pSortableColumn=\"createdDate\">Created <p-sortIcon field=\"createdDate\" /></th>\n            <th>Action</th>\n          </tr>\n        </ng-template>\n        <ng-template #body let-project>\n          <tr>\n            <td>{{ project.id }}</td>\n            <td>\n              <a [routerLink]=\"['/detail', project.id]\" class=\"project-link\">\n                {{ project.name }}\n              </a>\n            </td>\n            <td>\n              <div class=\"owner-cell\">\n                <p-avatar\n                  [label]=\"project.ownerInitials\"\n                  shape=\"circle\"\n                  size=\"normal\"\n                  styleClass=\"owner-avatar\"\n                />\n                <span>{{ project.owner }}</span>\n              </div>\n            </td>\n            <td>\n              <ds-tag [value]=\"project.status\" [severity]=\"project.statusSeverity\" />\n            </td>\n            <td>{{ project.createdDate }}</td>\n            <td>\n              <ds-button\n                label=\"View\"\n                severity=\"secondary\"\n                [outlined]=\"true\"\n                (clicked)=\"onView(project.id)\"\n              />\n            </td>\n          </tr>\n        </ng-template>\n        <ng-template #emptymessage>\n          <tr>\n            <td colspan=\"6\" class=\"empty-message\">No projects found.</td>\n          </tr>\n        </ng-template>\n      </p-table>\n    </div>\n  `,\n  styles: `\n    .list-page {\n      width: 100%;\n      padding: 2rem;\n      box-sizing: border-box;\n    }\n\n    .search-bar {\n      display: flex;\n      gap: 0.75rem;\n      margin-bottom: 1.5rem;\n      align-items: center;\n    }\n\n    .search-bar ds-input {\n      flex: 1;\n      max-width: 28rem;\n    }\n\n    :host ::ng-deep .list-table {\n      border: 1px solid #E7E5E4;\n      border-radius: 0.5rem;\n      overflow: hidden;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-thead > tr > th {\n      background: #F5F5F4;\n      color: #1C1917;\n      font-weight: 600;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr > td {\n      color: #1C1917;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr:hover {\n      background: #FAFAF9;\n    }\n\n    .project-link {\n      color: #1C1917;\n      text-decoration: none;\n      font-weight: 500;\n    }\n\n    .project-link:hover {\n      text-decoration: underline;\n    }\n\n    .owner-cell {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    :host ::ng-deep .owner-avatar {\n      background: #E7E5E4;\n      color: #1C1917;\n      font-size: 0.75rem;\n      width: 2rem;\n      height: 2rem;\n    }\n\n    .empty-message {\n      text-align: center;\n      padding: 2rem 1rem;\n      color: #78716c;\n    }\n  `,\n})\nexport class ListPage {\n  searchTerm = signal('');\n\n  private readonly projects = signal<Project[]>([\n    { id: 1, name: 'Acme Redesign', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-01-05' },\n    { id: 2, name: 'Bolt Migration', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Active', statusSeverity: 'success', createdDate: '2026-01-12' },\n    { id: 3, name: 'Cedar Analytics', owner: 'James Wu', ownerInitials: 'JW', status: 'Review', statusSeverity: 'info', createdDate: '2026-01-18' },\n    { id: 4, name: 'Delta Platform', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-01-22' },\n    { id: 5, name: 'Echo Dashboard', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-01' },\n    { id: 6, name: 'Falcon API', owner: 'Priya Patel', ownerInitials: 'PP', status: 'Cancelled', statusSeverity: 'danger', createdDate: '2026-02-04' },\n    { id: 7, name: 'Granite CMS', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Review', statusSeverity: 'info', createdDate: '2026-02-10' },\n    { id: 8, name: 'Horizon Mobile', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-15' },\n    { id: 9, name: 'Iris Onboarding', owner: 'James Wu', ownerInitials: 'JW', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-02-19' },\n    { id: 10, name: 'Jade Payments', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-25' },\n    { id: 11, name: 'Kite Scheduler', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Review', statusSeverity: 'info', createdDate: '2026-03-01' },\n    { id: 12, name: 'Lunar Reporting', owner: 'Priya Patel', ownerInitials: 'PP', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-04' },\n    { id: 13, name: 'Mesa Auth', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Cancelled', statusSeverity: 'danger', createdDate: '2026-03-07' },\n    { id: 14, name: 'Nova Search', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-10' },\n    { id: 15, name: 'Orbit Sync', owner: 'James Wu', ownerInitials: 'JW', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-03-12' },\n    { id: 16, name: 'Pulse Monitor', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'Review', statusSeverity: 'info', createdDate: '2026-03-14' },\n    { id: 17, name: 'Quartz Billing', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-16' },\n    { id: 18, name: 'Ridge Infra', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-18' },\n  ]);\n\n  filteredProjects = computed(() => {\n    const term = this.searchTerm().toLowerCase().trim();\n    if (!term) return this.projects();\n    return this.projects().filter(\n      (p) =>\n        p.name.toLowerCase().includes(term) ||\n        p.owner.toLowerCase().includes(term) ||\n        p.status.toLowerCase().includes(term)\n    );\n  });\n\n  onSearch(): void {\n    // Filtering is reactive via the computed signal; this hook exists\n    // for future enhancements (e.g. server-side search).\n  }\n\n  onView(id: number): void {\n    // Navigation could also be handled here programmatically if needed.\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "\n    .list-page {\n      width: 100%;\n      padding: 2rem;\n      box-sizing: border-box;\n    }\n\n    .search-bar {\n      display: flex;\n      gap: 0.75rem;\n      margin-bottom: 1.5rem;\n      align-items: center;\n    }\n\n    .search-bar ds-input {\n      flex: 1;\n      max-width: 28rem;\n    }\n\n    :host ::ng-deep .list-table {\n      border: 1px solid #E7E5E4;\n      border-radius: 0.5rem;\n      overflow: hidden;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-thead > tr > th {\n      background: #F5F5F4;\n      color: #1C1917;\n      font-weight: 600;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr > td {\n      color: #1C1917;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr:hover {\n      background: #FAFAF9;\n    }\n\n    .project-link {\n      color: #1C1917;\n      text-decoration: none;\n      font-weight: 500;\n    }\n\n    .project-link:hover {\n      text-decoration: underline;\n    }\n\n    .owner-cell {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    :host ::ng-deep .owner-avatar {\n      background: #E7E5E4;\n      color: #1C1917;\n      font-size: 0.75rem;\n      width: 2rem;\n      height: 2rem;\n    }\n\n    .empty-message {\n      text-align: center;\n      padding: 2rem 1rem;\n      color: #78716c;\n    }\n  \n",
+            "extends": []
+        }
+    ],
+    "modules": [],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "appConfig",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app.config.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "ApplicationConfig",
+                "defaultValue": "{\n  providers: [\n    provideBrowserGlobalErrorListeners(),\n    provideRouter(routes),\n    provideHttpClient(),\n    provideAnimationsAsync(),\n    providePrimeNG({\n      theme: {\n        preset: CustomPreset,\n        options: {\n          darkModeSelector: '.dark-mode',\n        },\n      },\n    }),\n  ],\n}"
+            },
+            {
+                "name": "CustomPreset",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/design-system/tokens/preset.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "unknown",
+                "defaultValue": "definePreset(Aura, {\n  // Primitive tier: raw palette values\n  primitive: {\n    indigo: {\n      500: '#4338CA',  // Brand Indigo\n      400: '#6366F1',  // Brand Indigo Light\n      600: '#3730A3',  // Brand Indigo Dark\n    },\n    red: {\n      500: '#DC2626',  // Danger Red\n      600: '#B91C1C',  // Danger Red Dark (hover)\n    },\n    green: {\n      500: '#16A34A',  // Success Green\n    },\n    amber: {\n      500: '#D97706',  // Warning Amber\n    },\n    stone: {\n      50:  '#FAFAF9',  // Surface Warm\n      100: '#F5F5F4',  // Surface Muted\n      200: '#E7E5E4',  // Border color\n      500: '#78716C',  // Text Secondary\n      900: '#1C1917',  // Text Primary\n    },\n    borderRadius: {\n      none: '0',\n      xs: '2px',\n      sm: '4px',\n      md: '6px',\n      lg: '8px',\n      xl: '12px',\n    },\n  },\n\n  // Semantic tier: intent-based aliases\n  semantic: {\n    primary: {\n      50:  '#EEF2FF',\n      100: '#E0E7FF',\n      200: '#C7D2FE',\n      300: '#A5B4FC',\n      400: '#818CF8',\n      500: '#6366F1',\n      600: '#4338CA',\n      700: '#3730A3',\n      800: '#312E81',\n      900: '#1E1B4B',\n      950: '#0F0D2E',\n    },\n    colorScheme: {\n      light: {\n        primary: {\n          color: '#4338CA',\n          contrastColor: '#FFFFFF',\n          hoverColor: '#6366F1',\n          activeColor: '#3730A3',\n        },\n        highlight: {\n          background: '#E0E7FF',\n          focusBackground: '#C7D2FE',\n          color: '#4338CA',\n          focusColor: '#3730A3',\n        },\n        surface: {\n          0: '#FFFFFF',\n          50: '#FAFAF9',\n          100: '#F5F5F4',\n          200: '#E7E5E4',\n          300: '#D6D3D1',\n          400: '#A8A29E',\n          500: '#78716C',\n          600: '#57534E',\n          700: '#44403C',\n          800: '#292524',\n          900: '#1C1917',\n          950: '#0C0A09',\n        },\n        text: {\n          color: '#1C1917',\n          hoverColor: '#0C0A09',\n          mutedColor: '#78716C',\n          hoverMutedColor: '#57534E',\n        },\n      },\n      dark: {\n        primary: {\n          color: '#6366F1',\n          contrastColor: '#FFFFFF',\n          hoverColor: '#818CF8',\n          activeColor: '#4338CA',\n        },\n        highlight: {\n          background: '#312E81',\n          focusBackground: '#3730A3',\n          color: '#A5B4FC',\n          focusColor: '#C7D2FE',\n        },\n        surface: {\n          0: '#0C0A09',\n          50: '#1C1917',\n          100: '#292524',\n          200: '#44403C',\n          300: '#57534E',\n          400: '#78716C',\n          500: '#A8A29E',\n          600: '#D6D3D1',\n          700: '#E7E5E4',\n          800: '#F5F5F4',\n          900: '#FAFAF9',\n          950: '#FFFFFF',\n        },\n        text: {\n          color: '#FAFAF9',\n          hoverColor: '#FFFFFF',\n          mutedColor: '#A8A29E',\n          hoverMutedColor: '#D6D3D1',\n        },\n      },\n    },\n  },\n\n  // Component tier: per-component overrides\n  components: {\n    button: {\n      root: {\n        borderRadius: '6px',\n        paddingX: '16px',\n        paddingY: '8px',\n        label: {\n          fontWeight: '600',\n        },\n        primary: {\n          background: '#4338CA',\n          hoverBackground: '#6366F1',\n          color: '#FFFFFF',\n          borderColor: '#4338CA',\n          hoverBorderColor: '#6366F1',\n        },\n        secondary: {\n          background: 'transparent',\n          hoverBackground: '#E0E7FF',\n          color: '#4338CA',\n          borderColor: '#4338CA',\n        },\n        danger: {\n          background: '#DC2626',\n          hoverBackground: '#B91C1C',\n          color: '#FFFFFF',\n          borderColor: '#DC2626',\n          hoverBorderColor: '#B91C1C',\n        },\n      },\n    },\n    tag: {\n      root: {\n        borderRadius: '9999px',\n        fontSize: '12px',\n        fontWeight: '600',\n        padding: '2px 10px',\n      },\n      success: {\n        background: '#DCFCE7',\n        color: '#16A34A',\n      },\n      warn: {\n        background: '#FEF3C7',\n        color: '#D97706',\n      },\n      danger: {\n        background: '#FEE2E2',\n        color: '#DC2626',\n      },\n      info: {\n        background: '#E0E7FF',\n        color: '#4338CA',\n      },\n    },\n    card: {\n      root: {\n        background: '#FFFFFF',\n        borderRadius: '12px',\n        shadow: '0 1px 3px rgba(0,0,0,0.1)',\n      },\n      body: {\n        padding: '24px',\n      },\n    },\n    datatable: {\n      headerCell: {\n        background: '#F5F5F4',\n        color: '#1C1917',\n        borderColor: '#E7E5E4',\n      },\n      bodyCell: {\n        borderColor: '#E7E5E4',\n      },\n      row: {\n        hoverBackground: '#FAFAF9',\n      },\n    },\n  },\n})"
+            },
+            {
+                "name": "handlers",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/mocks/handlers.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "[]",
+                "defaultValue": "[\n  http.get('/api/projects', async () => {\n    await delay(300);\n    return HttpResponse.json(projects);\n  }),\n\n  http.get('/api/projects/:id', async ({ params }) => {\n    await delay(200);\n    const project = projects.find((p: any) => p.id === Number(params['id']));\n    if (!project) {\n      return HttpResponse.json({ message: 'Project not found' }, { status: 404 });\n    }\n    return HttpResponse.json(project);\n  }),\n\n  http.get('/api/stats', async () => {\n    await delay(250);\n    return HttpResponse.json(stats);\n  }),\n\n  http.get('/api/users', async () => {\n    await delay(200);\n    return HttpResponse.json(users);\n  }),\n]"
+            },
+            {
+                "name": "routes",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app.routes.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Routes",
+                "defaultValue": "[\n  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },\n  { path: 'dashboard', loadComponent: () => \"import('./pages/dashboard/dashboard').then(m => m.Dashboard)\" },\n  { path: 'list', loadComponent: () => \"import('./pages/list/list').then(m => m.ListPage)\" },\n  { path: 'detail/:id', loadComponent: () => \"import('./pages/detail/detail').then(m => m.Detail)\" },\n]"
+            },
+            {
+                "name": "worker",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/mocks/browser.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "unknown",
+                "defaultValue": "setupWorker(...handlers)"
+            }
+        ],
+        "functions": [
+            {
+                "name": "bootstrap",
+                "file": "src/main.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "args": []
+            }
+        ],
+        "typealiases": [
+            {
+                "name": "ButtonSeverity",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"help\" | \"primary\" | \"secondary\" | \"contrast\"",
+                "file": "src/app/design-system/atoms/button/button.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 193
+            },
+            {
+                "name": "TagSeverity",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\"",
+                "file": "src/app/design-system/atoms/tag/tag.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 193
+            },
+            {
+                "name": "TagSeverity",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\"",
+                "file": "src/app/pages/list/list.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 193
+            }
+        ],
+        "enumerations": [],
+        "groupedVariables": {
+            "src/app/app.config.ts": [
+                {
+                    "name": "appConfig",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app.config.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ApplicationConfig",
+                    "defaultValue": "{\n  providers: [\n    provideBrowserGlobalErrorListeners(),\n    provideRouter(routes),\n    provideHttpClient(),\n    provideAnimationsAsync(),\n    providePrimeNG({\n      theme: {\n        preset: CustomPreset,\n        options: {\n          darkModeSelector: '.dark-mode',\n        },\n      },\n    }),\n  ],\n}"
+                }
+            ],
+            "src/app/design-system/tokens/preset.ts": [
+                {
+                    "name": "CustomPreset",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/design-system/tokens/preset.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "defaultValue": "definePreset(Aura, {\n  // Primitive tier: raw palette values\n  primitive: {\n    indigo: {\n      500: '#4338CA',  // Brand Indigo\n      400: '#6366F1',  // Brand Indigo Light\n      600: '#3730A3',  // Brand Indigo Dark\n    },\n    red: {\n      500: '#DC2626',  // Danger Red\n      600: '#B91C1C',  // Danger Red Dark (hover)\n    },\n    green: {\n      500: '#16A34A',  // Success Green\n    },\n    amber: {\n      500: '#D97706',  // Warning Amber\n    },\n    stone: {\n      50:  '#FAFAF9',  // Surface Warm\n      100: '#F5F5F4',  // Surface Muted\n      200: '#E7E5E4',  // Border color\n      500: '#78716C',  // Text Secondary\n      900: '#1C1917',  // Text Primary\n    },\n    borderRadius: {\n      none: '0',\n      xs: '2px',\n      sm: '4px',\n      md: '6px',\n      lg: '8px',\n      xl: '12px',\n    },\n  },\n\n  // Semantic tier: intent-based aliases\n  semantic: {\n    primary: {\n      50:  '#EEF2FF',\n      100: '#E0E7FF',\n      200: '#C7D2FE',\n      300: '#A5B4FC',\n      400: '#818CF8',\n      500: '#6366F1',\n      600: '#4338CA',\n      700: '#3730A3',\n      800: '#312E81',\n      900: '#1E1B4B',\n      950: '#0F0D2E',\n    },\n    colorScheme: {\n      light: {\n        primary: {\n          color: '#4338CA',\n          contrastColor: '#FFFFFF',\n          hoverColor: '#6366F1',\n          activeColor: '#3730A3',\n        },\n        highlight: {\n          background: '#E0E7FF',\n          focusBackground: '#C7D2FE',\n          color: '#4338CA',\n          focusColor: '#3730A3',\n        },\n        surface: {\n          0: '#FFFFFF',\n          50: '#FAFAF9',\n          100: '#F5F5F4',\n          200: '#E7E5E4',\n          300: '#D6D3D1',\n          400: '#A8A29E',\n          500: '#78716C',\n          600: '#57534E',\n          700: '#44403C',\n          800: '#292524',\n          900: '#1C1917',\n          950: '#0C0A09',\n        },\n        text: {\n          color: '#1C1917',\n          hoverColor: '#0C0A09',\n          mutedColor: '#78716C',\n          hoverMutedColor: '#57534E',\n        },\n      },\n      dark: {\n        primary: {\n          color: '#6366F1',\n          contrastColor: '#FFFFFF',\n          hoverColor: '#818CF8',\n          activeColor: '#4338CA',\n        },\n        highlight: {\n          background: '#312E81',\n          focusBackground: '#3730A3',\n          color: '#A5B4FC',\n          focusColor: '#C7D2FE',\n        },\n        surface: {\n          0: '#0C0A09',\n          50: '#1C1917',\n          100: '#292524',\n          200: '#44403C',\n          300: '#57534E',\n          400: '#78716C',\n          500: '#A8A29E',\n          600: '#D6D3D1',\n          700: '#E7E5E4',\n          800: '#F5F5F4',\n          900: '#FAFAF9',\n          950: '#FFFFFF',\n        },\n        text: {\n          color: '#FAFAF9',\n          hoverColor: '#FFFFFF',\n          mutedColor: '#A8A29E',\n          hoverMutedColor: '#D6D3D1',\n        },\n      },\n    },\n  },\n\n  // Component tier: per-component overrides\n  components: {\n    button: {\n      root: {\n        borderRadius: '6px',\n        paddingX: '16px',\n        paddingY: '8px',\n        label: {\n          fontWeight: '600',\n        },\n        primary: {\n          background: '#4338CA',\n          hoverBackground: '#6366F1',\n          color: '#FFFFFF',\n          borderColor: '#4338CA',\n          hoverBorderColor: '#6366F1',\n        },\n        secondary: {\n          background: 'transparent',\n          hoverBackground: '#E0E7FF',\n          color: '#4338CA',\n          borderColor: '#4338CA',\n        },\n        danger: {\n          background: '#DC2626',\n          hoverBackground: '#B91C1C',\n          color: '#FFFFFF',\n          borderColor: '#DC2626',\n          hoverBorderColor: '#B91C1C',\n        },\n      },\n    },\n    tag: {\n      root: {\n        borderRadius: '9999px',\n        fontSize: '12px',\n        fontWeight: '600',\n        padding: '2px 10px',\n      },\n      success: {\n        background: '#DCFCE7',\n        color: '#16A34A',\n      },\n      warn: {\n        background: '#FEF3C7',\n        color: '#D97706',\n      },\n      danger: {\n        background: '#FEE2E2',\n        color: '#DC2626',\n      },\n      info: {\n        background: '#E0E7FF',\n        color: '#4338CA',\n      },\n    },\n    card: {\n      root: {\n        background: '#FFFFFF',\n        borderRadius: '12px',\n        shadow: '0 1px 3px rgba(0,0,0,0.1)',\n      },\n      body: {\n        padding: '24px',\n      },\n    },\n    datatable: {\n      headerCell: {\n        background: '#F5F5F4',\n        color: '#1C1917',\n        borderColor: '#E7E5E4',\n      },\n      bodyCell: {\n        borderColor: '#E7E5E4',\n      },\n      row: {\n        hoverBackground: '#FAFAF9',\n      },\n    },\n  },\n})"
+                }
+            ],
+            "src/app/mocks/handlers.ts": [
+                {
+                    "name": "handlers",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/mocks/handlers.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "[]",
+                    "defaultValue": "[\n  http.get('/api/projects', async () => {\n    await delay(300);\n    return HttpResponse.json(projects);\n  }),\n\n  http.get('/api/projects/:id', async ({ params }) => {\n    await delay(200);\n    const project = projects.find((p: any) => p.id === Number(params['id']));\n    if (!project) {\n      return HttpResponse.json({ message: 'Project not found' }, { status: 404 });\n    }\n    return HttpResponse.json(project);\n  }),\n\n  http.get('/api/stats', async () => {\n    await delay(250);\n    return HttpResponse.json(stats);\n  }),\n\n  http.get('/api/users', async () => {\n    await delay(200);\n    return HttpResponse.json(users);\n  }),\n]"
+                }
+            ],
+            "src/app/app.routes.ts": [
+                {
+                    "name": "routes",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app.routes.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Routes",
+                    "defaultValue": "[\n  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },\n  { path: 'dashboard', loadComponent: () => \"import('./pages/dashboard/dashboard').then(m => m.Dashboard)\" },\n  { path: 'list', loadComponent: () => \"import('./pages/list/list').then(m => m.ListPage)\" },\n  { path: 'detail/:id', loadComponent: () => \"import('./pages/detail/detail').then(m => m.Detail)\" },\n]"
+                }
+            ],
+            "src/app/mocks/browser.ts": [
+                {
+                    "name": "worker",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/mocks/browser.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "defaultValue": "setupWorker(...handlers)"
+                }
+            ]
+        },
+        "groupedFunctions": {
+            "src/main.ts": [
+                {
+                    "name": "bootstrap",
+                    "file": "src/main.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "args": []
+                }
+            ]
+        },
+        "groupedEnumerations": {},
+        "groupedTypeAliases": {
+            "src/app/design-system/atoms/button/button.ts": [
+                {
+                    "name": "ButtonSeverity",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"help\" | \"primary\" | \"secondary\" | \"contrast\"",
+                    "file": "src/app/design-system/atoms/button/button.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 193
+                }
+            ],
+            "src/app/design-system/atoms/tag/tag.ts": [
+                {
+                    "name": "TagSeverity",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\"",
+                    "file": "src/app/design-system/atoms/tag/tag.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 193
+                }
+            ],
+            "src/app/pages/list/list.ts": [
+                {
+                    "name": "TagSeverity",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\"",
+                    "file": "src/app/pages/list/list.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 193
+                }
+            ]
+        }
+    },
+    "routes": {
+        "name": "<root>",
+        "kind": "module",
+        "children": [
+            {
+                "name": "dashboard",
+                "kind": "route-path",
+                "filename": "src/app/app.routes.ts"
+            },
+            {
+                "name": "list",
+                "kind": "route-path",
+                "filename": "src/app/app.routes.ts"
+            },
+            {
+                "name": "detail/:id",
+                "kind": "route-path",
+                "filename": "src/app/app.routes.ts"
+            },
+            {
+                "name": "dashboard",
+                "kind": "route-redirect",
+                "filename": "src/app/app.routes.ts"
+            }
+        ]
+    },
+    "coverage": {
+        "count": 0,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "src/app/app.config.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "appConfig",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.routes.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "routes",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "App",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/design-system/atoms/button/button.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DsButton",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/design-system/atoms/button/button.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "ButtonSeverity",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/design-system/atoms/input/input.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DsInput",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/design-system/atoms/tag/tag.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DsTag",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/design-system/atoms/tag/tag.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "TagSeverity",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/design-system/molecules/stat-card/stat-card.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DsStatCard",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/design-system/tokens/preset.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "CustomPreset",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/mocks/browser.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "worker",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/mocks/handlers.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "handlers",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/models/index.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "DashboardStats",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/models/index.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "Project",
+                "coveragePercent": 0,
+                "coverageCount": "0/14",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/models/index.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "User",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/pages/dashboard/dashboard.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "Dashboard",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/pages/dashboard/dashboard.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "ActivityRow",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/pages/detail/detail.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "Detail",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/pages/list/list.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ListPage",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/pages/list/list.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "Project",
+                "coveragePercent": 0,
+                "coverageCount": "0/8",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/pages/list/list.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "TagSeverity",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/main.ts",
+                "type": "function",
+                "linktype": "miscellaneous",
+                "linksubtype": "function",
+                "name": "bootstrap",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}

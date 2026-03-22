@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "Rory Ford",
+    "initials": "RF",
+    "email": "rory.ford@example.com",
+    "role": "Lead Engineer",
+    "avatar": "RF"
+  },
+  {
+    "id": 2,
+    "name": "Sarah Chen",
+    "initials": "SC",
+    "email": "sarah.chen@example.com",
+    "role": "Senior Developer",
+    "avatar": "SC"
+  },
+  {
+    "id": 3,
+    "name": "James Wu",
+    "initials": "JW",
+    "email": "james.wu@example.com",
+    "role": "Data Engineer",
+    "avatar": "JW"
+  },
+  {
+    "id": 4,
+    "name": "Maria Lopez",
+    "initials": "ML",
+    "email": "maria.lopez@example.com",
+    "role": "Product Manager",
+    "avatar": "ML"
+  },
+  {
+    "id": 5,
+    "name": "Priya Patel",
+    "initials": "PP",
+    "email": "priya.patel@example.com",
+    "role": "Backend Developer",
+    "avatar": "PP"
+  },
+  {
+    "id": 6,
+    "name": "Dev Nguyen",
+    "initials": "DN",
+    "email": "dev.nguyen@example.com",
+    "role": "DevOps Engineer",
+    "avatar": "DN"
+  }
+]

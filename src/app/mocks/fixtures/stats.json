@@ -1,0 +1,6 @@
+[
+  { "label": "Total Users", "value": "12,847", "icon": "pi-users" },
+  { "label": "Active Projects", "value": "284", "icon": "pi-briefcase" },
+  { "label": "Open Tasks", "value": "1,429", "icon": "pi-check-square" },
+  { "label": "Revenue", "value": "$847K", "icon": "pi-dollar" }
+]

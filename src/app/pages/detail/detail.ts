@@ -2,13 +2,11 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Avatar } from 'primeng/avatar';
 import { Divider } from 'primeng/divider';
-import { AppButton } from '../../atoms/button';
-import { AppTag } from '../../atoms/tag';
-import { AppInputText } from '../../atoms/input-text';
+import { DsButton, DsTag, DsInput } from '../../design-system/atoms';
 
 @Component({
   selector: 'app-detail',
-  imports: [Avatar, Divider, AppButton, AppTag, AppInputText],
+  imports: [Avatar, Divider, DsButton, DsTag, DsInput],
   template: `
     <div class="detail-page">
       <div class="detail-card">
@@ -18,7 +16,7 @@ import { AppInputText } from '../../atoms/input-text';
           <p-avatar label="PA" size="xlarge" shape="circle" />
           <div class="entity-title">
             <h1>Project Alpha</h1>
-            <app-tag value="Active" severity="success" />
+            <ds-tag value="Active" severity="success" />
           </div>
         </div>
 
@@ -28,23 +26,23 @@ import { AppInputText } from '../../atoms/input-text';
         <div class="info-section">
           <div class="field">
             <label>Project Name</label>
-            <app-input-text [value]="'Project Alpha'" placeholder="Project Name" />
+            <ds-input [value]="'Project Alpha'" placeholder="Project Name" />
           </div>
           <div class="field">
             <label>Owner</label>
-            <app-input-text [value]="'Sarah Chen'" placeholder="Owner" />
+            <ds-input [value]="'Sarah Chen'" placeholder="Owner" />
           </div>
           <div class="field">
             <label>Created</label>
-            <app-input-text [value]="'January 15, 2026'" placeholder="Created" />
+            <ds-input [value]="'January 15, 2026'" placeholder="Created" />
           </div>
           <div class="field">
             <label>Category</label>
-            <app-input-text [value]="'Engineering'" placeholder="Category" />
+            <ds-input [value]="'Engineering'" placeholder="Category" />
           </div>
           <div class="field full-width">
             <label>Description</label>
-            <app-input-text
+            <ds-input
               [value]="'Core platform redesign and API modernization initiative'"
               placeholder="Description"
             />
@@ -55,9 +53,9 @@ import { AppInputText } from '../../atoms/input-text';
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-          <app-button label="Edit" severity="primary" />
-          <app-button label="Delete" severity="danger" />
-          <app-button label="Back to List" severity="secondary" [outlined]="true" (clicked)="goBack()" />
+          <ds-button label="Edit" severity="primary" />
+          <ds-button label="Delete" severity="danger" />
+          <ds-button label="Back to List" severity="secondary" [outlined]="true" (clicked)="goBack()" />
         </div>
 
       </div>

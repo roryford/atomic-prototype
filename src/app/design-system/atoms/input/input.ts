@@ -3,13 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 
 @Component({
-  selector: 'app-input-text',
+  selector: 'ds-input',
   imports: [InputText, FormsModule],
   template: `
     <input pInputText [(ngModel)]="value" [placeholder]="placeholder()" />
   `,
 })
-export class AppInputText {
+export class DsInput {
   value = model<string>('');
   placeholder = input<string>('');
 }
