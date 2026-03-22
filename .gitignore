@@ -45,3 +45,5 @@ Thumbs.db
 
 *storybook.log
 storybook-static
+tools/token-pipeline/node_modules/
+tools/token-pipeline/output/
