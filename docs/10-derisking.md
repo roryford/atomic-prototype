@@ -2,7 +2,7 @@
 
 > **When to read:** Before each maturity transition (POC start, Prototype start). Use the summary table to track which risks you have addressed. Read time: ~8 minutes.
 
-A small team de-risks by building. These are not scheduled spikes -- they are questions to answer as you go. A 2-4 person team will surface most of these naturally while building the first screens and flows. The structure below tells you when to expect each one so nothing is a surprise.
+A small team de-risks by building. These are not scheduled spikes -- they are questions to answer as you go. You will surface most of these naturally as you build screens and flows. The structure below tells you when to expect each one so nothing is a surprise.
 
 Each risk below describes how you will naturally discover it while building. The goal is not to spike every risk upfront -- it is to recognize each one when it appears and know the 30-minute response.
 
@@ -188,7 +188,7 @@ Backend APIs are not ready when frontend needs them, or they change without noti
 | Scope creep (system) | Ongoing: tooling vs product ratio | Apply "does this ship screens faster?" test | Awareness |
 | Backend availability | Ongoing: integration friction | Contract-first, mock services, change notifications | Process change |
 
-Total technical effort across the 14 build-time risks: roughly 7-9 days. That investment prevents weeks of rework during production.
+Total technical effort across the 14 build-time risks: roughly 7-9 days (effort varies with team size and scope). That investment prevents weeks of rework during production.
 
 ---
 

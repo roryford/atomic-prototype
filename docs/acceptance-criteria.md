@@ -2,6 +2,8 @@
 
 Written BEFORE implementation. Each criterion drives a Storybook play function, a unit test, or a manual test checklist item.
 
+> These acceptance criteria are examples from the prototype simulation. Your criteria will reflect your own domain and user journeys. Use these as templates for the level of detail expected, not as literal requirements.
+
 ---
 
 ## Atoms

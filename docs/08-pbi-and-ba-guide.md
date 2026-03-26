@@ -297,7 +297,9 @@ For each PBI, explicitly define what's in scope and what's deferred:
 - Test implementation
 - CSS / responsive implementation (as long as requirements specify breakpoints)
 
-### 4.8 BA's Sprint Rhythm
+### 4.8 BA's Rhythm
+
+The table below maps BA activities to sprint phases. If your team uses continuous flow or kanban, adapt these to your cadence — the key principle is that state discovery and acceptance criteria happen before code.
 
 | When | What | Output |
 |------|------|--------|

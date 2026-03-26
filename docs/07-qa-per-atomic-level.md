@@ -26,6 +26,8 @@ If a defect is found at level N that originates at level N-1, the fix happens at
 
 ## Level 1 -- Atoms
 
+Atoms are the foundation — defects here cascade to every molecule, organism, and page that uses them. Token compliance, accessibility, and input/output correctness must be solid at this level.
+
 > **Examples:** Button, Input, Label, Icon, Badge, Avatar, Checkbox, Tag
 
 Atoms are thin wrappers around a single PrimeNG primitive or native HTML element. Purely presentational, stateless, styled through design tokens. Defects here have the widest blast radius.
@@ -122,6 +124,8 @@ The molecule is certified when: all child atoms are certified, integration tests
 ---
 
 ## Level 3 -- Organisms
+
+Organisms are where real data enters your system and where most production issues originate. State management, error handling, and data-driven rendering are the primary risks.
 
 > **Examples:** Header/Navbar, Data Table, Sidebar Nav, Card Grid, Form Section
 

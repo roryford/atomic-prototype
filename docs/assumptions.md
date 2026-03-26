@@ -1,6 +1,6 @@
 # Simulation Assumptions
 
-> Decisions Claude made autonomously that a real team would discuss in Week 1 alignment ([04-parallel-development](./04-parallel-development.md)).
+> Decisions made during the prototype simulation that a real team should discuss in early alignment ([04-parallel-development](./04-parallel-development.md)).
 > These become input for the real team's first conversation.
 
 ## Vocabulary

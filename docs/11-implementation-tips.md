@@ -8,11 +8,11 @@ Practical guidance from the POC and prototype simulations. These tips supplement
 
 ## Before Writing Code
 
-- **Settle file naming on day 1.** Angular 21 uses 2025 naming (`button.ts`, class `Button`) by default. The team must decide: adopt 2025 convention, or manually use legacy naming (`.component.ts`, `ButtonComponent`). Mixed naming in one project causes confusion. Pick one and stick with it.
+- **Settle file naming early.** Angular 21 uses 2025 naming (`button.ts`, class `Button`) by default. The team must decide: adopt 2025 convention, or manually use legacy naming (`.component.ts`, `ButtonComponent`). Mixed naming in one project causes confusion. Pick one and stick with it.
 
-- **Spike `definePreset()` in the first two days.** The token path discovery -- figuring out that button colors live at `components.button.root.primary.background` -- is the hardest part of theming. Don't save this for the end of the POC. Read `@primeuix/themes/types` to understand the nesting.
+- **Spike `definePreset()` early in the POC.** The token path discovery -- figuring out that button colors live at `components.button.root.primary.background` -- is the hardest part of theming. Don't save this for the end of the POC. Read `@primeuix/themes/types` to understand the nesting.
 
-- **Agree on a single set of breakpoints.** The responsive approach (reflow vs restructure) should be decided in Week 1. For canonical breakpoints, see [04-parallel-development](./04-parallel-development.md).
+- **Agree on a single set of breakpoints.** The responsive approach (reflow vs restructure) should be decided early. For canonical breakpoints, see [04-parallel-development](./04-parallel-development.md).
 
 ---
 

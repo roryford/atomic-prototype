@@ -20,7 +20,7 @@ Each stream's maturity advances independently. It is normal for dev to be at pro
 
 ---
 
-## Early Alignment (Week 1)
+## Early Alignment (First Sprint or Week)
 
 Not a meeting. Things the team should discuss early, even informally:
 
@@ -52,7 +52,7 @@ Dev should build settled areas to production quality, in-progress areas to proto
 
 - **BA involvement for organisms and pages.** Atoms and molecules are technical components where the API is the requirement -- developers can write these PBIs. Organisms and pages are user-facing -- they need someone (a BA, product owner, or the designer themselves) to elicit missing states before PBIs are written. Walk through each organism asking: "What happens when there's no data? When the API fails? When a search returns nothing? When one API succeeds and another fails?" Capture answers in a state matrix and route unanswered questions to the designer.
 
-These four topics do not require a formal kickoff meeting. They can happen over coffee, in a Slack thread, or in the first standup. The point is that all 2-4 people leave week one with the same mental model of what they are building and which parts are safe to invest in.
+These four topics do not require a formal kickoff meeting. They can happen over coffee, in a Slack thread, or in the first standup. The point is that all 2-4 people leave the first sprint or week with the same mental model of what they are building and which parts are safe to invest in.
 
 ---
 

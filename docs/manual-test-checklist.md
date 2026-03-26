@@ -4,6 +4,8 @@
 
 Manual verification items that cannot be fully covered by unit tests or Storybook play functions. These require a running application (`ng serve`) and a real browser.
 
+> This checklist is from the prototype simulation (dashboard, projects, stats). Your checklist should reflect your own pages and user journeys. Use this as a template for the types of manual verification needed.
+
 ---
 
 ## Prerequisites

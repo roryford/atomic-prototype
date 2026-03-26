@@ -14,7 +14,7 @@ These stages overlap. Design doesn't stop when dev starts prototyping. A prototy
 
 | Attribute | Value |
 |-----------|-------|
-| Duration | Days to 2 weeks |
+| Duration | Typically days to 2 weeks; varies by scope and team size |
 | Fidelity | Low -- rough, exploratory |
 | Data | Hardcoded, inline |
 | Purpose | Prove feasibility, test assumptions, explore tooling |
@@ -26,7 +26,7 @@ POC is where you spike PrimeNG fit, try Figma MCP, see if Storybook adds value. 
 
 | Attribute | Value |
 |-----------|-------|
-| Duration | 2 to 6 weeks |
+| Duration | Typically 2 to 6 weeks; varies by scope and team size |
 | Fidelity | Mid-to-high -- recognizable as the real product |
 | Data | Mocked APIs, realistic payloads |
 | Purpose | Validate usability, discover missing states |
