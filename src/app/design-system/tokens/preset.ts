@@ -99,19 +99,23 @@ const CustomPreset = definePreset(Aura, {
           color: '#A5B4FC',
           focusColor: '#C7D2FE',
         },
+        // Surface scale keeps the same convention in both modes:
+        // 0 = lightest (base/contrast), 900 = darkest.
+        // PrimeNG uses surface.0 for light-mode backgrounds and surface.900
+        // for dark-mode backgrounds (via --p-content-background).
         surface: {
-          0: '#0C0A09',
-          50: '#1C1917',
-          100: '#292524',
-          200: '#44403C',
-          300: '#57534E',
+          0: '#FAFAF9',
+          50: '#F5F5F4',
+          100: '#E7E5E4',
+          200: '#D6D3D1',
+          300: '#A8A29E',
           400: '#78716C',
-          500: '#A8A29E',
-          600: '#D6D3D1',
-          700: '#E7E5E4',
-          800: '#F5F5F4',
-          900: '#FAFAF9',
-          950: '#FFFFFF',
+          500: '#57534E',
+          600: '#44403C',
+          700: '#292524',
+          800: '#1C1917',
+          900: '#0C0A09',
+          950: '#050403',
         },
         text: {
           color: '#FAFAF9',
