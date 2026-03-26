@@ -25,8 +25,8 @@ Each stream's maturity advances independently. It is normal for dev to be at pro
 Not a meeting. Things the team should discuss early, even informally:
 
 - **Shared vocabulary.** Agree on what "atom," "molecule," and "organism" means for your project. If design calls something a "card" and dev calls it a "tile," you will waste time later. Write the agreed names somewhere everyone can see — a pinned Slack message, a Figma page title, whatever sticks.
-- **PrimeNG fit.** Does the design language work with PrimeNG's Aura preset, or fight it? Spike the riskiest components in the first few days. If a custom date picker is going to take a week, everyone should know that now, not in week three.
-- **Responsive approach.** Reflow (CSS grid/flex adjustments at breakpoints) or restructure (different DOM for mobile)? This decision affects component architecture deeply — a reflow approach means one component with CSS variations, while restructure may mean separate mobile templates.
+- **PrimeNG fit.** Does the design language work with PrimeNG's Aura preset, or fight it? Spike the riskiest components in the first few days. If a custom date picker is going to take a week, everyone should know that now, not in week three. Validate by attempting to replicate your design-spec component targets using only `definePreset()` — if that is not enough, you know early.
+- **Responsive approach.** Reflow (CSS grid/flex adjustments at breakpoints) or restructure (different DOM for mobile)? This decision affects component architecture deeply — a reflow approach means one component with CSS variations, while restructure may mean separate mobile templates. For standard layouts (dashboards, list views, detail forms), reflow is usually sufficient — cards reflow from multi-column to single-column, tables get horizontal scroll on mobile, and forms stack fields vertically. Defer restructure only for screens that genuinely need different DOM for mobile (e.g., complex drag-and-drop dashboards).
 - **Canonical breakpoints.** Settle on a single set of breakpoints in Week 1. These values are a starting point — adjust based on the actual design:
 
   | Name | Width | Columns |
@@ -48,11 +48,21 @@ Exploring:   Settings page (two approaches being tested)
 Not started: Search results
 ```
 
-Dev should build settled areas to production quality, in-progress areas to prototype quality, and exploring areas to POC quality at most. This prevents the most common source of rework: polishing something that is about to change.
+Dev should build settled areas to production quality, in-progress areas to prototype quality, and exploring areas to POC quality at most. This prevents the most common source of rework: polishing something that is about to change. In a real project, maintain this list visibly — a pinned Slack message, a whiteboard, a Figma annotation — and keep it current. It does not need to be a formal document, but the team should be able to point to it at any time.
 
 - **BA involvement for organisms and pages.** Atoms and molecules are technical components where the API is the requirement -- developers can write these PBIs. Organisms and pages are user-facing -- they need someone (a BA, product owner, or the designer themselves) to elicit missing states before PBIs are written. Walk through each organism asking: "What happens when there's no data? When the API fails? When a search returns nothing? When one API succeeds and another fails?" Capture answers in a state matrix and route unanswered questions to the designer.
 
 These four topics do not require a formal kickoff meeting. They can happen over coffee, in a Slack thread, or in the first standup. The point is that all 2-4 people leave the first sprint or week with the same mental model of what they are building and which parts are safe to invest in.
+
+### Team Alignment Questions
+
+These questions surfaced during the prototype simulation. A real team should discuss them in their first alignment conversation:
+
+1. **Selector prefix** — used `app-` (Angular default). [03-project-structure](./03-project-structure.md) suggests `ds-` for design system components at prototype stage. When to switch?
+2. **Breakpoint values** — used 640/1024/1440 from design spec. [10-derisking](./10-derisking.md) mentions breakpoints but doesn't specify values. [07-qa-per-atomic-level](./07-qa-per-atomic-level.md)'s reference mentions 320/768/1024/1440/1920. Which is canonical?
+3. **Dark mode strategy** — See [05-token-pipeline § Dark Mode](./05-token-pipeline.md#4-dark-mode) for the full guide. The prototype uses a manual toggle; the team should decide between manual, OS preference, or both.
+4. **File naming convention** — Angular 21 uses 2025 naming (`button.ts`, class `Button`) not legacy (`button.component.ts`, class `ButtonComponent`). The docs use legacy naming throughout. Which should the team adopt?
+5. **Atom wrapper depth** — [01-atomic-hierarchy](./01-atomic-hierarchy.md) says "thin wrapper" but doesn't specify: should the wrapper re-expose every PrimeNG input, or only the ones the design system uses?
 
 ---
 

@@ -79,9 +79,7 @@ This repository serves as both the process documentation and the working referen
 
 | Doc | What it answers |
 |-----|-----------------|
-| [design-spec](./design-spec.md) | Design specification |
-| [design-spec-prototype](./design-spec-prototype.md) | Prototype-specific design spec |
-| [assumptions](./assumptions.md) | Documented assumptions |
+| [design-spec](./design-spec.md) | Design specification (includes prototype extensions) |
 | [simulation-report](./simulation-report.md) | Simulation findings |
 | [acceptance-criteria](./acceptance-criteria.md) | Acceptance criteria |
 | [manual-test-checklist](./manual-test-checklist.md) | Manual test checklist |

@@ -135,7 +135,7 @@ Outputs:
   - projectSelected: Project (emitted when View clicked or row selected)
   - retryClicked: void (emitted when retry button in error state clicked)
 
-States (see design-spec-prototype.md for visuals):
+States (see [design-spec.md#prototype-phase-extensions](./design-spec.md#prototype-phase-extensions) for visuals):
   1. Loading: skeleton header (40px) + 5 skeleton rows (48px each)
   2. Error: p-message severity="error" "Unable to load projects" + retry DsButton (secondary, outlined)
   3. Empty: DsEmptyState icon=pi-inbox message="No projects found"
@@ -260,7 +260,7 @@ Maintain a **design questions log** — every time dev encounters a state the de
 
 | Date | Component | Question | Asked To | Answer | Updated In |
 |------|-----------|----------|----------|--------|------------|
-| Mar 22 | ProjectTable | What does search-no-results look like? | Designer | pi-search icon + "No results" + Clear button | PBI #42, design-spec-prototype.md |
+| Mar 22 | ProjectTable | What does search-no-results look like? | Designer | pi-search icon + "No results" + Clear button | PBI #42, [design-spec.md#prototype-phase-extensions](./design-spec.md#prototype-phase-extensions) |
 | Mar 23 | Dashboard | What happens when stats fail but projects load? | Designer | Show error in stats section only | PBI #38, acceptance-criteria.md |
 
 For a 2-4 person team, this doesn't need a tool — a shared doc or Slack thread that the BA owns is enough.
