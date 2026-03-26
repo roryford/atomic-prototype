@@ -23,7 +23,7 @@ import { Button } from 'primeng/button';
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      background: var(--p-surface-ground);
+      background: var(--p-content-background);
     }
 
     .app-nav {
