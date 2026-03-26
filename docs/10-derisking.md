@@ -197,3 +197,4 @@ Total technical effort across the 14 build-time risks: roughly 7-9 days (effort 
 - For Angular-specific concerns, see [09-angular-direction.md](./09-angular-direction.md).
 - For the parallel development model, see [04-parallel-development.md](./04-parallel-development.md).
 - For implementation tips and patterns, see [11-implementation-tips.md](./11-implementation-tips.md).
+- For tool options and procurement guidance: [06-tooling-landscape](./06-tooling-landscape.md)

@@ -278,6 +278,8 @@ No viable Angular alternatives to Storybook exist -- Histoire and Ladle are Reac
 - **Must use `ng run`, not `storybook dev`.** Direct invocation fails with `SB_FRAMEWORK_ANGULAR_0001`. Use `ng run atomic-prototype:storybook` (or `npm run storybook` which wraps it).
 - **CSS imports in `preview.ts` fail.** Importing `primeicons/primeicons.css` directly causes a webpack parse error (`Unexpected character '@'` on `@font-face`). Load global styles through `angular.json`'s `styles` array or via a CDN `<link>` in `.storybook/preview-head.html` instead.
 
+For tool evaluation and alternatives, see [06-tooling-landscape](./06-tooling-landscape.md).
+
 ### Visual Regression Testing
 
 **Chromatic** (by Storybook team) -- simplest for small teams:
@@ -311,6 +313,8 @@ Prevent the #1 dark mode gotcha (hardcoded hex values) at the linter level:
 - `stylelint-declaration-use-css-custom-properties` enforces `var(--*)` for color properties
 
 Neither auto-suggests the correct `--p-*` token -- inspect `@primeng/themes/aura` source or browser DevTools for the mapping.
+
+For the full linting tool landscape, see [06-tooling-landscape](./06-tooling-landscape.md).
 
 ### Test Runner Setup
 

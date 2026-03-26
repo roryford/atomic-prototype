@@ -129,6 +129,8 @@ Angular has no component-level error boundaries (feature request open since 2017
 
 **Decision needed:** Are backend APIs available? Is there an OpenAPI spec? Who owns the contract? Can MSW handlers be generated from the spec to keep mocks and reality aligned?
 
+For the full tooling landscape and procurement decision guide, see [06-tooling-landscape](./06-tooling-landscape.md).
+
 ---
 
 ## 4. Proposed Production Simulation Waves

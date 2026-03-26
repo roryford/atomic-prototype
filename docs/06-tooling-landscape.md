@@ -1,6 +1,6 @@
 # 06 — Tooling Landscape
 
-> **When to read:** When the team is deciding which tools to adopt. Not needed on day 1. Read time: ~5 minutes.
+> **When to read:** When the team is deciding which tools to adopt. Not needed on day 1. Read time: ~8 minutes.
 
 > **Key principle:** Angular + PrimeNG + Figma are locked in. Everything else is a recommendation to explore. The process must work with zero additional tooling and get better as tools are added.
 
@@ -46,14 +46,22 @@ Every function below can be done manually. Tools are accelerators you adopt when
 
 | Function | Manual Approach | Tools to Evaluate | Evaluate When |
 |---|---|---|---|
-| Design token extraction | Inspect Figma, create JSON by hand | Tokens Studio (free), Figma Variables API | POC — if manual token sync is painful |
+| Design token extraction | Inspect Figma, create JSON by hand | Tokens Studio (free; Pro tier adds Git sync — paid), Figma Variables API. Packages: `@tokens-studio/sd-transforms`, `@tokens-studio/dtcg-convert` | POC — if manual token sync is painful |
 | Token transformation | Hand-write SCSS/preset files from JSON | Style Dictionary v5 | Prototype — if token count exceeds ~50 |
 | Token format standard | Use your own JSON schema | W3C DTCG spec (free, open standard) | Prototype — when setting up the pipeline |
-| Component development | Build and test in the app directly | Storybook 10 (free, open source) | Prototype — when reviewing components in isolation matters |
-| Visual regression | Manual side-by-side review (Storybook vs Figma) | Chromatic, Percy (free tiers), BackstopJS (free) | Production — when manual visual review does not scale |
-| Unit testing | Angular CLI default (Vitest in v21) | Already bundled — no procurement needed | Day 1 |
+| PrimeNG theming (premium) | `definePreset()` with hand-authored tokens | PrimeOne UI Kit v4 + Theme Designer Extended (paid) | Prototype — if manual dark mode mapping is painful or token count is high |
+| Token pipeline CI | Run `npm run build:tokens` manually | `figma-to-theme-code-generator` GitHub Action (PrimeNG), Tokens Studio Pro Git sync (paid) | Production — when token changes need automated PRs |
+| Component development | Build and test in the app directly | Storybook 10 (free, open source). **Angular caveat:** use `ng run <project>:storybook`, not `storybook dev` directly. CSS imports in `preview.ts` fail — use `angular.json` styles array or CDN link in `preview-head.html`. | Prototype — when reviewing components in isolation matters |
+| Visual regression | Manual side-by-side review (Storybook vs Figma) | Chromatic (easiest, free tier 5K snapshots/month, Modes feature for dark mode), Percy (free tier available), BackstopJS (open source, self-hosted), Playwright `toHaveScreenshot()` (built-in, no external service) | Production — when manual visual review does not scale |
+| Unit testing | Angular CLI default (Vitest in v21). **Note:** PrimeNG `(onClick)` does not fire via DOM click in jsdom. Full interaction testing requires Storybook play functions or Playwright. | Already bundled — no procurement needed | Day 1 |
 | E2E testing | Manual testing of user flows | Cypress (free), Playwright (free) | Prototype — when core flows are stable enough to automate |
-| Accessibility testing | Manual keyboard + screen reader testing | axe-core (free), pa11y (free), Storybook a11y addon (free) | Prototype — from first atom |
+| Accessibility testing | Manual keyboard + screen reader testing | axe-core (free, recommended standard), pa11y (free), Storybook a11y addon (free). **Gate:** zero critical/serious violations. | Prototype — from first atom |
+| CSS/SCSS linting | Manual code review | Stylelint + `color-no-hex` rule | POC — from first component |
+| Code formatting | Manual style adherence | Prettier (free) | POC — from first component |
+| TypeScript linting | Manual code review | ESLint + `@angular-eslint` (free) | Prototype — when team grows past 2 |
+| Bundle analysis | Check build output sizes | source-map-explorer (free, recommended), webpack-bundle-analyzer | Prototype — when initial bundle exceeds budget |
+| Performance monitoring | Manual Lighthouse audits | Lighthouse CI (free) | Production — when performance budgets are enforced in CI |
+| CI/CD pipeline | Manual build + test + deploy | GitHub Actions (free for public repos) | Prototype — when PRs need automated checks |
 | API mocking | Hardcoded data in components | MSW (free, open source) | Prototype — when organisms need realistic data |
 | Monorepo management | Single Angular project (Angular CLI) | Nx (free, open source) | Only if multiple apps consume the design system |
 | AI-assisted development | Manual implementation from Figma inspection | Figma MCP Server (free), Angular CLI MCP (experimental) | POC — low-cost experiment |
@@ -92,7 +100,11 @@ Figma ──► Tokens Studio ──► Style Dictionary ──► Angular + Pri
   ▼                                                 ▼
 Figma MCP ──► AI Agent ──► Angular CLI MCP    Storybook ──► Chromatic
                                                   │
-                                              Vitest + Cypress/Playwright
+                                              Vitest + Playwright
+                                                  │
+                                              Stylelint + ESLint + Prettier
+                                                  │
+                                              GitHub Actions CI
 ```
 
 Both paths produce the same output. The second is faster at scale.
@@ -115,12 +127,55 @@ Ask these questions before procuring or adopting anything:
 | Accessibility is an afterthought | Are a11y issues found late in QA or by users? | axe-core, pa11y |
 | Scaffolding is repetitive | Are you copy-pasting boilerplate for every new component? | Figmular, Builder.io, Angular CLI MCP |
 | Build times are growing | Is CI taking >10 min on incremental changes? | Nx |
+| Dark mode token mapping is manual | Are you hand-authoring `colorScheme.dark` for 50+ tokens? | PrimeOne UI Kit v4 (auto-generates light/dark from Figma Variable modes) |
+| Hardcoded hex values keep appearing | Are hex values slipping past code review into component styles? | Stylelint `color-no-hex` + pre-commit hook for inline styles |
+| Bundle size is growing | Is the production bundle exceeding 500KB raw? | source-map-explorer + `@defer` blocks + lazy loading |
+| CI has no quality gates | Can broken code or failing tests merge to main? | GitHub Actions: lint → test → build on PR |
+| Performance regressions go unnoticed | Are users reporting slowness before you catch it? | Lighthouse CI with budget thresholds |
 
 **Decision rule:** If the manual approach works and the team is not blocked, do not add tooling. Complexity has a cost. Every tool you adopt is a dependency you maintain.
 
 ---
 
+## 5. Lessons from the Prototype
+
+The simulation phase validated several tools against real Angular 21 + PrimeNG 21 code. Summary:
+
+| Tool | Verdict | Key Finding |
+|------|---------|-------------|
+| MSW v2 | Seamless | Network-level interception works perfectly with `httpResource()` |
+| Storybook 10 | Works, with caveats | Must use `ng run`; CSS import workaround needed |
+| Stylelint | Partial coverage | Catches hex in `.scss` but blind to inline TypeScript styles |
+| Vitest | Fast, minimal setup | 36 tests in ~2s; jsdom limitation with PrimeNG clicks |
+| `httpResource()` | Clean but experimental | `@experimental 19.2` — wrap behind service methods to isolate risk |
+
+These verdicts informed the "Evaluate When" column in Section 2. None of the tools required significant configuration effort, but each had at least one gotcha worth knowing in advance.
+
+For detailed findings, see [simulation-report](./simulation-report.md).
+
+---
+
+## 6. Angular Feature Stability
+
+Quick reference for which Angular features are safe to depend on today.
+
+| Feature | Status | Guidance |
+|---------|--------|----------|
+| Signal inputs/outputs | Stable | Use everywhere — the standard for component APIs |
+| Zoneless change detection | Stable | Default in Angular 21, no action needed |
+| `@defer` blocks | Stable | Use for lazy-loading heavy organisms |
+| `httpResource()` | Experimental (19.2) | Wrap behind services; fallback: `toSignal(http.get())` |
+| Signal Forms | Developer Preview | Do not depend on; use facade pattern for future swap |
+| Selectorless components | RFC | Do not depend on; name classes cleanly for eventual migration |
+
+For full Angular feature details, see [09-angular-direction](./09-angular-direction.md).
+
+---
+
 ## Cross-References
 
-- For token pipeline detail: see [05-token-pipeline.md](./05-token-pipeline.md)
-- For Angular architectural direction: see [09-angular-direction.md](./09-angular-direction.md)
+- Token pipeline detail (three paths, dark mode): [05-token-pipeline](./05-token-pipeline.md)
+- Angular feature status and signal patterns: [09-angular-direction](./09-angular-direction.md)
+- Practical setup instructions and gotchas: [11-implementation-tips](./11-implementation-tips.md)
+- QA checklists per atomic level: [07-qa-per-atomic-level](./07-qa-per-atomic-level.md)
+- Simulation tool verdicts: [simulation-report](./simulation-report.md)
