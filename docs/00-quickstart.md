@@ -6,13 +6,17 @@ Start here. This repo contains process documentation for building Angular 21 + P
 
 ---
 
-## Read These First (in order)
+## After This, Read the Foundations (in order)
+
+You're in the right place. After this page, continue with:
 
 1. **[01-atomic-hierarchy](./01-atomic-hierarchy.md)** -- Component taxonomy and cascade rule
 2. **[02-maturity-stages](./02-maturity-stages.md)** -- POC, Prototype, Production quality levels
 3. **[03-project-structure](./03-project-structure.md)** -- Where files go, how they're named
 
-## Then Read Based on Your Role
+Then pick your role-based path below.
+
+## Reading Path by Role
 
 **Developer (new to the project):**
 00 -> 01 -> 02 -> 03 -> [11-implementation-tips](./11-implementation-tips.md) -> explore `src/`
