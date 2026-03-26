@@ -153,11 +153,56 @@ document.documentElement.classList.toggle('dark-mode');
 
 See the working implementation at [`src/app/design-system/tokens/preset.ts`](../src/app/design-system/tokens/preset.ts) and [`src/app/app.config.ts`](../src/app/app.config.ts).
 
-### The #1 Rule
+### The Three Rules
 
-**Always use CSS custom properties for colors.** Any hardcoded hex value (`background: #FAFAF9`) stays the same in both modes — it does not respond to the dark mode toggle. Use `var(--p-surface-50)`, `var(--p-text-color)`, etc. instead. This is the most common theming mistake and was found in 11 places during the prototype simulation.
+**Rule 1: Use derived tokens, not raw surface tokens.**
 
-Stylelint's `color-no-hex` rule catches this in `.scss`/`.css` files, but cannot inspect inline `styles:` arrays in TypeScript decorators or `[style]` template bindings. A pre-commit grep or custom ESLint rule is needed for full coverage.
+PrimeNG has two kinds of CSS variables:
+
+| Type | Example | Dark mode behavior |
+|------|---------|-------------------|
+| **Raw scale tokens** | `--p-surface-0`, `--p-surface-200` | Same value in both modes. `surface.0` is always the lightest. |
+| **Derived tokens** | `--p-content-background`, `--p-content-border-color`, `--p-text-color` | PrimeNG swaps these automatically between modes. |
+
+For component backgrounds and borders, always use the derived tokens:
+
+```scss
+// WRONG — stays light in dark mode
+background: var(--p-surface-0);
+border: 1px solid var(--p-surface-200);
+
+// RIGHT — switches automatically
+background: var(--p-content-background);
+border: 1px solid var(--p-content-border-color);
+```
+
+Available derived tokens: `--p-content-background`, `--p-content-border-color`, `--p-content-color`, `--p-text-color`, `--p-text-muted-color`, `--p-primary-color`.
+
+**Rule 2: Do not override colors in the component tier of `definePreset()`.**
+
+Token references like `{surface.0}` in the component tier resolve at build time, not runtime. They bake in a single value that doesn't switch between modes. Only override structural properties (border-radius, padding, font-weight) in the component tier. Let PrimeNG's Aura handle all color switching.
+
+```ts
+// WRONG — {surface.0} resolves to #FFFFFF and stays light
+components: { card: { root: { background: '{surface.0}' } } }
+
+// RIGHT — only structural overrides, colors handled by Aura
+components: { card: { root: { borderRadius: '12px' } } }
+```
+
+**Rule 3: Keep the surface scale numbering consistent across modes.**
+
+In `colorScheme.dark`, surface.0 should still be the lightest value and surface.900 the darkest. Do NOT invert the scale. PrimeNG's `--p-content-background` uses `var(--p-surface-900)` in dark mode, expecting it to be dark.
+
+```ts
+// WRONG — inverted scale, surface.900 is light
+dark: { surface: { 0: '#0C0A09', 900: '#FAFAF9' } }
+
+// RIGHT — same direction, just darker values
+dark: { surface: { 0: '#FAFAF9', 900: '#0C0A09' } }
+```
+
+**Additional:** Stylelint's `color-no-hex` rule catches hardcoded hex in `.scss`/`.css` files, but cannot inspect inline `styles:` arrays in TypeScript decorators or `[style]` template bindings. A pre-commit grep or custom ESLint rule is needed for full coverage.
 
 ### Toggle Strategy (team decision)
 
