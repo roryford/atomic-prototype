@@ -2,7 +2,7 @@
 
 > **Simulation note:** This file simulates a designer sharing visual values from Figma.
 > These values are intentionally different from PrimeNG Aura defaults to force the
-> developer to practice the token mapping workflow described in [03-token-pipeline](./03-token-pipeline.md).
+> developer to practice the token mapping workflow described in [05-token-pipeline](./05-token-pipeline.md).
 
 ---
 

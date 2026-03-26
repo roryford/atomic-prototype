@@ -1,5 +1,7 @@
 # Parallel Development: Design and Dev Run Together
 
+> **When to read:** After the foundations (01-03). Especially relevant for designers and BAs joining the team. Read time: ~8 minutes.
+
 Design is not a phase before dev. On a small team (2-4 people), all streams run in parallel from day one. The words POC, Prototype, and Production describe the **maturity of each stream's output**, not sequential phases separated by handoffs.
 
 ---
@@ -10,22 +12,7 @@ Everyone is in the same standup. Convergence is not a scheduled checkpoint — i
 
 The maturity stages describe where each stream's output sits right now, not what order work happens in. A stream can jump from POC to Production on one component while another component is still being explored. Maturity is per-component, not per-project.
 
-```
-Maturity ──────────────────────────────────────────────────────────►
-
-                  POC              Prototype           Production
-               (explore)          (validate)            (harden)
-            ┌──────────────┬──────────────────┬──────────────────────┐
-  Design    │ Rough comps, │ Hi-fi screens,   │ Final specs,         │
-            │ token sketch │ interaction docs  │ full token coverage  │
-            ├──────────────┼──────────────────┼──────────────────────┤
-  Dev       │ Atom wraps,  │ Organisms wired, │ All states, a11y,    │
-            │ spike builds │ mocked data      │ perf, prod pipeline  │
-            ├──────────────┼──────────────────┼──────────────────────┤
-  Backend   │ Entity model │ Draft endpoints, │ Contracted APIs,     │
-            │ sketches     │ sample payloads  │ versioned, monitored │
-            └──────────────┴──────────────────┴──────────────────────┘
-```
+For what gets built at each maturity level, see [02-maturity-stages](./02-maturity-stages.md).
 
 Each stream's maturity advances independently. It is normal for dev to be at prototype maturity on atoms while design is still at POC on organism layouts. That is fine — the team is small enough to course-correct in conversation.
 
@@ -172,5 +159,5 @@ On a 2-4 person team, the process is the people. Keep talking. Keep showing each
 
 ## Cross-References
 
-- For what to build at each maturity level, see [06-maturity-stages.md](./06-maturity-stages.md).
-- For risks to surface early, see [07-derisking.md](./07-derisking.md).
+- For what to build at each maturity level, see [02-maturity-stages.md](./02-maturity-stages.md).
+- For risks to surface early, see [10-derisking.md](./10-derisking.md).

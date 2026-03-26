@@ -1,5 +1,7 @@
 # 09 - Angular Direction: Things to Be Aware Of
 
+> **When to read:** When you need to understand Angular 21 features that affect component architecture. Not needed before your first component. Read time: ~10 minutes.
+
 > A reference for Angular features and ecosystem signals that affect our atomic
 > design approach. Honest about what is stable vs speculative. Not urgent
 > decisions -- awareness and readiness.
@@ -90,7 +92,7 @@ For fine-grained control, use field-level comparison or a library like
 `fast-deep-equal`. Apply this especially to signals holding API response data
 in organisms and page-level services.
 
-**`httpResource()` (Experimental):** Angular 21's signal-based HTTP resource API. Wraps `HttpClient` and provides built-in `loading`, `error`, `resolved` states as signals. Ideal for organism-level data fetching at prototype stage. Still experimental — wrap behind service methods. See [11-prototype-solutions § Loading States](./11-prototype-solutions.md).
+**`httpResource()` (Experimental 19.2):** Signal-based HTTP resource from `@angular/common/http`. For usage patterns, template examples, and MSW integration, see [11-implementation-tips](./11-implementation-tips.md).
 
 **What to do now:** Use signal inputs/outputs for all new atoms. Use
 `computed()` in molecules, `linkedSignal()` in organisms where state resets on
@@ -175,6 +177,10 @@ data = toSignal(
 atoms to expose an error/fallback state. Use `@defer @error` in templates.
 
 ---
+
+## Future / Watch List
+
+These features are announced but not stable. Track them but do not build on them.
 
 ## Selectorless Components (RFC/Preview)
 
@@ -307,7 +313,7 @@ import { Button } from 'primeng/button';
 `::ng-deep` or `ViewEncapsulation.None` -- scope these to atom wrapper
 components only. Never apply unscoped global overrides to PrimeNG internals.
 
-> For full PrimeNG fit risk analysis, see [07-derisking.md](./07-derisking.md).
+> For full PrimeNG fit risk analysis, see [10-derisking.md](./10-derisking.md).
 
 ---
 
@@ -394,5 +400,5 @@ Everything below is worth tracking but should not drive architectural decisions.
 
 ## Cross-References
 
-- For PrimeNG fit risk and fallback strategy, see [07-derisking.md](./07-derisking.md).
-- For project structure and module boundaries, see [08-project-structure.md](./08-project-structure.md).
+- For PrimeNG fit risk and fallback strategy, see [10-derisking.md](./10-derisking.md).
+- For project structure and module boundaries, see [03-project-structure.md](./03-project-structure.md).

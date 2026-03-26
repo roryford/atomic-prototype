@@ -1,5 +1,7 @@
 # Atomic Design Hierarchy for Angular + PrimeNG
 
+> **When to read:** First. This is the foundation everything else builds on. Read time: ~10 minutes.
+
 Atomic Design (Brad Frost, 2013) decomposes UIs into five distinct levels.
 This document defines each level in the context of **Angular 21** and **PrimeNG 21**, establishing what belongs where and why.
 
@@ -135,5 +137,16 @@ The strict one-level-below rule applies to structural composition, not content p
 
 ## Cross-References
 
-- For QA criteria per level, see [04-qa-per-atomic-level.md](./04-qa-per-atomic-level.md).
-- For how levels evolve across maturity stages, see [06-maturity-stages.md](./06-maturity-stages.md).
+- For QA criteria per level, see [07-qa-per-atomic-level.md](./07-qa-per-atomic-level.md).
+- For how levels evolve across maturity stages, see [02-maturity-stages.md](./02-maturity-stages.md).
+
+---
+
+## See It in Code
+
+This repo is a working prototype. Explore these files to see the hierarchy in practice:
+
+- **Atom:** [`src/app/design-system/atoms/button/button.ts`](../src/app/design-system/atoms/button/button.ts) -- thin wrapper around PrimeNG p-button
+- **Molecule:** [`src/app/design-system/molecules/search-bar/search-bar.ts`](../src/app/design-system/molecules/search-bar/search-bar.ts) -- composes DsInput + DsButton
+- **Organism:** [`src/app/design-system/organisms/project-table/project-table.ts`](../src/app/design-system/organisms/project-table/project-table.ts) -- 5-state data-aware table
+- **Page:** [`src/app/pages/dashboard/dashboard.ts`](../src/app/pages/dashboard/dashboard.ts) -- wires services to organisms

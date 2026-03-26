@@ -1,34 +1,20 @@
-# 08 - Project Structure
+# Project Structure
+
+> **When to read:** Third, after understanding the hierarchy and maturity stages. This shows where files go. Read time: ~8 minutes.
 
 > **Key question:** What does the project directory look like at each maturity level?
 
 This is a single Angular project that evolves in place. There is no migration between repositories, no monorepo split, and no Nx workspace unless a second application needs to consume the design system. A team of 2-4 does not need the overhead.
 
-Each section below shows the directory tree at a given maturity level, what is intentionally absent, and configuration examples you can copy-paste.
-
-> **Cross-reference:** For a full description of _what gets built_ at each stage and the exit criteria for graduating to the next one, see [06-maturity-stages.md](./06-maturity-stages.md).
+> **Cross-reference:** For a full description of _what gets built_ at each stage and the exit criteria for graduating to the next one, see [02-maturity-stages.md](./02-maturity-stages.md).
 
 ---
 
 ## 1. POC Structure
 
-The goal is speed-to-screen. You prove a PrimeNG preset can approximate the Figma comp well enough to justify further investment. Everything lives in a flat structure with no abstractions beyond what the CLI scaffolds.
+At POC stage, the structure is simpler: flatten `design-system/` to just `atoms/` and `molecules/` at the app level. No `mocks/`, `services/`, or barrel exports needed yet.
 
-```
-src/app/
-├── theme/
-│   └── preset.ts                    # Rough definePreset() with eyeballed Figma values
-├── pages/
-│   ├── dashboard/
-│   │   └── dashboard.ts   # Inline template and styles
-│   ├── detail/
-│   │   └── detail.ts
-│   └── list/
-│       └── list.ts
-├── app.routes.ts                    # Flat route array, no lazy loading
-├── app.config.ts                    # providePrimeNG + HttpClient
-└── app.ts
-```
+The goal is speed-to-screen. You prove a PrimeNG preset can approximate the Figma comp well enough to justify further investment. Everything lives in a flat structure with no abstractions beyond what the CLI scaffolds.
 
 > **Tip:** If the team wants to practice atomic decomposition during the POC (recommended), add `atoms/` and `molecules/` folders even at this stage. The decomposition exercise surfaces type-narrowing and wrapper-depth decisions that are better resolved early.
 
@@ -43,72 +29,11 @@ src/app/
 | Services / data layer | Pages use hard-coded JSON or direct `fetch` calls |
 | Design tokens pipeline | Colors and spacing are manually eyeballed from Figma |
 
-### `app.config.ts` -- PrimeNG bootstrap
+### Configuration
 
-```typescript
-// Note: @angular/animations must be installed separately: npm install @angular/animations
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { providePrimeNG } from 'primeng/config';
+See `src/app/app.config.ts` for the working PrimeNG bootstrap configuration.
 
-import { routes } from './app.routes';
-import { CustomPreset } from './theme/preset';
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
-    provideHttpClient(),
-    provideAnimationsAsync(),
-    providePrimeNG({
-      theme: {
-        preset: CustomPreset,
-        options: {
-          darkModeSelector: '.dark-mode',
-        },
-      },
-    }),
-  ],
-};
-```
-
-### `preset.ts` -- eyeballed Figma values
-
-```typescript
-import { definePreset } from '@primeng/themes';
-import Aura from '@primeng/themes/aura';
-
-export const CustomPreset = definePreset(Aura, {
-  primitive: {
-    blue: {
-      500: '#2563EB',   // sampled from Figma primary swatch
-    },
-    slate: {
-      100: '#F1F5F9',
-      700: '#334155',
-      900: '#0F172A',
-    },
-  },
-  semantic: {
-    primary: {
-      50:  '{blue.50}',
-      500: '{blue.500}',
-      900: '{blue.900}',
-    },
-    colorScheme: {
-      light: {
-        surface: {
-          0:   '#FFFFFF',
-          100: '{slate.100}',
-          900: '{slate.900}',
-        },
-      },
-    },
-  },
-});
-```
+See `src/app/theme/preset.ts` for the working preset with Figma-sampled values.
 
 At this stage every value is hand-picked from Figma using a color-picker. That is fine -- the preset exists only to prove the theme _can_ work, not to be pixel-perfect.
 
@@ -183,7 +108,7 @@ src/app/
 └── app.ts
 ```
 
-> **Shared models early.** Define canonical data interfaces in `models/` early. The POC simulation found the same interface defined differently in multiple pages — a shared model prevents this drift.
+> **Shared models early.** Define canonical data interfaces in `models/` early. The POC simulation found the same interface defined differently in multiple pages -- a shared model prevents this drift.
 
 Optional top-level additions at prototype stage:
 
@@ -201,24 +126,7 @@ Optional top-level additions at prototype stage:
 
 The rule is simple: **atoms with a one-line template use inline template and styles. Everything else gets separate files.**
 
-Atoms are thin PrimeNG wrappers. Their template is often a single element with bound inputs:
-
-```typescript
-// atoms/button/button.ts
-import { Button } from 'primeng/button';
-
-@Component({
-  selector: 'ds-button',
-  standalone: true,
-  imports: [Button],
-  template: `<p-button [label]="label" [severity]="severity" [outlined]="outlined" />`,
-})
-export class DsButton {
-  label = input<string>();
-  severity = input<string>('primary');
-  outlined = input<boolean>(false);
-}
-```
+Atoms are thin PrimeNG wrappers. Their template is often a single element with bound inputs.
 
 > **Import note:** Use standalone imports (`import { Button } from 'primeng/button'`) rather than module imports. Use `TableModule` only for organism primitives that need template directives (`pTemplate`, `pSortableColumn`).
 
@@ -226,22 +134,7 @@ Molecules and above always use separate `.html` and `.scss` files because their 
 
 ### How components import each other
 
-Imports use simple relative paths. No path aliases are needed within a single project:
-
-```typescript
-// pages/dashboard/dashboard.ts
-import { Component } from '@angular/core';
-import { DataTable } from '../../design-system/organisms/data-table/data-table';
-import { SidebarLayout } from '../../design-system/templates/sidebar-layout/sidebar-layout';
-
-@Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [SidebarLayout, DataTable],
-  templateUrl: './dashboard.html',
-})
-export class Dashboard {}
-```
+Imports use simple relative paths. No path aliases are needed within a single project.
 
 Barrel exports (`index.ts` at each atomic level) are optional but helpful. If you use them, the import simplifies:
 
@@ -251,26 +144,7 @@ import { DataTable } from '../../design-system/organisms';
 
 ### Storybook setup (if adopted)
 
-The `.storybook/preview.ts` file provides PrimeNG globally so stories do not need to configure it individually:
-
-```typescript
-// .storybook/preview.ts
-import { applicationConfig } from '@storybook/angular';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { providePrimeNG } from 'primeng/config';
-import { CustomPreset } from '../src/app/design-system/tokens/generated/preset';
-
-export const decorators = [
-  applicationConfig({
-    providers: [
-      provideAnimationsAsync(),
-      providePrimeNG({
-        theme: { preset: CustomPreset },
-      }),
-    ],
-  }),
-];
-```
+See `.storybook/preview.ts` for the working Storybook configuration with PrimeNG providers.
 
 Stories use the `title` field to group by atomic level:
 
@@ -287,58 +161,9 @@ export default meta;
 
 ## 3. Production Structure
 
-Same project, evolved. The main additions are a `core/` folder for cross-cutting concerns, lazy-loaded routes, and a CI pipeline.
+Same project, evolved. At Production, add: `core/` (guards, interceptors, error handler), `shared/` (pipes, directives), `environments/`, and move design system to a library if needed.
 
-```
-src/app/
-├── design-system/
-│   ├── tokens/
-│   │   ├── primitives.json
-│   │   ├── semantic.json
-│   │   ├── generated/
-│   │   │   ├── _primitives.scss
-│   │   │   ├── _semantic.scss
-│   │   │   └── preset.ts
-│   │   └── index.ts
-│   ├── atoms/
-│   │   ├── button/
-│   │   ├── input/
-│   │   ├── badge/
-│   │   └── index.ts
-│   ├── molecules/
-│   │   ├── search-bar/
-│   │   ├── form-field/
-│   │   ├── stat-card/
-│   │   └── index.ts
-│   ├── organisms/
-│   │   ├── data-table/
-│   │   ├── sidebar-nav/
-│   │   └── index.ts
-│   └── templates/
-│       ├── sidebar-layout/
-│       └── index.ts
-├── pages/
-│   ├── dashboard/
-│   │   ├── dashboard.ts
-│   │   ├── dashboard.html
-│   │   └── dashboard.scss
-│   ├── detail/
-│   └── list/
-├── core/
-│   ├── guards/
-│   │   └── auth.guard.ts
-│   ├── interceptors/
-│   │   ├── auth.interceptor.ts
-│   │   └── error.interceptor.ts
-│   └── error-handling/
-│       └── global-error-handler.ts
-├── services/
-│   ├── user.service.ts
-│   └── project.service.ts
-├── app.routes.ts                        # loadComponent / loadChildren
-├── app.config.ts                        # Same providers + interceptors
-└── app.ts
-```
+The main additions are a `core/` folder for cross-cutting concerns, lazy-loaded routes, and a CI pipeline. The `design-system/`, `pages/`, `models/`, and `services/` folders remain structurally the same -- they just gain more components and more thorough implementations.
 
 ### Lazy-loaded route example
 
@@ -363,12 +188,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/detail/detail').then(m => m.Detail),
-  },
-  {
-    path: 'admin',
-    canActivate: [authGuard],
-    loadChildren: () =>
-      import('./pages/admin/admin.routes').then(m => m.adminRoutes),
   },
 ];
 ```
@@ -476,4 +295,4 @@ Then add the `.spec.ts` and `.stories.ts` files manually. For molecules and abov
 
 ---
 
-> **Next step:** For what gets built at each maturity level and the criteria for graduating between them, see [06-maturity-stages.md](./06-maturity-stages.md).
+> **Next step:** For what gets built at each maturity level and the criteria for graduating between them, see [02-maturity-stages.md](./02-maturity-stages.md).

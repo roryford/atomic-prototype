@@ -1,6 +1,8 @@
 # Maturity Stages: POC, Prototype, Production
 
-POC, Prototype, and Production describe the **maturity of a component's output**, not sequential project phases. A team may have production-grade atoms, prototype-grade organisms, and POC-grade pages all at the same time.
+> **When to read:** Second, right after 01-atomic-hierarchy. This tells you what quality level to target right now. Read time: ~10 minutes.
+
+Design is not a phase before dev. On a small team (2-4 people), all streams run in parallel from day one. The words POC, Prototype, and Production describe the **maturity of each stream's output**, not sequential phases separated by handoffs.
 
 These stages overlap. Design doesn't stop when dev starts prototyping. A prototype organism might depend on production-quality atoms. The stages describe where something is, not where the whole project is.
 
@@ -80,7 +82,7 @@ Not everything starts at POC. Some components skip it entirely (a standard form 
 | **QA approach** | Does the layout work with realistic-shaped data? | Manual walkthrough of all states; test with realistic data volumes | E2E tests on critical paths; performance budget; API contract validation |
 | **Tooling** | Mock data files | Mock service layer (MSW or simple interceptors) | Real API integration; monitoring if needed |
 
-> **Angular 21 note:** `httpResource()` provides built-in loading/error/data state signals for organism-level data fetching, eliminating manual state management boilerplate. See [11-prototype-solutions § Loading States](./11-prototype-solutions.md).
+> **Angular 21 note:** `httpResource()` provides built-in loading/error/data state signals for organism-level data fetching, eliminating manual state management boilerplate. See [11-implementation-tips](./11-implementation-tips.md).
 
 **Transition insight:** Organisms are where most production risk lives. They sit at the boundary between UI and data. The prototype-to-production transition is the hardest and most valuable.
 
@@ -133,7 +135,7 @@ Templates often reach production quality quickly despite being Level 4 because t
 | Basic keyboard navigation | Usability testing exposes interaction gaps immediately |
 | Design spec extension (loading/empty/error visuals) | Organisms need designed states, not developer-invented ones |
 
-**Tooling decisions at this transition:** The prototype stage is when token pipeline tooling (Tokens Studio + Style Dictionary or PrimeOne Theme Designer), API mocking (MSW), and component development tooling (Storybook) should be evaluated and adopted. See [11-prototype-solutions](./11-prototype-solutions.md) for evaluated options.
+**Tooling decisions at this transition:** The prototype stage is when token pipeline tooling (Tokens Studio + Style Dictionary or PrimeOne Theme Designer), API mocking (MSW), and component development tooling (Storybook) should be evaluated and adopted. See [11-implementation-tips](./11-implementation-tips.md) for evaluated options.
 
 ### Prototype to Production
 
@@ -219,7 +221,7 @@ Tooling decisions are not prerequisites. They happen as the team learns what it 
 ## Cross-References
 
 - For the atomic hierarchy that defines each level, see [01-atomic-hierarchy.md](./01-atomic-hierarchy.md).
-- For how the three streams converge, see [05-parallel-development.md](./05-parallel-development.md).
-- For QA criteria and automation potential per atomic level, see [04-qa-per-atomic-level.md](./04-qa-per-atomic-level.md).
-- For risks to explore at each stage, see [07-derisking.md](./07-derisking.md).
-- For certification gates and CI pipeline, see the gates section in [04-qa-per-atomic-level.md](./04-qa-per-atomic-level.md).
+- For how the three streams converge, see [04-parallel-development.md](./04-parallel-development.md).
+- For QA criteria and automation potential per atomic level, see [07-qa-per-atomic-level.md](./07-qa-per-atomic-level.md).
+- For risks to explore at each stage, see [10-derisking.md](./10-derisking.md).
+- For certification gates and CI pipeline, see the gates section in [07-qa-per-atomic-level.md](./07-qa-per-atomic-level.md).

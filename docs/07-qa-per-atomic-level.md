@@ -1,5 +1,7 @@
 # QA Per Atomic Level
 
+> **When to read:** When writing tests or reviewing PRs. Use as a checklist, not a narrative. Read time: ~12 minutes (or skim the Quick Reference tables).
+
 Answers: **What does QA look like at each atomic level for a small team?**
 
 This document defines QA checklists, certification criteria, and feedback loops for every level of the atomic hierarchy. It assumes a small team (2-4 devs) where developers write tests, the designer reviews in Storybook, and PR review is the certification gate. No separate QA role required.
@@ -433,22 +435,6 @@ Feedback loops are faster with tooling (MCP, Tokens Studio, Chromatic) but they 
 
 ---
 
-## Automation Potential
-
-This table replaces fixed percentages with concrete descriptions of what can be automated and what requires human judgment at each level.
-
-| Level | What Can Be Automated | What Needs Human Judgment | Automation Potential |
-|---|---|---|---|
-| **Atoms** | Token auditing (lint rules catch hardcoded values), snapshot diffing (Chromatic detects visual changes), boundary linting (ESLint catches isolation violations), unit test execution | Screen reader UX nuance, design intent ("does this feel right?"), deciding which states to test | High -- most checks are mechanical |
-| **Molecules** | Integration test execution, wiring validation (`for`/`id` matching via axe-core), interaction test replay (Storybook play functions), visual snapshot diffing | Composition design decisions, edge-case UX ("what happens if the label is 200 characters?"), deciding if a molecule is reusable enough | High -- interaction tests automate what was previously manual clicking |
-| **Organisms** | Mock service generation, state branch coverage reporting, memory leak detection (Observable subscription audits), re-render count assertions | State architecture decisions, error UX design ("retry button or auto-retry?"), deciding acceptable loading thresholds | Medium -- state logic requires human design, but verification is automatable |
-| **Templates** | Breakpoint screenshot capture (Playwright viewports), slot projection validation, landmark role scanning (axe-core) | Responsive design judgment ("should the sidebar collapse or hide at 768px?"), layout aesthetics, overflow handling decisions | High -- checks are visual and structural, largely automatable |
-| **Pages** | E2E test execution (Playwright), performance measurement (Lighthouse CI), error path simulation (network interception), cross-browser matrix | Acceptance criteria judgment, multi-page flow coherence, business logic validation, "does this user journey make sense?" | Medium -- execution is automated, but deciding what to test requires understanding the user |
-
-**Pattern:** Automation potential is highest where checks are mechanical and deterministic (atoms, templates). It is lowest where business context and UX judgment dominate (organisms, pages). Start by automating the mechanical checks; invest in judgment-heavy automation only when the team is stable and patterns are predictable.
-
----
-
 ## Visual Regression Tooling: PrimeNG Mitigation
 
 If using visual regression tooling (Chromatic, Percy, or similar) with PrimeNG components, two issues commonly cause false positives:
@@ -466,6 +452,10 @@ These are mitigation steps, not blockers. Visual regression tooling works well w
 ## Cross-References
 
 - For the atomic hierarchy and component classification, see [01-atomic-hierarchy.md](./01-atomic-hierarchy.md).
-- For tooling options, see [02-tooling-landscape.md](./02-tooling-landscape.md).
-- For the design token pipeline, see [03-token-pipeline.md](./03-token-pipeline.md).
-- For how QA evolves across maturity stages, see [06-maturity-stages.md](./06-maturity-stages.md).
+- For tooling options, see [06-tooling-landscape.md](./06-tooling-landscape.md).
+- For the design token pipeline, see [05-token-pipeline.md](./05-token-pipeline.md).
+- For how QA evolves across maturity stages, see [02-maturity-stages.md](./02-maturity-stages.md).
+
+## Related
+
+- [manual-test-checklist](./manual-test-checklist.md) — browser verification checklist from the prototype simulation

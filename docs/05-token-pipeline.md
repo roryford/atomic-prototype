@@ -1,4 +1,6 @@
-# 03 - Token Pipeline
+# 05 - Token Pipeline
+
+> **When to read:** When you need to set up or modify the design token pipeline. Developers read this early. Designers should read sections 1-3. Read time: ~10 minutes.
 
 > **Key question:** How do design tokens flow from Figma to Angular code — and what does that look like when you have zero tooling vs. a mature pipeline?
 
@@ -137,5 +139,9 @@ Typography tokens in DTCG are composite — a single token bundles `fontFamily`,
 
 ## Cross-References
 
-- For tooling options and version guidance, see [02 - Tooling Landscape](02-tooling-landscape.md).
-- For token gap risks and mitigation strategies, see [07 - De-risking](07-derisking.md).
+- For tooling options and version guidance, see [06-tooling-landscape.md](./06-tooling-landscape.md).
+- For token gap risks and mitigation strategies, see [10-derisking.md](./10-derisking.md).
+
+## See It in Code
+
+The working preset is at [`src/app/design-system/tokens/preset.ts`](../src/app/design-system/tokens/preset.ts).

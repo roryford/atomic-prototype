@@ -68,9 +68,9 @@ docs/             — Process guides (00-12) + prototype findings
 See [docs/README.md](./docs/README.md) for the full documentation index. Highlights:
 
 - [Atomic hierarchy definitions](./docs/01-atomic-hierarchy.md)
-- [QA per atomic level](./docs/04-qa-per-atomic-level.md)
+- [Maturity stages](./docs/02-maturity-stages.md)
+- [QA per atomic level](./docs/07-qa-per-atomic-level.md)
 - [Simulation report and findings](./docs/simulation-report.md)
-- [Lessons learned](./docs/lessons-learned.md)
 - [Production plan sketch](./docs/production-plan-sketch.md)
 
 ## Tech Stack

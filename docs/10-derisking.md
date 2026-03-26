@@ -1,8 +1,12 @@
 # De-Risking: Questions to Answer as You Build
 
+> **When to read:** Before each maturity transition (POC start, Prototype start). Use the summary table to track which risks you have addressed. Read time: ~8 minutes.
+
 A small team de-risks by building. These are not scheduled spikes -- they are questions to answer as you go. A 2-4 person team will surface most of these naturally while building the first screens and flows. The structure below tells you when to expect each one so nothing is a surprise.
 
-For Angular-specific concerns, see [09-angular-direction.md](./09-angular-direction.md). For the parallel development model, see [05-parallel-development.md](./05-parallel-development.md).
+Each risk below describes how you will naturally discover it while building. The goal is not to spike every risk upfront -- it is to recognize each one when it appears and know the 30-minute response.
+
+For Angular-specific concerns, see [09-angular-direction.md](./09-angular-direction.md). For the parallel development model, see [04-parallel-development.md](./04-parallel-development.md).
 
 ---
 
@@ -50,7 +54,7 @@ PrimeNG tree-shaking may not work correctly, the icon library may pull in everyt
 
 **What to do:** Run `ng build --configuration production` and check bundle size. Use `source-map-explorer` if anything looks surprising. Set a rough budget. Fix import patterns before they spread.
 
-**Prototype follow-up:** If the POC baseline exceeds 800KB, apply route-level lazy loading (`loadComponent()`) and template-level `@defer` for heavy organisms (especially `p-table`). Use `source-map-explorer` (not `webpack-bundle-analyzer`) for accurate attribution. See [11-prototype-solutions § Bundle Size](./11-prototype-solutions.md) for budget recommendations.
+**Prototype follow-up:** If the POC baseline exceeds 800KB, apply route-level lazy loading (`loadComponent()`) and template-level `@defer` for heavy organisms (especially `p-table`). Use `source-map-explorer` (not `webpack-bundle-analyzer`) for accurate attribution. See [11-implementation-tips](./11-implementation-tips.md) for budget recommendations.
 
 ---
 
@@ -108,11 +112,11 @@ Color contrast passes automated checks. But complex interactions -- modal focus 
 
 ### Stylelint Coverage Gap
 
-The `color-no-hex` rule catches hex values in `.scss` and `.css` files but cannot inspect inline styles in Angular component TypeScript `styles:` arrays. This creates false confidence — the prototype simulation found 11 hardcoded hex values, all in inline TypeScript styles that Stylelint missed.
+The `color-no-hex` rule catches hex values in `.scss` and `.css` files but cannot inspect inline styles in Angular component TypeScript `styles:` arrays. This creates false confidence -- the prototype simulation found 11 hardcoded hex values, all in inline TypeScript styles that Stylelint missed.
 
 **How you'll notice:** Stylelint reports zero violations but a manual audit of `.ts` component files reveals hardcoded hex colors in inline `styles:` arrays.
 
-**What to do:** Mitigate by: extracting inline styles to `.scss` files for molecules and above (per doc 08), adding hex checks to the PR review checklist, or writing a custom ESLint rule.
+**What to do:** Mitigate by: extracting inline styles to `.scss` files for molecules and above (per [03-project-structure](./03-project-structure.md)), adding hex checks to the PR review checklist, or writing a custom ESLint rule.
 
 ### `httpResource()` Experimental API
 
@@ -191,4 +195,5 @@ Total technical effort across the 14 build-time risks: roughly 7-9 days. That in
 ## Cross-References
 
 - For Angular-specific concerns, see [09-angular-direction.md](./09-angular-direction.md).
-- For the parallel development model, see [05-parallel-development.md](./05-parallel-development.md).
+- For the parallel development model, see [04-parallel-development.md](./04-parallel-development.md).
+- For implementation tips and patterns, see [11-implementation-tips.md](./11-implementation-tips.md).

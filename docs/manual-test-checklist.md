@@ -1,6 +1,6 @@
 # Manual Test Checklist
 
-> For the general QA framework per atomic level, see [04-qa-per-atomic-level](./04-qa-per-atomic-level.md).
+> For the general QA framework per atomic level, see [07-qa-per-atomic-level](./07-qa-per-atomic-level.md).
 
 Manual verification items that cannot be fully covered by unit tests or Storybook play functions. These require a running application (`ng serve`) and a real browser.
 

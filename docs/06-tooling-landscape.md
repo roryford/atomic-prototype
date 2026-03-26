@@ -1,6 +1,10 @@
-# 02 — Tooling Landscape
+# 06 — Tooling Landscape
+
+> **When to read:** When the team is deciding which tools to adopt. Not needed on day 1. Read time: ~5 minutes.
 
 > **Key principle:** Angular + PrimeNG + Figma are locked in. Everything else is a recommendation to explore. The process must work with zero additional tooling and get better as tools are added.
+
+This doc helps you avoid two traps: adopting too much tooling too early, and not knowing what tools exist when you need them.
 
 ---
 
@@ -118,5 +122,5 @@ Ask these questions before procuring or adopting anything:
 
 ## Cross-References
 
-- For token pipeline detail: see [03 — Token Pipeline](03-token-pipeline.md)
-- For Angular architectural direction: see [09 — Angular Direction](09-angular-direction.md)
+- For token pipeline detail: see [05-token-pipeline.md](./05-token-pipeline.md)
+- For Angular architectural direction: see [09-angular-direction.md](./09-angular-direction.md)
