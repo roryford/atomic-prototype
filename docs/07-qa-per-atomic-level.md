@@ -186,7 +186,7 @@ Templates are page-level layout shells that define spatial structure through `ng
 ### What to Check
 
 - [ ] All named `ng-content` slots render projected content correctly
-- [ ] Layout reflows correctly at all defined breakpoints (320, 768, 1024, 1440, 1920px)
+- [ ] Layout reflows correctly at all defined breakpoints (see [04-parallel-development](./04-parallel-development.md) for canonical values)
 - [ ] Empty slots collapse gracefully; multi-child slots render correctly
 - [ ] Zero `input()` properties bound to entity data (layout-config inputs are acceptable)
 - [ ] No `ngIf`, `ngFor`, service injections, or subscriptions
@@ -431,7 +431,7 @@ Feedback loops are faster with tooling (MCP, Tokens Studio, Chromatic) but they 
 
 ## PrimeNG Testing Limitation
 
-**PrimeNG `(onClick)` and jsdom.** PrimeNG's `(onClick)` output does not fire from native DOM click events in jsdom-based test runners (Vitest, Jest). For unit tests, verify output wiring directly rather than simulating clicks. Use Storybook play functions or Playwright for full interaction testing.
+PrimeNG's `(onClick)` does not fire from DOM click events in jsdom. See [11-implementation-tips § PrimeNG Interaction Testing](./11-implementation-tips.md) for details and workarounds.
 
 ---
 

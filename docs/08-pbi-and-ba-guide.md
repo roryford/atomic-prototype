@@ -240,7 +240,7 @@ Produce a **state matrix** per organism:
 | Organism | Loading | Error | Empty | Data | Search-No-Results | Partial Failure |
 |----------|---------|-------|-------|------|-------------------|-----------------|
 | StatGrid | 4 skeletons | Message + retry | "No stats" | Stat cards | N/A | N/A |
-| ProjectTable | 5 skeleton rows | Message + retry | "No projects" | Sortable table | "No results for X" | N/A |
+| ProjectTable | 5 skeleton rows | Message + retry | "No projects" | Sortable table | "No results for X" + Clear | N/A |
 | Dashboard (page) | Both loading | Both error | Both empty | Both data | N/A | Stats OK, projects error |
 
 Flag states that need designer input before the PBI is ready for dev.

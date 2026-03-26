@@ -18,7 +18,7 @@ Practical guidance from the POC and prototype simulations. These tips supplement
 
 ## Theming
 
-- **Never hardcode hex values in component styles.** Use `var(--p-surface-50)`, `var(--p-text-color)`, `var(--p-primary-color)` etc. Hardcoded hex is the #1 reason dark mode breaks. Make this a PR review rule from day 1.
+- **Always use CSS custom properties for colors** — see [05-token-pipeline](./05-token-pipeline.md) for the full token usage guide. Hardcoded hex is the #1 reason dark mode breaks.
 
 - **`definePreset()` covers ~80% of design needs.** For the remaining ~20%:
   1. Try the `pt` (passthrough) API first -- it's type-safe and survives upgrades
@@ -272,6 +272,11 @@ const preview: Preview = {
 Also add PrimeNG/PrimeIcons CSS to Storybook's styles configuration.
 
 No viable Angular alternatives to Storybook exist -- Histoire and Ladle are React/Vue only.
+
+**Gotchas:**
+
+- **Must use `ng run`, not `storybook dev`.** Direct invocation fails with `SB_FRAMEWORK_ANGULAR_0001`. Use `ng run atomic-prototype:storybook` (or `npm run storybook` which wraps it).
+- **CSS imports in `preview.ts` fail.** Importing `primeicons/primeicons.css` directly causes a webpack parse error (`Unexpected character '@'` on `@font-face`). Load global styles through `angular.json`'s `styles` array or via a CDN `<link>` in `.storybook/preview-head.html` instead.
 
 ### Visual Regression Testing
 

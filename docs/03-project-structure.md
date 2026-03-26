@@ -273,7 +273,7 @@ During PR review, check the import paths at the top of each changed file. A mole
 | Interceptor | `.interceptor.ts` | `error.interceptor.ts` |
 | Barrel export | `index.ts` | `index.ts` |
 
-> **Angular 21 note:** Angular 21 uses the 2025 naming convention by default. The `.component` suffix is no longer generated. File: `button.ts` (not `button.component.ts`). Class: `Button` (not `ButtonComponent`). Test: `button.spec.ts`. Story: `button.stories.ts`.
+> **Angular 21 note:** Angular 21 uses 2025 file naming by default -- see [09-angular-direction](./09-angular-direction.md). The `.component` suffix is no longer generated. File: `button.ts` (not `button.component.ts`). Class: `Button` (not `ButtonComponent`). Test: `button.spec.ts`. Story: `button.stories.ts`.
 
 All names follow Angular 21 CLI defaults. Barrel exports (`index.ts`) at each atomic level are optional but simplify imports when the number of components grows.
 

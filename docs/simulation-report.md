@@ -151,7 +151,7 @@ Three additional states were discovered during implementation:
 | List chunk | N/A | 465.93 KB | lazy (TableModule) |
 | Detail chunk | N/A | 9.97 KB | lazy |
 
-The list chunk (465.93 KB) is disproportionately large because PrimeNG's `TableModule` pulls in significant transitive dependencies (badge, checkbox, datepicker, dialog, dropdown, paginator, radiobutton, select, tooltip, tree, treetable). The dashboard and detail chunks are small because they use lighter PrimeNG components (cards, skeletons, avatars). Using `@defer` on the table component within the list page could further reduce the lazy chunk size.
+The list chunk is disproportionately large due to PrimeNG's `TableModule` transitive dependencies. See [11-implementation-tips § Bundle Size](./11-implementation-tips.md) for optimization techniques.
 
 ---
 
@@ -180,10 +180,8 @@ The list chunk (465.93 KB) is disproportionately large because PrimeNG's `TableM
 
 ### httpResource()
 - **Verdict:** Clean signal-based API, but experimental.
-- Imported from `@angular/common/http`, marked `@experimental 19.2`.
-- API: `.value()`, `.status()`, `.error()`, `.isLoading()`, `.reload()`, `.destroy()`, `.headers()`, `.statusCode()`, `.hasValue()`.
+- `httpResource` from `@angular/common/http` (marked `@experimental 19.2`) provides signal-based `.value()`, `.error()`, and `.isLoading()` accessors. For the full API reference, see [09-angular-direction](./09-angular-direction.md).
 - No `.data()` alias — documentation must reference `.value()`.
-- Sub-constructors: `httpResource.text()`, `httpResource.blob()`, `httpResource.arrayBuffer()` for non-JSON responses.
 - Recommendation: wrap behind service abstractions to isolate experimental API surface.
 
 ### Vitest
