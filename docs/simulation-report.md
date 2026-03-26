@@ -9,7 +9,7 @@ This report covers the prototype phase of an Angular 21 atomic design simulation
 - Restructuring a flat component layout into a `design-system/` folder hierarchy with barrel exports
 - Renaming selectors from `app-` to `ds-` prefix for design-system components
 - Adding 2 new molecules (DsSearchBar, DsFormField), 1 new atom (DsEmptyState), and 3 organisms (DsStatGrid, DsProjectCardGrid, DsProjectTable)
-- Wiring MSW v2 for mock API data (4 endpoints, fixture data for 18 projects, 4 stats, 6 users)
+- Wiring MSW v2 for mock API data (3 endpoints, fixture data for 18 projects, 4 stats)
 - Integrating Storybook 10 with Angular 21
 - Setting up Vitest as the test runner via `@angular/build:unit-test`
 - Implementing lazy loading for all three page routes
@@ -34,7 +34,7 @@ This report covers the prototype phase of an Angular 21 atomic design simulation
 | Molecules | 3 (DsStatCard, DsSearchBar, DsFormField) |
 | Organisms | 3 (DsStatGrid, DsProjectCardGrid, DsProjectTable) |
 | Pages | 3 (Dashboard, List, Detail) |
-| Services | 2 (ProjectService, UserService) |
+| Services | 1 (ProjectService) |
 | Unit tests | 36 across 13 spec files |
 | Story files | 10 |
 | MSW endpoints | 4 |
