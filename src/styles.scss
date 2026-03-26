@@ -6,3 +6,8 @@ html, body {
   color: var(--p-text-color);
   font-family: Inter, system-ui, -apple-system, sans-serif;
 }
+
+/* Ensure headings and common elements inherit token-based color */
+h1, h2, h3, h4, h5, h6, p, span, label, a {
+  color: inherit;
+}
