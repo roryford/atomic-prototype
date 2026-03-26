@@ -9,6 +9,19 @@ import { Message } from 'primeng/message';
 import { TableModule } from 'primeng/table';
 import { Avatar } from 'primeng/avatar';
 
+/**
+ * Organism: Data-aware project table with search, filtering, and 5-state rendering.
+ *
+ * States: loading → error → empty → search-no-results → data
+ * (rendered in @if priority order in the template)
+ *
+ * Uses signal() for searchTerm (local state the parent doesn't need to see)
+ * and computed() for filteredProjects (derived state that auto-updates when
+ * projects or searchTerm change — no manual state management needed).
+ *
+ * Does not fetch data — receives it via inputs. The parent (page) owns the
+ * data lifecycle; this organism owns the presentation and filtering.
+ */
 @Component({
   selector: 'ds-project-table',
   imports: [DsEmptyState, DsButton, DsTag, DsSearchBar, Skeleton, Message, TableModule, Avatar],

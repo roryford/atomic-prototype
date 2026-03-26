@@ -1,5 +1,7 @@
 # PBI Templates by Atomic Level
 
+> For the general PBI writing process, see [12-pbi-writing-guide](./12-pbi-writing-guide.md). This file contains prototype-specific worked examples.
+
 Lessons from the prototype simulation on writing complete PBIs for each level of the atomic hierarchy.
 
 ---

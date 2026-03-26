@@ -1,59 +1,86 @@
-# AtomicPoc
+# Atomic Design Prototype
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.3.
+An Angular 21 + PrimeNG 21 prototype demonstrating atomic design methodology for small teams.
 
-## Development server
+## What Is This?
 
-To start a local development server, run:
+This is a working prototype that demonstrates how to build a component library
+using Brad Frost's Atomic Design principles in Angular 21 with PrimeNG 21. It
+pairs real, runnable components with the process documentation a small team
+needs to adopt atomic design without guesswork.
 
-```bash
-ng serve
+The repository includes process documentation (13 guides covering hierarchy,
+tokens, QA, tooling, and maturity stages) alongside working code (4 atoms,
+3 molecules, 3 organisms, and 3 pages). Every component is exercised in
+Storybook and covered by Vitest unit tests.
+
+Target audience: small teams (2-4 developers) building design systems. This
+prototype is useful for learning atomic design concepts, Angular 21 patterns
+(signals, httpResource, standalone components), and the surrounding process
+(PBIs, acceptance criteria, testing strategy).
+
+## Atomic Design Hierarchy
+
+```
+Atoms                    Molecules                 Organisms
+------------------       -------------------       -------------------------
+DsButton                 DsSearchBar               DsStatGrid
+DsInput                  DsStatCard                DsProjectCardGrid
+DsTag                    DsFormField               DsProjectTable
+DsEmptyState
+                                                   Pages
+                                                   -------------------------
+                                                   Dashboard
+                                                   List
+                                                   Detail
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Quick Start
 
-## Code scaffolding
+```
+Prerequisites: Node 25+, npm 11+
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+git clone https://github.com/roryford/atomic-prototype.git
+cd atomic-prototype
+npm install
+npm start              # Dev server at http://localhost:4200
+npm run storybook      # Component library at http://localhost:6006
+npm test               # 36 unit tests via Vitest
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Project Structure
 
-```bash
-ng generate --help
+```
+src/app/
+  design-system/
+    atoms/        — Button, Input, Tag, EmptyState
+    molecules/    — SearchBar, StatCard, FormField
+    organisms/    — StatGrid, ProjectCardGrid, ProjectTable
+    tokens/       — PrimeNG theme preset, design tokens
+  pages/          — Dashboard, List, Detail
+  services/       — ProjectService (httpResource-based)
+  mocks/          — MSW handlers + fixture data
+docs/             — Process guides (00-12) + prototype findings
 ```
 
-## Building
+## Documentation
 
-To build the project run:
+See [docs/README.md](./docs/README.md) for the full documentation index. Highlights:
 
-```bash
-ng build
-```
+- [Atomic hierarchy definitions](./docs/01-atomic-hierarchy.md)
+- [QA per atomic level](./docs/04-qa-per-atomic-level.md)
+- [Simulation report and findings](./docs/simulation-report.md)
+- [Lessons learned](./docs/lessons-learned.md)
+- [Production plan sketch](./docs/production-plan-sketch.md)
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Tech Stack
 
-## Running unit tests
+- Angular 21.2, PrimeNG 21.1, Storybook 10.3, Vitest 4.1, MSW 2.12, TypeScript 5.9
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Contributing
 
-```bash
-ng test
-```
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup instructions and guidelines.
 
-## Running end-to-end tests
+## License
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+MIT — see [LICENSE](./LICENSE).

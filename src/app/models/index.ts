@@ -19,11 +19,3 @@ export interface DashboardStats {
   value: string;
   icon: string;
 }
-
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  initials: string;
-}

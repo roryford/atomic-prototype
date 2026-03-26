@@ -107,7 +107,7 @@ All three journeys (Browse Projects, Search and Filter, Handle Errors) are compl
 
 #### H8: Loading/empty/error states implementable with httpResource — YES
 
-The `httpResource` API shape (`value()`, `status()`, `error()`, `isLoading()`) maps directly to the four documented states. Doc 11 patterns (from the POC process docs) worked without modification. Each organism independently manages its own state rendering.
+The `httpResource` API shape (`value()`, `status()`, `error()`, `isLoading()`) maps directly to the four documented states. [11-prototype-solutions](./11-prototype-solutions.md) patterns (from the POC process docs) worked without modification. Each organism independently manages its own state rendering.
 
 #### H9: States beyond the known 4 discovered — YES
 
@@ -260,21 +260,21 @@ The list chunk (465.93 KB) is disproportionately large because PrimeNG's `TableM
 
 | Finding | Impact | Source |
 |---------|--------|--------|
-| `httpResource` import path not specified | Team would search multiple packages before finding `@angular/common/http` | Extends POC Doc 04 |
-| Docs reference `.data()` but correct accessor is `.value()` | Code would not compile | Extends POC Doc 04 |
-| `stylelint-declaration-use-css-custom-properties` plugin not on npm | Cannot enforce custom property usage beyond `color-no-hex` | Extends POC Doc 06 |
-| `httpResource` `@experimental 19.2` status not mentioned | Team unaware of API stability risk | Extends POC Doc 04 |
+| `httpResource` import path not specified | Team would search multiple packages before finding `@angular/common/http` | Extends [09-angular-direction](./09-angular-direction.md) |
+| Docs reference `.data()` but correct accessor is `.value()` | Code would not compile | Extends [09-angular-direction](./09-angular-direction.md) |
+| `stylelint-declaration-use-css-custom-properties` plugin not on npm | Cannot enforce custom property usage beyond `color-no-hex` | Extends [02-tooling-landscape](./02-tooling-landscape.md) |
+| `httpResource` `@experimental 19.2` status not mentioned | Team unaware of API stability risk | Extends [09-angular-direction](./09-angular-direction.md) |
 
 ### Confirmed from POC Docs
 
 | Finding | Status |
 |---------|--------|
-| Folder structure conventions (Doc 03) | Confirmed — restructure was mechanical, build passed on first attempt |
-| Selector naming `ds-` prefix (Doc 03) | Confirmed — straightforward, compiler catches stale selectors |
-| Mock data patterns (Doc 04) | Confirmed — MSW setup was smooth |
-| State handling patterns (Doc 11) | Confirmed — loading/error/empty/data patterns worked directly |
-| Dark mode via CSS custom properties (Doc 08) | Confirmed — all components respond to dark mode after hex remediation |
-| Bundle size concern with TableModule (Doc 05) | Confirmed — TableModule still dominates lazy chunk at 466 KB |
+| Folder structure conventions ([08-project-structure](./08-project-structure.md)) | Confirmed — restructure was mechanical, build passed on first attempt |
+| Selector naming `ds-` prefix ([08-project-structure](./08-project-structure.md)) | Confirmed — straightforward, compiler catches stale selectors |
+| Mock data patterns ([11-prototype-solutions](./11-prototype-solutions.md)) | Confirmed — MSW setup was smooth |
+| State handling patterns ([11-prototype-solutions](./11-prototype-solutions.md)) | Confirmed — loading/error/empty/data patterns worked directly |
+| Dark mode via CSS custom properties ([08-project-structure](./08-project-structure.md)) | Confirmed — all components respond to dark mode after hex remediation |
+| Bundle size concern with TableModule ([05-parallel-development](./05-parallel-development.md)) | Confirmed — TableModule still dominates lazy chunk at 466 KB |
 
 ---
 

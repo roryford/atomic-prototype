@@ -2,68 +2,13 @@
     "pipes": [],
     "interfaces": [
         {
-            "name": "ActivityRow",
-            "id": "interface-ActivityRow-637a465557f1fab7ba0f42a1d844780cbb3759cfbe5ba560ef0042f0b6b921c02d76bd88abe6fa7f6f7a52b79863b4f1fca3bd1b6224a334163b7fbfe4bfd19e",
-            "file": "src/app/pages/dashboard/dashboard.ts",
-            "deprecated": false,
-            "deprecationMessage": "",
-            "type": "interface",
-            "sourceCode": "import { Component, signal } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\nimport { DsStatCard } from '../../design-system/molecules';\nimport { DsButton, DsTag, DsInput } from '../../design-system/atoms';\nimport { Card } from 'primeng/card';\nimport { Avatar } from 'primeng/avatar';\nimport { TableModule } from 'primeng/table';\n\ninterface ActivityRow {\n  name: string;\n  status: string;\n  statusSeverity: 'success' | 'info' | 'warn' | 'danger';\n  date: string;\n}\n\n@Component({\n  selector: 'app-dashboard',\n  imports: [DsStatCard, DsButton, DsInput, DsTag, Card, Avatar, TableModule, FormsModule],\n  template: `\n    <div class=\"dashboard\">\n      <!-- Page Header -->\n      <header class=\"dashboard-header\">\n        <div>\n          <h1 class=\"dashboard-title\">Dashboard</h1>\n          <p class=\"dashboard-subtitle\">Welcome back. Here's what's happening today.</p>\n        </div>\n        <ds-button label=\"Export Report\" severity=\"primary\" [outlined]=\"true\" />\n      </header>\n\n      <!-- Stat Cards Row -->\n      <section class=\"stat-grid\">\n        @for (stat of stats(); track stat.label) {\n          <ds-stat-card [label]=\"stat.label\" [value]=\"stat.value\" [icon]=\"stat.icon\" />\n        }\n      </section>\n\n      <!-- Project Cards Row -->\n      <section class=\"section\">\n        <h2 class=\"section-title\">Active Projects</h2>\n        <div class=\"card-grid\">\n          @for (project of projects(); track project.name) {\n            <p-card>\n              <div class=\"project-card-body\">\n                <div class=\"project-header\">\n                  <p-avatar\n                    [label]=\"project.avatar\"\n                    shape=\"circle\"\n                    [style]=\"{ 'background-color': project.color, color: '#ffffff' }\"\n                  />\n                  <ds-tag [value]=\"project.status\" [severity]=\"project.severity\" />\n                </div>\n                <h3 class=\"project-name\">{{ project.name }}</h3>\n                <p class=\"project-description\">{{ project.description }}</p>\n                <div class=\"project-meta\">\n                  <span class=\"meta-item\"><i class=\"pi pi-users\"></i> {{ project.members }} members</span>\n                  <span class=\"meta-item\"><i class=\"pi pi-calendar\"></i> {{ project.deadline }}</span>\n                </div>\n              </div>\n            </p-card>\n          }\n        </div>\n      </section>\n\n      <!-- Data Table -->\n      <section class=\"section\">\n        <h2 class=\"section-title\">Recent Activity</h2>\n        <div class=\"table-container\">\n          <p-table\n            [value]=\"activities()\"\n            [rows]=\"10\"\n            [tableStyle]=\"{ 'min-width': '40rem' }\"\n            [pt]=\"{ thead: { style: 'text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em' } }\"\n          >\n            <ng-template pTemplate=\"header\">\n              <tr>\n                <th>Name</th>\n                <th>Status</th>\n                <th>Date</th>\n                <th>Action</th>\n              </tr>\n            </ng-template>\n            <ng-template pTemplate=\"body\" let-row>\n              <tr>\n                <td class=\"name-cell\">{{ row.name }}</td>\n                <td>\n                  <ds-tag [value]=\"row.status\" [severity]=\"row.statusSeverity\" />\n                </td>\n                <td class=\"date-cell\">{{ row.date }}</td>\n                <td>\n                  <ds-button label=\"View\" severity=\"secondary\" [outlined]=\"true\" />\n                </td>\n              </tr>\n            </ng-template>\n          </p-table>\n        </div>\n      </section>\n\n      <!-- Dark Mode Test (Spike 3) -->\n      <section class=\"section\">\n        <h2 class=\"section-title\">Dark Mode Test</h2>\n        <ds-button\n          label=\"Toggle Dark Mode\"\n          severity=\"secondary\"\n          [outlined]=\"true\"\n          (clicked)=\"toggleDarkMode()\"\n        />\n        <div class=\"dark-mode-demo\">\n          <p-card>\n            <div class=\"dark-mode-form\">\n              <label class=\"form-label\">Nested Composition Test</label>\n              <ds-input placeholder=\"Type something...\" [(value)]=\"demoInput\" />\n              <div class=\"form-actions\">\n                <ds-button label=\"Submit\" severity=\"primary\" />\n                <ds-button label=\"Cancel\" severity=\"secondary\" [outlined]=\"true\" />\n                <ds-button label=\"Delete\" severity=\"danger\" />\n              </div>\n              <div class=\"tag-row\">\n                <ds-tag value=\"Success\" severity=\"success\" />\n                <ds-tag value=\"Warning\" severity=\"warn\" />\n                <ds-tag value=\"Error\" severity=\"danger\" />\n                <ds-tag value=\"Info\" severity=\"info\" />\n              </div>\n            </div>\n          </p-card>\n        </div>\n      </section>\n    </div>\n  `,\n  styles: `\n    .dashboard {\n      padding: 32px;\n      background: #FAFAF9;\n      min-height: 100vh;\n      font-family: Inter, sans-serif;\n    }\n\n    /* Header */\n    .dashboard-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 32px;\n      flex-wrap: wrap;\n      gap: 16px;\n    }\n\n    .dashboard-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: #1C1917;\n      margin: 0 0 4px 0;\n    }\n\n    .dashboard-subtitle {\n      font-size: 14px;\n      color: #78716C;\n      margin: 0;\n    }\n\n    /* Stat Cards — responsive grid */\n    .stat-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n      margin-bottom: 40px;\n    }\n\n    @media (min-width: 640px) {\n      .stat-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .stat-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    @media (min-width: 1440px) {\n      .stat-grid {\n        grid-template-columns: repeat(4, 1fr);\n      }\n    }\n\n    /* Sections */\n    .section {\n      margin-bottom: 40px;\n    }\n\n    .section-title {\n      font-size: 18px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0 0 20px 0;\n    }\n\n    /* Project Card Grid — same responsive breakpoints */\n    .card-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n    }\n\n    @media (min-width: 640px) {\n      .card-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .card-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    /* Project card inner layout */\n    .project-card-body {\n      display: flex;\n      flex-direction: column;\n      gap: 12px;\n    }\n\n    .project-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n\n    .project-name {\n      font-size: 16px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0;\n    }\n\n    .project-description {\n      font-size: 13px;\n      color: #78716C;\n      margin: 0;\n      line-height: 1.5;\n    }\n\n    .project-meta {\n      display: flex;\n      gap: 16px;\n      padding-top: 8px;\n      border-top: 1px solid #E7E5E4;\n    }\n\n    .meta-item {\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      font-size: 12px;\n      color: #78716C;\n    }\n\n    .meta-item .pi {\n      font-size: 12px;\n    }\n\n    /* Table container */\n    .table-container {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      overflow: hidden;\n    }\n\n    .name-cell {\n      font-weight: 500;\n      color: #1C1917;\n    }\n\n    .date-cell {\n      color: #78716C;\n      font-size: 13px;\n    }\n\n    /* Dark Mode Demo */\n    .dark-mode-demo {\n      margin-top: 16px;\n    }\n\n    .dark-mode-form {\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    .form-label {\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--p-text-color);\n    }\n\n    .form-actions {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n\n    .tag-row {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n  `,\n})\nexport class Dashboard {\n  stats = signal([\n    { label: 'Total Users', value: '12,847', icon: 'pi-users' },\n    { label: 'Active Projects', value: '284', icon: 'pi-briefcase' },\n    { label: 'Open Tasks', value: '1,429', icon: 'pi-check-square' },\n    { label: 'Revenue', value: '$847K', icon: 'pi-dollar' },\n  ]);\n\n  projects = signal([\n    {\n      name: 'Project Alpha',\n      description: 'Next-gen platform rebuild with new component architecture and CI/CD pipeline.',\n      status: 'On Track',\n      severity: 'success' as const,\n      avatar: 'A',\n      color: '#4338CA',\n      members: 8,\n      deadline: 'Apr 15',\n    },\n    {\n      name: 'Design System',\n      description: 'Unified token library and component catalog across web and mobile products.',\n      status: 'In Review',\n      severity: 'info' as const,\n      avatar: 'D',\n      color: '#0891B2',\n      members: 5,\n      deadline: 'Mar 30',\n    },\n    {\n      name: 'API Migration',\n      description: 'REST-to-GraphQL migration for core services with backward compatibility layer.',\n      status: 'At Risk',\n      severity: 'warn' as const,\n      avatar: 'M',\n      color: '#D97706',\n      members: 6,\n      deadline: 'May 01',\n    },\n  ]);\n\n  demoInput = signal('');\n\n  toggleDarkMode() {\n    document.documentElement.classList.toggle('dark-mode');\n  }\n\n  activities = signal<ActivityRow[]>([\n    { name: 'Homepage Redesign', status: 'Completed', statusSeverity: 'success', date: 'Mar 22, 2026' },\n    { name: 'User Auth Flow', status: 'In Progress', statusSeverity: 'info', date: 'Mar 21, 2026' },\n    { name: 'Payment Integration', status: 'At Risk', statusSeverity: 'warn', date: 'Mar 20, 2026' },\n    { name: 'Mobile Responsive', status: 'Completed', statusSeverity: 'success', date: 'Mar 19, 2026' },\n    { name: 'Search Indexing', status: 'In Progress', statusSeverity: 'info', date: 'Mar 18, 2026' },\n    { name: 'Data Export Feature', status: 'Blocked', statusSeverity: 'danger', date: 'Mar 17, 2026' },\n    { name: 'Notification System', status: 'In Progress', statusSeverity: 'info', date: 'Mar 16, 2026' },\n    { name: 'Performance Audit', status: 'Completed', statusSeverity: 'success', date: 'Mar 15, 2026' },\n  ]);\n}\n",
-            "properties": [
-                {
-                    "name": "date",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 13
-                },
-                {
-                    "name": "name",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 10
-                },
-                {
-                    "name": "status",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 11
-                },
-                {
-                    "name": "statusSeverity",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "\"success\" | \"info\" | \"warn\" | \"danger\"",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 12
-                }
-            ],
-            "indexSignatures": [],
-            "kind": 172,
-            "methods": [],
-            "extends": []
-        },
-        {
             "name": "DashboardStats",
-            "id": "interface-DashboardStats-777ef7a3660e5cc6fd8547e452abedfbfe7ba5d0f0b072c1eea413782a7613e72c29b068d3aab40f126bb3d6193cf0613a8bb7bfc1bd6b4f46e7a4bc7e34f96c",
+            "id": "interface-DashboardStats-9eb5e211d1f9d2e44c121f6232cf7469f808fd727c814cc183f78796d2976e90d10858b82eea82d8d53999372e1a14d8cf1129a78e3837e57e37844b158bcb27",
             "file": "src/app/models/index.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "export interface Project {\n  id: number;\n  name: string;\n  description: string;\n  owner: string;\n  ownerInitials: string;\n  status: string;\n  statusSeverity: 'success' | 'info' | 'warn' | 'danger';\n  avatar: string;\n  color: string;\n  members: number;\n  deadline: string;\n  createdDate: string;\n  category: string;\n}\n\nexport interface DashboardStats {\n  label: string;\n  value: string;\n  icon: string;\n}\n\nexport interface User {\n  id: number;\n  name: string;\n  email: string;\n  role: string;\n  initials: string;\n}\n",
+            "sourceCode": "export interface Project {\n  id: number;\n  name: string;\n  description: string;\n  owner: string;\n  ownerInitials: string;\n  status: string;\n  statusSeverity: 'success' | 'info' | 'warn' | 'danger';\n  avatar: string;\n  color: string;\n  members: number;\n  deadline: string;\n  createdDate: string;\n  category: string;\n}\n\nexport interface DashboardStats {\n  label: string;\n  value: string;\n  icon: string;\n}\n",
             "properties": [
                 {
                     "name": "icon",
@@ -103,12 +48,12 @@
         },
         {
             "name": "Project",
-            "id": "interface-Project-777ef7a3660e5cc6fd8547e452abedfbfe7ba5d0f0b072c1eea413782a7613e72c29b068d3aab40f126bb3d6193cf0613a8bb7bfc1bd6b4f46e7a4bc7e34f96c",
+            "id": "interface-Project-9eb5e211d1f9d2e44c121f6232cf7469f808fd727c814cc183f78796d2976e90d10858b82eea82d8d53999372e1a14d8cf1129a78e3837e57e37844b158bcb27",
             "file": "src/app/models/index.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "export interface Project {\n  id: number;\n  name: string;\n  description: string;\n  owner: string;\n  ownerInitials: string;\n  status: string;\n  statusSeverity: 'success' | 'info' | 'warn' | 'danger';\n  avatar: string;\n  color: string;\n  members: number;\n  deadline: string;\n  createdDate: string;\n  category: string;\n}\n\nexport interface DashboardStats {\n  label: string;\n  value: string;\n  icon: string;\n}\n\nexport interface User {\n  id: number;\n  name: string;\n  email: string;\n  role: string;\n  initials: string;\n}\n",
+            "sourceCode": "export interface Project {\n  id: number;\n  name: string;\n  description: string;\n  owner: string;\n  ownerInitials: string;\n  status: string;\n  statusSeverity: 'success' | 'info' | 'warn' | 'danger';\n  avatar: string;\n  color: string;\n  members: number;\n  deadline: string;\n  createdDate: string;\n  category: string;\n}\n\nexport interface DashboardStats {\n  label: string;\n  value: string;\n  icon: string;\n}\n",
             "properties": [
                 {
                     "name": "avatar",
@@ -245,162 +190,80 @@
             "kind": 172,
             "methods": [],
             "extends": []
-        },
-        {
-            "name": "Project",
-            "id": "interface-Project-327fa117679974c30fb0877bc86f847c93e8e414d1c2010322ebb7c1366190df4adcc5ea43e7044262e9ca4ee11e692d1949b58c88cfb87a40b1c84195e8ff2f-1",
-            "file": "src/app/pages/list/list.ts",
-            "deprecated": false,
-            "deprecationMessage": "",
-            "type": "interface",
-            "sourceCode": "import { Component, computed, signal } from '@angular/core';\nimport { RouterLink } from '@angular/router';\nimport { TableModule } from 'primeng/table';\nimport { Avatar } from 'primeng/avatar';\nimport { DsButton, DsTag, DsInput } from '../../design-system/atoms';\n\ntype TagSeverity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast';\n\ninterface Project {\n  id: number;\n  name: string;\n  owner: string;\n  ownerInitials: string;\n  status: string;\n  statusSeverity: TagSeverity;\n  createdDate: string;\n}\n\n@Component({\n  selector: 'app-list',\n  imports: [RouterLink, TableModule, Avatar, DsButton, DsTag, DsInput],\n  template: `\n    <div class=\"list-page\">\n      <div class=\"search-bar\">\n        <ds-input\n          [(value)]=\"searchTerm\"\n          placeholder=\"Search projects...\"\n        />\n        <ds-button\n          label=\"Search\"\n          severity=\"primary\"\n          (clicked)=\"onSearch()\"\n        />\n      </div>\n\n      <p-table\n        [value]=\"filteredProjects()\"\n        [tableStyle]=\"{ 'min-width': '60rem' }\"\n        styleClass=\"list-table\"\n        [rowHover]=\"true\"\n      >\n        <ng-template #header>\n          <tr>\n            <th>ID</th>\n            <th pSortableColumn=\"name\">Name <p-sortIcon field=\"name\" /></th>\n            <th>Owner</th>\n            <th>Status</th>\n            <th pSortableColumn=\"createdDate\">Created <p-sortIcon field=\"createdDate\" /></th>\n            <th>Action</th>\n          </tr>\n        </ng-template>\n        <ng-template #body let-project>\n          <tr>\n            <td>{{ project.id }}</td>\n            <td>\n              <a [routerLink]=\"['/detail', project.id]\" class=\"project-link\">\n                {{ project.name }}\n              </a>\n            </td>\n            <td>\n              <div class=\"owner-cell\">\n                <p-avatar\n                  [label]=\"project.ownerInitials\"\n                  shape=\"circle\"\n                  size=\"normal\"\n                  styleClass=\"owner-avatar\"\n                />\n                <span>{{ project.owner }}</span>\n              </div>\n            </td>\n            <td>\n              <ds-tag [value]=\"project.status\" [severity]=\"project.statusSeverity\" />\n            </td>\n            <td>{{ project.createdDate }}</td>\n            <td>\n              <ds-button\n                label=\"View\"\n                severity=\"secondary\"\n                [outlined]=\"true\"\n                (clicked)=\"onView(project.id)\"\n              />\n            </td>\n          </tr>\n        </ng-template>\n        <ng-template #emptymessage>\n          <tr>\n            <td colspan=\"6\" class=\"empty-message\">No projects found.</td>\n          </tr>\n        </ng-template>\n      </p-table>\n    </div>\n  `,\n  styles: `\n    .list-page {\n      width: 100%;\n      padding: 2rem;\n      box-sizing: border-box;\n    }\n\n    .search-bar {\n      display: flex;\n      gap: 0.75rem;\n      margin-bottom: 1.5rem;\n      align-items: center;\n    }\n\n    .search-bar ds-input {\n      flex: 1;\n      max-width: 28rem;\n    }\n\n    :host ::ng-deep .list-table {\n      border: 1px solid #E7E5E4;\n      border-radius: 0.5rem;\n      overflow: hidden;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-thead > tr > th {\n      background: #F5F5F4;\n      color: #1C1917;\n      font-weight: 600;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr > td {\n      color: #1C1917;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr:hover {\n      background: #FAFAF9;\n    }\n\n    .project-link {\n      color: #1C1917;\n      text-decoration: none;\n      font-weight: 500;\n    }\n\n    .project-link:hover {\n      text-decoration: underline;\n    }\n\n    .owner-cell {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    :host ::ng-deep .owner-avatar {\n      background: #E7E5E4;\n      color: #1C1917;\n      font-size: 0.75rem;\n      width: 2rem;\n      height: 2rem;\n    }\n\n    .empty-message {\n      text-align: center;\n      padding: 2rem 1rem;\n      color: #78716c;\n    }\n  `,\n})\nexport class ListPage {\n  searchTerm = signal('');\n\n  private readonly projects = signal<Project[]>([\n    { id: 1, name: 'Acme Redesign', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-01-05' },\n    { id: 2, name: 'Bolt Migration', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Active', statusSeverity: 'success', createdDate: '2026-01-12' },\n    { id: 3, name: 'Cedar Analytics', owner: 'James Wu', ownerInitials: 'JW', status: 'Review', statusSeverity: 'info', createdDate: '2026-01-18' },\n    { id: 4, name: 'Delta Platform', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-01-22' },\n    { id: 5, name: 'Echo Dashboard', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-01' },\n    { id: 6, name: 'Falcon API', owner: 'Priya Patel', ownerInitials: 'PP', status: 'Cancelled', statusSeverity: 'danger', createdDate: '2026-02-04' },\n    { id: 7, name: 'Granite CMS', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Review', statusSeverity: 'info', createdDate: '2026-02-10' },\n    { id: 8, name: 'Horizon Mobile', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-15' },\n    { id: 9, name: 'Iris Onboarding', owner: 'James Wu', ownerInitials: 'JW', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-02-19' },\n    { id: 10, name: 'Jade Payments', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-25' },\n    { id: 11, name: 'Kite Scheduler', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Review', statusSeverity: 'info', createdDate: '2026-03-01' },\n    { id: 12, name: 'Lunar Reporting', owner: 'Priya Patel', ownerInitials: 'PP', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-04' },\n    { id: 13, name: 'Mesa Auth', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Cancelled', statusSeverity: 'danger', createdDate: '2026-03-07' },\n    { id: 14, name: 'Nova Search', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-10' },\n    { id: 15, name: 'Orbit Sync', owner: 'James Wu', ownerInitials: 'JW', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-03-12' },\n    { id: 16, name: 'Pulse Monitor', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'Review', statusSeverity: 'info', createdDate: '2026-03-14' },\n    { id: 17, name: 'Quartz Billing', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-16' },\n    { id: 18, name: 'Ridge Infra', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-18' },\n  ]);\n\n  filteredProjects = computed(() => {\n    const term = this.searchTerm().toLowerCase().trim();\n    if (!term) return this.projects();\n    return this.projects().filter(\n      (p) =>\n        p.name.toLowerCase().includes(term) ||\n        p.owner.toLowerCase().includes(term) ||\n        p.status.toLowerCase().includes(term)\n    );\n  });\n\n  onSearch(): void {\n    // Filtering is reactive via the computed signal; this hook exists\n    // for future enhancements (e.g. server-side search).\n  }\n\n  onView(id: number): void {\n    // Navigation could also be handled here programmatically if needed.\n  }\n}\n",
-            "properties": [
-                {
-                    "name": "createdDate",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 16
-                },
-                {
-                    "name": "id",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "number",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 10
-                },
-                {
-                    "name": "name",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 11
-                },
-                {
-                    "name": "owner",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 12
-                },
-                {
-                    "name": "ownerInitials",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 13
-                },
-                {
-                    "name": "status",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 14
-                },
-                {
-                    "name": "statusSeverity",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "TagSeverity",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 15
-                }
-            ],
-            "indexSignatures": [],
-            "kind": 172,
-            "methods": [],
-            "extends": [],
-            "isDuplicate": true,
-            "duplicateId": 1,
-            "duplicateName": "Project-1"
-        },
-        {
-            "name": "User",
-            "id": "interface-User-777ef7a3660e5cc6fd8547e452abedfbfe7ba5d0f0b072c1eea413782a7613e72c29b068d3aab40f126bb3d6193cf0613a8bb7bfc1bd6b4f46e7a4bc7e34f96c",
-            "file": "src/app/models/index.ts",
-            "deprecated": false,
-            "deprecationMessage": "",
-            "type": "interface",
-            "sourceCode": "export interface Project {\n  id: number;\n  name: string;\n  description: string;\n  owner: string;\n  ownerInitials: string;\n  status: string;\n  statusSeverity: 'success' | 'info' | 'warn' | 'danger';\n  avatar: string;\n  color: string;\n  members: number;\n  deadline: string;\n  createdDate: string;\n  category: string;\n}\n\nexport interface DashboardStats {\n  label: string;\n  value: string;\n  icon: string;\n}\n\nexport interface User {\n  id: number;\n  name: string;\n  email: string;\n  role: string;\n  initials: string;\n}\n",
-            "properties": [
-                {
-                    "name": "email",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 26
-                },
-                {
-                    "name": "id",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "number",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 24
-                },
-                {
-                    "name": "initials",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 28
-                },
-                {
-                    "name": "name",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 25
-                },
-                {
-                    "name": "role",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "string",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 27
-                }
-            ],
-            "indexSignatures": [],
-            "kind": 172,
-            "methods": [],
-            "extends": []
         }
     ],
-    "injectables": [],
+    "injectables": [
+        {
+            "name": "ProjectService",
+            "id": "injectable-ProjectService-7570689bc07ae85db20a04ad5c98c0da24c801ae9e71337aec60e6c1e8552c95473c3e44e8543ea655516d5ea3e5e4d6cad63b82abe60471fcf7f72a9fe072d5",
+            "file": "src/app/services/project.service.ts",
+            "properties": [
+                {
+                    "name": "projects",
+                    "defaultValue": "httpResource<Project[]>(() => '/api/projects')",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                },
+                {
+                    "name": "stats",
+                    "defaultValue": "httpResource<DashboardStats[]>(() => '/api/stats')",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 8
+                }
+            ],
+            "methods": [
+                {
+                    "name": "projectById",
+                    "args": [
+                        {
+                            "name": "id",
+                            "type": "number",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 10,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "id",
+                            "type": "number",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { Injectable } from '@angular/core';\nimport { httpResource } from '@angular/common/http';\nimport { Project, DashboardStats } from '../models';\n\n@Injectable({ providedIn: 'root' })\nexport class ProjectService {\n  projects = httpResource<Project[]>(() => '/api/projects');\n  stats = httpResource<DashboardStats[]>(() => '/api/stats');\n\n  projectById(id: number) {\n    return httpResource<Project>(() => `/api/projects/${id}`);\n  }\n}\n",
+            "extends": [],
+            "type": "injectable"
+        }
+    ],
     "guards": [],
     "interceptors": [],
     "classes": [],
@@ -408,7 +271,7 @@
     "components": [
         {
             "name": "App",
-            "id": "component-App-f0f3c53b050165cdee58a9078dcb1a278e14e97e0df7da7a3eb21ec46c9f19e26ce005add59cb98185f05567f165bdd4d3edacdb5c27de986d7b10732cffb01b",
+            "id": "component-App-0eda04351a168a504440ee9f49f78301d140a2f9d1d6c009cd030fcb714f4205b2c38115b33567b7601796e80857ec38d820fb3ededac50f74ba086e7a3a7454",
             "file": "src/app/app.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -418,7 +281,7 @@
             "selector": "app-root",
             "styleUrls": [],
             "styles": [
-                "\n    :host {\n      display: flex;\n      flex-direction: column;\n      min-height: 100vh;\n    }\n\n    .app-nav {\n      display: flex;\n      align-items: center;\n      gap: 24px;\n      padding: 8px 24px;\n      background: #FFFFFF;\n      border-bottom: 1px solid #E7E5E4;\n    }\n\n    .nav-brand {\n      font-family: Inter, sans-serif;\n      font-size: 18px;\n      font-weight: 700;\n      color: #4338CA;\n    }\n\n    .nav-links {\n      display: flex;\n      gap: 8px;\n    }\n\n    .app-content {\n      flex: 1;\n      padding: 24px;\n      background: #FAFAF9;\n    }\n  "
+                "\n    :host {\n      display: flex;\n      flex-direction: column;\n      min-height: 100vh;\n    }\n\n    .app-nav {\n      display: flex;\n      align-items: center;\n      gap: 24px;\n      padding: 8px 24px;\n      background: var(--p-surface-0);\n      border-bottom: 1px solid var(--p-surface-200);\n    }\n\n    .nav-brand {\n      font-family: Inter, sans-serif;\n      font-size: 18px;\n      font-weight: 700;\n      color: var(--p-primary-color);\n    }\n\n    .nav-links {\n      display: flex;\n      gap: 8px;\n    }\n\n    .app-content {\n      flex: 1;\n      padding: 24px;\n      background: var(--p-surface-50);\n    }\n  "
             ],
             "template": "<nav class=\"app-nav\">\n  <div class=\"nav-brand\">Atomic POC</div>\n  <div class=\"nav-links\">\n    <p-button label=\"Dashboard\" [link]=\"true\" routerLink=\"/dashboard\" severity=\"secondary\" [text]=\"true\" />\n    <p-button label=\"List\" [link]=\"true\" routerLink=\"/list\" severity=\"secondary\" [text]=\"true\" />\n    <p-button label=\"Detail\" [link]=\"true\" routerLink=\"/detail/1\" severity=\"secondary\" [text]=\"true\" />\n  </div>\n</nav>\n<main class=\"app-content\">\n  <router-outlet />\n</main>\n",
             "templateUrl": [],
@@ -447,15 +310,15 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component } from '@angular/core';\nimport { RouterOutlet, RouterLink } from '@angular/router';\nimport { Button } from 'primeng/button';\n\n@Component({\n  selector: 'app-root',\n  imports: [RouterOutlet, RouterLink, Button],\n  template: `\n    <nav class=\"app-nav\">\n      <div class=\"nav-brand\">Atomic POC</div>\n      <div class=\"nav-links\">\n        <p-button label=\"Dashboard\" [link]=\"true\" routerLink=\"/dashboard\" severity=\"secondary\" [text]=\"true\" />\n        <p-button label=\"List\" [link]=\"true\" routerLink=\"/list\" severity=\"secondary\" [text]=\"true\" />\n        <p-button label=\"Detail\" [link]=\"true\" routerLink=\"/detail/1\" severity=\"secondary\" [text]=\"true\" />\n      </div>\n    </nav>\n    <main class=\"app-content\">\n      <router-outlet />\n    </main>\n  `,\n  styles: `\n    :host {\n      display: flex;\n      flex-direction: column;\n      min-height: 100vh;\n    }\n\n    .app-nav {\n      display: flex;\n      align-items: center;\n      gap: 24px;\n      padding: 8px 24px;\n      background: #FFFFFF;\n      border-bottom: 1px solid #E7E5E4;\n    }\n\n    .nav-brand {\n      font-family: Inter, sans-serif;\n      font-size: 18px;\n      font-weight: 700;\n      color: #4338CA;\n    }\n\n    .nav-links {\n      display: flex;\n      gap: 8px;\n    }\n\n    .app-content {\n      flex: 1;\n      padding: 24px;\n      background: #FAFAF9;\n    }\n  `,\n})\nexport class App {}\n",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { RouterOutlet, RouterLink } from '@angular/router';\nimport { Button } from 'primeng/button';\n\n@Component({\n  selector: 'app-root',\n  imports: [RouterOutlet, RouterLink, Button],\n  template: `\n    <nav class=\"app-nav\">\n      <div class=\"nav-brand\">Atomic POC</div>\n      <div class=\"nav-links\">\n        <p-button label=\"Dashboard\" [link]=\"true\" routerLink=\"/dashboard\" severity=\"secondary\" [text]=\"true\" />\n        <p-button label=\"List\" [link]=\"true\" routerLink=\"/list\" severity=\"secondary\" [text]=\"true\" />\n        <p-button label=\"Detail\" [link]=\"true\" routerLink=\"/detail/1\" severity=\"secondary\" [text]=\"true\" />\n      </div>\n    </nav>\n    <main class=\"app-content\">\n      <router-outlet />\n    </main>\n  `,\n  styles: `\n    :host {\n      display: flex;\n      flex-direction: column;\n      min-height: 100vh;\n    }\n\n    .app-nav {\n      display: flex;\n      align-items: center;\n      gap: 24px;\n      padding: 8px 24px;\n      background: var(--p-surface-0);\n      border-bottom: 1px solid var(--p-surface-200);\n    }\n\n    .nav-brand {\n      font-family: Inter, sans-serif;\n      font-size: 18px;\n      font-weight: 700;\n      color: var(--p-primary-color);\n    }\n\n    .nav-links {\n      display: flex;\n      gap: 8px;\n    }\n\n    .app-content {\n      flex: 1;\n      padding: 24px;\n      background: var(--p-surface-50);\n    }\n  `,\n})\nexport class App {}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
-            "stylesData": "\n    :host {\n      display: flex;\n      flex-direction: column;\n      min-height: 100vh;\n    }\n\n    .app-nav {\n      display: flex;\n      align-items: center;\n      gap: 24px;\n      padding: 8px 24px;\n      background: #FFFFFF;\n      border-bottom: 1px solid #E7E5E4;\n    }\n\n    .nav-brand {\n      font-family: Inter, sans-serif;\n      font-size: 18px;\n      font-weight: 700;\n      color: #4338CA;\n    }\n\n    .nav-links {\n      display: flex;\n      gap: 8px;\n    }\n\n    .app-content {\n      flex: 1;\n      padding: 24px;\n      background: #FAFAF9;\n    }\n  \n",
+            "stylesData": "\n    :host {\n      display: flex;\n      flex-direction: column;\n      min-height: 100vh;\n    }\n\n    .app-nav {\n      display: flex;\n      align-items: center;\n      gap: 24px;\n      padding: 8px 24px;\n      background: var(--p-surface-0);\n      border-bottom: 1px solid var(--p-surface-200);\n    }\n\n    .nav-brand {\n      font-family: Inter, sans-serif;\n      font-size: 18px;\n      font-weight: 700;\n      color: var(--p-primary-color);\n    }\n\n    .nav-links {\n      display: flex;\n      gap: 8px;\n    }\n\n    .app-content {\n      flex: 1;\n      padding: 24px;\n      background: var(--p-surface-50);\n    }\n  \n",
             "extends": []
         },
         {
             "name": "Dashboard",
-            "id": "component-Dashboard-637a465557f1fab7ba0f42a1d844780cbb3759cfbe5ba560ef0042f0b6b921c02d76bd88abe6fa7f6f7a52b79863b4f1fca3bd1b6224a334163b7fbfe4bfd19e",
+            "id": "component-Dashboard-ec594ae161ddc79bd89780c1c9d3ea8d2ee9f2f2198d72852ac81863c13d20dacb73b7d6b7ee4186fda8c51c5ecc2f48194802f31db251880d080a0d30a57475",
             "file": "src/app/pages/dashboard/dashboard.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -465,9 +328,9 @@
             "selector": "app-dashboard",
             "styleUrls": [],
             "styles": [
-                "\n    .dashboard {\n      padding: 32px;\n      background: #FAFAF9;\n      min-height: 100vh;\n      font-family: Inter, sans-serif;\n    }\n\n    /* Header */\n    .dashboard-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 32px;\n      flex-wrap: wrap;\n      gap: 16px;\n    }\n\n    .dashboard-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: #1C1917;\n      margin: 0 0 4px 0;\n    }\n\n    .dashboard-subtitle {\n      font-size: 14px;\n      color: #78716C;\n      margin: 0;\n    }\n\n    /* Stat Cards — responsive grid */\n    .stat-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n      margin-bottom: 40px;\n    }\n\n    @media (min-width: 640px) {\n      .stat-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .stat-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    @media (min-width: 1440px) {\n      .stat-grid {\n        grid-template-columns: repeat(4, 1fr);\n      }\n    }\n\n    /* Sections */\n    .section {\n      margin-bottom: 40px;\n    }\n\n    .section-title {\n      font-size: 18px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0 0 20px 0;\n    }\n\n    /* Project Card Grid — same responsive breakpoints */\n    .card-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n    }\n\n    @media (min-width: 640px) {\n      .card-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .card-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    /* Project card inner layout */\n    .project-card-body {\n      display: flex;\n      flex-direction: column;\n      gap: 12px;\n    }\n\n    .project-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n\n    .project-name {\n      font-size: 16px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0;\n    }\n\n    .project-description {\n      font-size: 13px;\n      color: #78716C;\n      margin: 0;\n      line-height: 1.5;\n    }\n\n    .project-meta {\n      display: flex;\n      gap: 16px;\n      padding-top: 8px;\n      border-top: 1px solid #E7E5E4;\n    }\n\n    .meta-item {\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      font-size: 12px;\n      color: #78716C;\n    }\n\n    .meta-item .pi {\n      font-size: 12px;\n    }\n\n    /* Table container */\n    .table-container {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      overflow: hidden;\n    }\n\n    .name-cell {\n      font-weight: 500;\n      color: #1C1917;\n    }\n\n    .date-cell {\n      color: #78716C;\n      font-size: 13px;\n    }\n\n    /* Dark Mode Demo */\n    .dark-mode-demo {\n      margin-top: 16px;\n    }\n\n    .dark-mode-form {\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    .form-label {\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--p-text-color);\n    }\n\n    .form-actions {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n\n    .tag-row {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n  "
+                "\n    .dashboard {\n      padding: 32px;\n      background: var(--p-content-background);\n      min-height: 100vh;\n      font-family: Inter, sans-serif;\n    }\n\n    .dashboard-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 32px;\n      flex-wrap: wrap;\n      gap: 16px;\n    }\n\n    .dashboard-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: var(--p-text-color);\n      margin: 0 0 4px 0;\n    }\n\n    .dashboard-subtitle {\n      font-size: 14px;\n      color: var(--p-text-muted-color);\n      margin: 0;\n    }\n\n    .section {\n      margin-top: 40px;\n    }\n\n    .section-title {\n      font-size: 18px;\n      font-weight: 600;\n      color: var(--p-text-color);\n      margin: 0 0 20px 0;\n    }\n  "
             ],
-            "template": "<div class=\"dashboard\">\n  <!-- Page Header -->\n  <header class=\"dashboard-header\">\n    <div>\n      <h1 class=\"dashboard-title\">Dashboard</h1>\n      <p class=\"dashboard-subtitle\">Welcome back. Here's what's happening today.</p>\n    </div>\n    <ds-button label=\"Export Report\" severity=\"primary\" [outlined]=\"true\" />\n  </header>\n\n  <!-- Stat Cards Row -->\n  <section class=\"stat-grid\">\n    @for (stat of stats(); track stat.label) {\n      <ds-stat-card [label]=\"stat.label\" [value]=\"stat.value\" [icon]=\"stat.icon\" />\n    }\n  </section>\n\n  <!-- Project Cards Row -->\n  <section class=\"section\">\n    <h2 class=\"section-title\">Active Projects</h2>\n    <div class=\"card-grid\">\n      @for (project of projects(); track project.name) {\n        <p-card>\n          <div class=\"project-card-body\">\n            <div class=\"project-header\">\n              <p-avatar\n                [label]=\"project.avatar\"\n                shape=\"circle\"\n                [style]=\"{ 'background-color': project.color, color: '#ffffff' }\"\n              />\n              <ds-tag [value]=\"project.status\" [severity]=\"project.severity\" />\n            </div>\n            <h3 class=\"project-name\">{{ project.name }}</h3>\n            <p class=\"project-description\">{{ project.description }}</p>\n            <div class=\"project-meta\">\n              <span class=\"meta-item\"><i class=\"pi pi-users\"></i> {{ project.members }} members</span>\n              <span class=\"meta-item\"><i class=\"pi pi-calendar\"></i> {{ project.deadline }}</span>\n            </div>\n          </div>\n        </p-card>\n      }\n    </div>\n  </section>\n\n  <!-- Data Table -->\n  <section class=\"section\">\n    <h2 class=\"section-title\">Recent Activity</h2>\n    <div class=\"table-container\">\n      <p-table\n        [value]=\"activities()\"\n        [rows]=\"10\"\n        [tableStyle]=\"{ 'min-width': '40rem' }\"\n        [pt]=\"{ thead: { style: 'text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em' } }\"\n      >\n        <ng-template pTemplate=\"header\">\n          <tr>\n            <th>Name</th>\n            <th>Status</th>\n            <th>Date</th>\n            <th>Action</th>\n          </tr>\n        </ng-template>\n        <ng-template pTemplate=\"body\" let-row>\n          <tr>\n            <td class=\"name-cell\">{{ row.name }}</td>\n            <td>\n              <ds-tag [value]=\"row.status\" [severity]=\"row.statusSeverity\" />\n            </td>\n            <td class=\"date-cell\">{{ row.date }}</td>\n            <td>\n              <ds-button label=\"View\" severity=\"secondary\" [outlined]=\"true\" />\n            </td>\n          </tr>\n        </ng-template>\n      </p-table>\n    </div>\n  </section>\n\n  <!-- Dark Mode Test (Spike 3) -->\n  <section class=\"section\">\n    <h2 class=\"section-title\">Dark Mode Test</h2>\n    <ds-button\n      label=\"Toggle Dark Mode\"\n      severity=\"secondary\"\n      [outlined]=\"true\"\n      (clicked)=\"toggleDarkMode()\"\n    />\n    <div class=\"dark-mode-demo\">\n      <p-card>\n        <div class=\"dark-mode-form\">\n          <label class=\"form-label\">Nested Composition Test</label>\n          <ds-input placeholder=\"Type something...\" [(value)]=\"demoInput\" />\n          <div class=\"form-actions\">\n            <ds-button label=\"Submit\" severity=\"primary\" />\n            <ds-button label=\"Cancel\" severity=\"secondary\" [outlined]=\"true\" />\n            <ds-button label=\"Delete\" severity=\"danger\" />\n          </div>\n          <div class=\"tag-row\">\n            <ds-tag value=\"Success\" severity=\"success\" />\n            <ds-tag value=\"Warning\" severity=\"warn\" />\n            <ds-tag value=\"Error\" severity=\"danger\" />\n            <ds-tag value=\"Info\" severity=\"info\" />\n          </div>\n        </div>\n      </p-card>\n    </div>\n  </section>\n</div>\n",
+            "template": "<div class=\"dashboard\">\n  <header class=\"dashboard-header\">\n    <div>\n      <h1 class=\"dashboard-title\">Dashboard</h1>\n      <p class=\"dashboard-subtitle\">Welcome back. Here's what's happening today.</p>\n    </div>\n    <ds-button\n      label=\"Toggle Dark Mode\"\n      severity=\"secondary\"\n      [outlined]=\"true\"\n      (clicked)=\"toggleDarkMode()\"\n    />\n  </header>\n\n  <ds-stat-grid\n    [stats]=\"projectService.stats.value() ?? []\"\n    [isLoading]=\"projectService.stats.isLoading()\"\n    [error]=\"projectService.stats.error()?.message ?? null\"\n    (retryClicked)=\"projectService.stats.reload()\"\n  />\n\n  <section class=\"section\">\n    <h2 class=\"section-title\">Active Projects</h2>\n    <ds-project-card-grid\n      [projects]=\"projectService.projects.value() ?? []\"\n      [isLoading]=\"projectService.projects.isLoading()\"\n      [error]=\"projectService.projects.error()?.message ?? null\"\n      (projectSelected)=\"onProjectSelected($event)\"\n      (retryClicked)=\"projectService.projects.reload()\"\n    />\n  </section>\n</div>\n",
             "templateUrl": [],
             "viewProviders": [],
             "hostDirectives": [],
@@ -475,58 +338,71 @@
             "outputsClass": [],
             "propertiesClass": [
                 {
-                    "name": "activities",
-                    "defaultValue": "signal<ActivityRow[]>([\n    { name: 'Homepage Redesign', status: 'Completed', statusSeverity: 'success', date: 'Mar 22, 2026' },\n    { name: 'User Auth Flow', status: 'In Progress', statusSeverity: 'info', date: 'Mar 21, 2026' },\n    { name: 'Payment Integration', status: 'At Risk', statusSeverity: 'warn', date: 'Mar 20, 2026' },\n    { name: 'Mobile Responsive', status: 'Completed', statusSeverity: 'success', date: 'Mar 19, 2026' },\n    { name: 'Search Indexing', status: 'In Progress', statusSeverity: 'info', date: 'Mar 18, 2026' },\n    { name: 'Data Export Feature', status: 'Blocked', statusSeverity: 'danger', date: 'Mar 17, 2026' },\n    { name: 'Notification System', status: 'In Progress', statusSeverity: 'info', date: 'Mar 16, 2026' },\n    { name: 'Performance Audit', status: 'Completed', statusSeverity: 'success', date: 'Mar 15, 2026' },\n  ])",
+                    "name": "projectService",
+                    "defaultValue": "inject(ProjectService)",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "unknown",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 358
+                    "line": 89
                 },
                 {
-                    "name": "demoInput",
-                    "defaultValue": "signal('')",
+                    "name": "router",
+                    "defaultValue": "inject(Router)",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "unknown",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 352
-                },
-                {
-                    "name": "projects",
-                    "defaultValue": "signal([\n    {\n      name: 'Project Alpha',\n      description: 'Next-gen platform rebuild with new component architecture and CI/CD pipeline.',\n      status: 'On Track',\n      severity: 'success' as const,\n      avatar: 'A',\n      color: '#4338CA',\n      members: 8,\n      deadline: 'Apr 15',\n    },\n    {\n      name: 'Design System',\n      description: 'Unified token library and component catalog across web and mobile products.',\n      status: 'In Review',\n      severity: 'info' as const,\n      avatar: 'D',\n      color: '#0891B2',\n      members: 5,\n      deadline: 'Mar 30',\n    },\n    {\n      name: 'API Migration',\n      description: 'REST-to-GraphQL migration for core services with backward compatibility layer.',\n      status: 'At Risk',\n      severity: 'warn' as const,\n      avatar: 'M',\n      color: '#D97706',\n      members: 6,\n      deadline: 'May 01',\n    },\n  ])",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "unknown",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 319
-                },
-                {
-                    "name": "stats",
-                    "defaultValue": "signal([\n    { label: 'Total Users', value: '12,847', icon: 'pi-users' },\n    { label: 'Active Projects', value: '284', icon: 'pi-briefcase' },\n    { label: 'Open Tasks', value: '1,429', icon: 'pi-check-square' },\n    { label: 'Revenue', value: '$847K', icon: 'pi-dollar' },\n  ])",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "unknown",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 312
+                    "line": 90,
+                    "modifierKind": [
+                        123
+                    ]
                 }
             ],
             "methodsClass": [
+                {
+                    "name": "onProjectSelected",
+                    "args": [
+                        {
+                            "name": "project",
+                            "type": "Project",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 92,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "project",
+                            "type": "Project",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
                 {
                     "name": "toggleDarkMode",
                     "args": [],
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 354,
+                    "line": 96,
                     "deprecated": false,
                     "deprecationMessage": ""
                 }
@@ -538,44 +414,27 @@
             "standalone": false,
             "imports": [
                 {
-                    "name": "DsStatCard"
+                    "name": "DsStatGrid"
+                },
+                {
+                    "name": "DsProjectCardGrid"
                 },
                 {
                     "name": "DsButton"
-                },
-                {
-                    "name": "DsInput"
-                },
-                {
-                    "name": "DsTag"
-                },
-                {
-                    "name": "Card"
-                },
-                {
-                    "name": "Avatar"
-                },
-                {
-                    "name": "TableModule",
-                    "type": "module"
-                },
-                {
-                    "name": "FormsModule",
-                    "type": "module"
                 }
             ],
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, signal } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\nimport { DsStatCard } from '../../design-system/molecules';\nimport { DsButton, DsTag, DsInput } from '../../design-system/atoms';\nimport { Card } from 'primeng/card';\nimport { Avatar } from 'primeng/avatar';\nimport { TableModule } from 'primeng/table';\n\ninterface ActivityRow {\n  name: string;\n  status: string;\n  statusSeverity: 'success' | 'info' | 'warn' | 'danger';\n  date: string;\n}\n\n@Component({\n  selector: 'app-dashboard',\n  imports: [DsStatCard, DsButton, DsInput, DsTag, Card, Avatar, TableModule, FormsModule],\n  template: `\n    <div class=\"dashboard\">\n      <!-- Page Header -->\n      <header class=\"dashboard-header\">\n        <div>\n          <h1 class=\"dashboard-title\">Dashboard</h1>\n          <p class=\"dashboard-subtitle\">Welcome back. Here's what's happening today.</p>\n        </div>\n        <ds-button label=\"Export Report\" severity=\"primary\" [outlined]=\"true\" />\n      </header>\n\n      <!-- Stat Cards Row -->\n      <section class=\"stat-grid\">\n        @for (stat of stats(); track stat.label) {\n          <ds-stat-card [label]=\"stat.label\" [value]=\"stat.value\" [icon]=\"stat.icon\" />\n        }\n      </section>\n\n      <!-- Project Cards Row -->\n      <section class=\"section\">\n        <h2 class=\"section-title\">Active Projects</h2>\n        <div class=\"card-grid\">\n          @for (project of projects(); track project.name) {\n            <p-card>\n              <div class=\"project-card-body\">\n                <div class=\"project-header\">\n                  <p-avatar\n                    [label]=\"project.avatar\"\n                    shape=\"circle\"\n                    [style]=\"{ 'background-color': project.color, color: '#ffffff' }\"\n                  />\n                  <ds-tag [value]=\"project.status\" [severity]=\"project.severity\" />\n                </div>\n                <h3 class=\"project-name\">{{ project.name }}</h3>\n                <p class=\"project-description\">{{ project.description }}</p>\n                <div class=\"project-meta\">\n                  <span class=\"meta-item\"><i class=\"pi pi-users\"></i> {{ project.members }} members</span>\n                  <span class=\"meta-item\"><i class=\"pi pi-calendar\"></i> {{ project.deadline }}</span>\n                </div>\n              </div>\n            </p-card>\n          }\n        </div>\n      </section>\n\n      <!-- Data Table -->\n      <section class=\"section\">\n        <h2 class=\"section-title\">Recent Activity</h2>\n        <div class=\"table-container\">\n          <p-table\n            [value]=\"activities()\"\n            [rows]=\"10\"\n            [tableStyle]=\"{ 'min-width': '40rem' }\"\n            [pt]=\"{ thead: { style: 'text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em' } }\"\n          >\n            <ng-template pTemplate=\"header\">\n              <tr>\n                <th>Name</th>\n                <th>Status</th>\n                <th>Date</th>\n                <th>Action</th>\n              </tr>\n            </ng-template>\n            <ng-template pTemplate=\"body\" let-row>\n              <tr>\n                <td class=\"name-cell\">{{ row.name }}</td>\n                <td>\n                  <ds-tag [value]=\"row.status\" [severity]=\"row.statusSeverity\" />\n                </td>\n                <td class=\"date-cell\">{{ row.date }}</td>\n                <td>\n                  <ds-button label=\"View\" severity=\"secondary\" [outlined]=\"true\" />\n                </td>\n              </tr>\n            </ng-template>\n          </p-table>\n        </div>\n      </section>\n\n      <!-- Dark Mode Test (Spike 3) -->\n      <section class=\"section\">\n        <h2 class=\"section-title\">Dark Mode Test</h2>\n        <ds-button\n          label=\"Toggle Dark Mode\"\n          severity=\"secondary\"\n          [outlined]=\"true\"\n          (clicked)=\"toggleDarkMode()\"\n        />\n        <div class=\"dark-mode-demo\">\n          <p-card>\n            <div class=\"dark-mode-form\">\n              <label class=\"form-label\">Nested Composition Test</label>\n              <ds-input placeholder=\"Type something...\" [(value)]=\"demoInput\" />\n              <div class=\"form-actions\">\n                <ds-button label=\"Submit\" severity=\"primary\" />\n                <ds-button label=\"Cancel\" severity=\"secondary\" [outlined]=\"true\" />\n                <ds-button label=\"Delete\" severity=\"danger\" />\n              </div>\n              <div class=\"tag-row\">\n                <ds-tag value=\"Success\" severity=\"success\" />\n                <ds-tag value=\"Warning\" severity=\"warn\" />\n                <ds-tag value=\"Error\" severity=\"danger\" />\n                <ds-tag value=\"Info\" severity=\"info\" />\n              </div>\n            </div>\n          </p-card>\n        </div>\n      </section>\n    </div>\n  `,\n  styles: `\n    .dashboard {\n      padding: 32px;\n      background: #FAFAF9;\n      min-height: 100vh;\n      font-family: Inter, sans-serif;\n    }\n\n    /* Header */\n    .dashboard-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 32px;\n      flex-wrap: wrap;\n      gap: 16px;\n    }\n\n    .dashboard-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: #1C1917;\n      margin: 0 0 4px 0;\n    }\n\n    .dashboard-subtitle {\n      font-size: 14px;\n      color: #78716C;\n      margin: 0;\n    }\n\n    /* Stat Cards — responsive grid */\n    .stat-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n      margin-bottom: 40px;\n    }\n\n    @media (min-width: 640px) {\n      .stat-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .stat-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    @media (min-width: 1440px) {\n      .stat-grid {\n        grid-template-columns: repeat(4, 1fr);\n      }\n    }\n\n    /* Sections */\n    .section {\n      margin-bottom: 40px;\n    }\n\n    .section-title {\n      font-size: 18px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0 0 20px 0;\n    }\n\n    /* Project Card Grid — same responsive breakpoints */\n    .card-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n    }\n\n    @media (min-width: 640px) {\n      .card-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .card-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    /* Project card inner layout */\n    .project-card-body {\n      display: flex;\n      flex-direction: column;\n      gap: 12px;\n    }\n\n    .project-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n\n    .project-name {\n      font-size: 16px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0;\n    }\n\n    .project-description {\n      font-size: 13px;\n      color: #78716C;\n      margin: 0;\n      line-height: 1.5;\n    }\n\n    .project-meta {\n      display: flex;\n      gap: 16px;\n      padding-top: 8px;\n      border-top: 1px solid #E7E5E4;\n    }\n\n    .meta-item {\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      font-size: 12px;\n      color: #78716C;\n    }\n\n    .meta-item .pi {\n      font-size: 12px;\n    }\n\n    /* Table container */\n    .table-container {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      overflow: hidden;\n    }\n\n    .name-cell {\n      font-weight: 500;\n      color: #1C1917;\n    }\n\n    .date-cell {\n      color: #78716C;\n      font-size: 13px;\n    }\n\n    /* Dark Mode Demo */\n    .dark-mode-demo {\n      margin-top: 16px;\n    }\n\n    .dark-mode-form {\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    .form-label {\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--p-text-color);\n    }\n\n    .form-actions {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n\n    .tag-row {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n  `,\n})\nexport class Dashboard {\n  stats = signal([\n    { label: 'Total Users', value: '12,847', icon: 'pi-users' },\n    { label: 'Active Projects', value: '284', icon: 'pi-briefcase' },\n    { label: 'Open Tasks', value: '1,429', icon: 'pi-check-square' },\n    { label: 'Revenue', value: '$847K', icon: 'pi-dollar' },\n  ]);\n\n  projects = signal([\n    {\n      name: 'Project Alpha',\n      description: 'Next-gen platform rebuild with new component architecture and CI/CD pipeline.',\n      status: 'On Track',\n      severity: 'success' as const,\n      avatar: 'A',\n      color: '#4338CA',\n      members: 8,\n      deadline: 'Apr 15',\n    },\n    {\n      name: 'Design System',\n      description: 'Unified token library and component catalog across web and mobile products.',\n      status: 'In Review',\n      severity: 'info' as const,\n      avatar: 'D',\n      color: '#0891B2',\n      members: 5,\n      deadline: 'Mar 30',\n    },\n    {\n      name: 'API Migration',\n      description: 'REST-to-GraphQL migration for core services with backward compatibility layer.',\n      status: 'At Risk',\n      severity: 'warn' as const,\n      avatar: 'M',\n      color: '#D97706',\n      members: 6,\n      deadline: 'May 01',\n    },\n  ]);\n\n  demoInput = signal('');\n\n  toggleDarkMode() {\n    document.documentElement.classList.toggle('dark-mode');\n  }\n\n  activities = signal<ActivityRow[]>([\n    { name: 'Homepage Redesign', status: 'Completed', statusSeverity: 'success', date: 'Mar 22, 2026' },\n    { name: 'User Auth Flow', status: 'In Progress', statusSeverity: 'info', date: 'Mar 21, 2026' },\n    { name: 'Payment Integration', status: 'At Risk', statusSeverity: 'warn', date: 'Mar 20, 2026' },\n    { name: 'Mobile Responsive', status: 'Completed', statusSeverity: 'success', date: 'Mar 19, 2026' },\n    { name: 'Search Indexing', status: 'In Progress', statusSeverity: 'info', date: 'Mar 18, 2026' },\n    { name: 'Data Export Feature', status: 'Blocked', statusSeverity: 'danger', date: 'Mar 17, 2026' },\n    { name: 'Notification System', status: 'In Progress', statusSeverity: 'info', date: 'Mar 16, 2026' },\n    { name: 'Performance Audit', status: 'Completed', statusSeverity: 'success', date: 'Mar 15, 2026' },\n  ]);\n}\n",
+            "sourceCode": "import { Component, inject } from '@angular/core';\nimport { Router } from '@angular/router';\nimport { ProjectService } from '../../services/project.service';\nimport { DsStatGrid } from '../../design-system/organisms/stat-grid/stat-grid';\nimport { DsProjectCardGrid } from '../../design-system/organisms/project-card-grid/project-card-grid';\nimport { DsButton } from '../../design-system/atoms/button/button';\nimport { Project } from '../../models';\n\n@Component({\n  selector: 'app-dashboard',\n  imports: [DsStatGrid, DsProjectCardGrid, DsButton],\n  template: `\n    <div class=\"dashboard\">\n      <header class=\"dashboard-header\">\n        <div>\n          <h1 class=\"dashboard-title\">Dashboard</h1>\n          <p class=\"dashboard-subtitle\">Welcome back. Here's what's happening today.</p>\n        </div>\n        <ds-button\n          label=\"Toggle Dark Mode\"\n          severity=\"secondary\"\n          [outlined]=\"true\"\n          (clicked)=\"toggleDarkMode()\"\n        />\n      </header>\n\n      <ds-stat-grid\n        [stats]=\"projectService.stats.value() ?? []\"\n        [isLoading]=\"projectService.stats.isLoading()\"\n        [error]=\"projectService.stats.error()?.message ?? null\"\n        (retryClicked)=\"projectService.stats.reload()\"\n      />\n\n      <section class=\"section\">\n        <h2 class=\"section-title\">Active Projects</h2>\n        <ds-project-card-grid\n          [projects]=\"projectService.projects.value() ?? []\"\n          [isLoading]=\"projectService.projects.isLoading()\"\n          [error]=\"projectService.projects.error()?.message ?? null\"\n          (projectSelected)=\"onProjectSelected($event)\"\n          (retryClicked)=\"projectService.projects.reload()\"\n        />\n      </section>\n    </div>\n  `,\n  styles: `\n    .dashboard {\n      padding: 32px;\n      background: var(--p-content-background);\n      min-height: 100vh;\n      font-family: Inter, sans-serif;\n    }\n\n    .dashboard-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 32px;\n      flex-wrap: wrap;\n      gap: 16px;\n    }\n\n    .dashboard-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: var(--p-text-color);\n      margin: 0 0 4px 0;\n    }\n\n    .dashboard-subtitle {\n      font-size: 14px;\n      color: var(--p-text-muted-color);\n      margin: 0;\n    }\n\n    .section {\n      margin-top: 40px;\n    }\n\n    .section-title {\n      font-size: 18px;\n      font-weight: 600;\n      color: var(--p-text-color);\n      margin: 0 0 20px 0;\n    }\n  `,\n})\nexport class Dashboard {\n  projectService = inject(ProjectService);\n  private router = inject(Router);\n\n  onProjectSelected(project: Project) {\n    this.router.navigate(['/detail', project.id]);\n  }\n\n  toggleDarkMode() {\n    document.documentElement.classList.toggle('dark-mode');\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
-            "stylesData": "\n    .dashboard {\n      padding: 32px;\n      background: #FAFAF9;\n      min-height: 100vh;\n      font-family: Inter, sans-serif;\n    }\n\n    /* Header */\n    .dashboard-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 32px;\n      flex-wrap: wrap;\n      gap: 16px;\n    }\n\n    .dashboard-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: #1C1917;\n      margin: 0 0 4px 0;\n    }\n\n    .dashboard-subtitle {\n      font-size: 14px;\n      color: #78716C;\n      margin: 0;\n    }\n\n    /* Stat Cards — responsive grid */\n    .stat-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n      margin-bottom: 40px;\n    }\n\n    @media (min-width: 640px) {\n      .stat-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .stat-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    @media (min-width: 1440px) {\n      .stat-grid {\n        grid-template-columns: repeat(4, 1fr);\n      }\n    }\n\n    /* Sections */\n    .section {\n      margin-bottom: 40px;\n    }\n\n    .section-title {\n      font-size: 18px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0 0 20px 0;\n    }\n\n    /* Project Card Grid — same responsive breakpoints */\n    .card-grid {\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 20px;\n    }\n\n    @media (min-width: 640px) {\n      .card-grid {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n\n    @media (min-width: 1024px) {\n      .card-grid {\n        grid-template-columns: repeat(3, 1fr);\n      }\n    }\n\n    /* Project card inner layout */\n    .project-card-body {\n      display: flex;\n      flex-direction: column;\n      gap: 12px;\n    }\n\n    .project-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n\n    .project-name {\n      font-size: 16px;\n      font-weight: 600;\n      color: #1C1917;\n      margin: 0;\n    }\n\n    .project-description {\n      font-size: 13px;\n      color: #78716C;\n      margin: 0;\n      line-height: 1.5;\n    }\n\n    .project-meta {\n      display: flex;\n      gap: 16px;\n      padding-top: 8px;\n      border-top: 1px solid #E7E5E4;\n    }\n\n    .meta-item {\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      font-size: 12px;\n      color: #78716C;\n    }\n\n    .meta-item .pi {\n      font-size: 12px;\n    }\n\n    /* Table container */\n    .table-container {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      overflow: hidden;\n    }\n\n    .name-cell {\n      font-weight: 500;\n      color: #1C1917;\n    }\n\n    .date-cell {\n      color: #78716C;\n      font-size: 13px;\n    }\n\n    /* Dark Mode Demo */\n    .dark-mode-demo {\n      margin-top: 16px;\n    }\n\n    .dark-mode-form {\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    .form-label {\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--p-text-color);\n    }\n\n    .form-actions {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n\n    .tag-row {\n      display: flex;\n      gap: 8px;\n      flex-wrap: wrap;\n    }\n  \n",
+            "stylesData": "\n    .dashboard {\n      padding: 32px;\n      background: var(--p-content-background);\n      min-height: 100vh;\n      font-family: Inter, sans-serif;\n    }\n\n    .dashboard-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 32px;\n      flex-wrap: wrap;\n      gap: 16px;\n    }\n\n    .dashboard-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: var(--p-text-color);\n      margin: 0 0 4px 0;\n    }\n\n    .dashboard-subtitle {\n      font-size: 14px;\n      color: var(--p-text-muted-color);\n      margin: 0;\n    }\n\n    .section {\n      margin-top: 40px;\n    }\n\n    .section-title {\n      font-size: 18px;\n      font-weight: 600;\n      color: var(--p-text-color);\n      margin: 0 0 20px 0;\n    }\n  \n",
             "extends": []
         },
         {
             "name": "Detail",
-            "id": "component-Detail-fa87bfac8a4056e72150151fa597d890afed6e436ae8f264560a8b7e3584e12f03793853856206a1f6b72baf0ec2d0f95a010935ebe4e1d85b811f9abed43f3c",
+            "id": "component-Detail-6448df072633cfc5caea5b4d28fb86fa9c1c1cd10b7a95e1bd991b1d1d024c138a2b110b388d3bff4d7dea4bee8417ed366e46aa660103c48c5253388246208c",
             "file": "src/app/pages/detail/detail.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -585,15 +444,54 @@
             "selector": "app-detail",
             "styleUrls": [],
             "styles": [
-                "\n    .detail-page {\n      max-width: 720px;\n      margin: 2rem auto;\n      padding: 0 1rem;\n    }\n\n    .detail-card {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      padding: 2rem;\n    }\n\n    .entity-header {\n      display: flex;\n      align-items: center;\n      gap: 1rem;\n    }\n\n    .entity-title {\n      display: flex;\n      align-items: center;\n      gap: 0.75rem;\n    }\n\n    .entity-title h1 {\n      margin: 0;\n      font-size: 1.5rem;\n      font-weight: 600;\n      color: #1C1917;\n    }\n\n    .info-section {\n      display: grid;\n      grid-template-columns: 1fr 1fr;\n      gap: 1.25rem;\n    }\n\n    .info-section .full-width {\n      grid-column: 1 / -1;\n    }\n\n    .field {\n      display: flex;\n      flex-direction: column;\n      gap: 0.375rem;\n    }\n\n    .field label {\n      font-size: 0.875rem;\n      font-weight: 500;\n      color: #78716C;\n    }\n\n    .action-buttons {\n      display: flex;\n      gap: 0.75rem;\n    }\n  "
+                "\n    .detail-page {\n      max-width: 720px;\n      margin: 2rem auto;\n      padding: 0 1rem;\n    }\n\n    .detail-card {\n      background: var(--p-surface-0);\n      border: 1px solid var(--p-surface-border);\n      border-radius: 12px;\n      padding: 2rem;\n    }\n\n    .error-card {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      gap: 1rem;\n      text-align: center;\n    }\n\n    .error-detail {\n      color: var(--p-text-muted-color);\n      margin: 0;\n    }\n\n    .entity-header {\n      display: flex;\n      align-items: center;\n      gap: 1rem;\n    }\n\n    .entity-title {\n      display: flex;\n      align-items: center;\n      gap: 0.75rem;\n    }\n\n    .entity-title h1 {\n      margin: 0;\n      font-size: 1.5rem;\n      font-weight: 600;\n      color: var(--p-text-color);\n    }\n\n    .skeleton-header {\n      display: flex;\n      align-items: center;\n      gap: 1rem;\n    }\n\n    .skeleton-title {\n      display: flex;\n      align-items: center;\n      gap: 0.75rem;\n    }\n\n    .info-section {\n      display: grid;\n      grid-template-columns: 1fr 1fr;\n      gap: 1.25rem;\n    }\n\n    .info-section .full-width {\n      grid-column: 1 / -1;\n    }\n\n    .field {\n      display: flex;\n      flex-direction: column;\n      gap: 0.375rem;\n    }\n\n    .field.full-width {\n      grid-column: 1 / -1;\n    }\n\n    .action-buttons {\n      display: flex;\n      gap: 0.75rem;\n    }\n  "
             ],
-            "template": "<div class=\"detail-page\">\n  <div class=\"detail-card\">\n\n    <!-- Entity Header -->\n    <div class=\"entity-header\">\n      <p-avatar label=\"PA\" size=\"xlarge\" shape=\"circle\" />\n      <div class=\"entity-title\">\n        <h1>Project Alpha</h1>\n        <ds-tag value=\"Active\" severity=\"success\" />\n      </div>\n    </div>\n\n    <p-divider />\n\n    <!-- Info Section -->\n    <div class=\"info-section\">\n      <div class=\"field\">\n        <label>Project Name</label>\n        <ds-input [value]=\"'Project Alpha'\" placeholder=\"Project Name\" />\n      </div>\n      <div class=\"field\">\n        <label>Owner</label>\n        <ds-input [value]=\"'Sarah Chen'\" placeholder=\"Owner\" />\n      </div>\n      <div class=\"field\">\n        <label>Created</label>\n        <ds-input [value]=\"'January 15, 2026'\" placeholder=\"Created\" />\n      </div>\n      <div class=\"field\">\n        <label>Category</label>\n        <ds-input [value]=\"'Engineering'\" placeholder=\"Category\" />\n      </div>\n      <div class=\"field full-width\">\n        <label>Description</label>\n        <ds-input\n          [value]=\"'Core platform redesign and API modernization initiative'\"\n          placeholder=\"Description\"\n        />\n      </div>\n    </div>\n\n    <p-divider />\n\n    <!-- Action Buttons -->\n    <div class=\"action-buttons\">\n      <ds-button label=\"Edit\" severity=\"primary\" />\n      <ds-button label=\"Delete\" severity=\"danger\" />\n      <ds-button label=\"Back to List\" severity=\"secondary\" [outlined]=\"true\" (clicked)=\"goBack()\" />\n    </div>\n\n  </div>\n</div>\n",
+            "template": "<div class=\"detail-page\">\n  @if (project.isLoading()) {\n    <div class=\"detail-card\">\n      <div class=\"skeleton-header\">\n        <p-skeleton shape=\"circle\" size=\"4rem\" />\n        <div class=\"skeleton-title\">\n          <p-skeleton width=\"200px\" height=\"28px\" />\n          <p-skeleton width=\"80px\" height=\"24px\" />\n        </div>\n      </div>\n      <p-divider />\n      <div class=\"info-section\">\n        @for (_ of [1, 2, 3, 4]; track $index) {\n          <div class=\"field\">\n            <p-skeleton width=\"80px\" height=\"14px\" />\n            <p-skeleton width=\"100%\" height=\"38px\" />\n          </div>\n        }\n        <div class=\"field full-width\">\n          <p-skeleton width=\"80px\" height=\"14px\" />\n          <p-skeleton width=\"100%\" height=\"38px\" />\n        </div>\n      </div>\n    </div>\n  } @else if (project.error()) {\n    <div class=\"detail-card error-card\">\n      <p-message severity=\"error\" text=\"Project not found\" />\n      <p class=\"error-detail\">The project you're looking for doesn't exist or couldn't be loaded.</p>\n      <ds-button\n        label=\"Back to List\"\n        severity=\"secondary\"\n        [outlined]=\"true\"\n        (clicked)=\"goBack()\"\n      />\n    </div>\n  } @else if (project.value(); as p) {\n    <div class=\"detail-card\">\n      <div class=\"entity-header\">\n        <p-avatar\n          [label]=\"p.ownerInitials\"\n          size=\"xlarge\"\n          shape=\"circle\"\n          [style]=\"{ 'background-color': p.color, color: 'var(--p-surface-0)' }\"\n        />\n        <div class=\"entity-title\">\n          <h1>{{ p.name }}</h1>\n          <ds-tag [value]=\"p.status\" [severity]=\"p.statusSeverity\" />\n        </div>\n      </div>\n\n      <p-divider />\n\n      <div class=\"info-section\">\n        <ds-form-field label=\"Project Name\">\n          <ds-input [value]=\"p.name\" placeholder=\"Project Name\" />\n        </ds-form-field>\n        <ds-form-field label=\"Owner\">\n          <ds-input [value]=\"p.owner\" placeholder=\"Owner\" />\n        </ds-form-field>\n        <ds-form-field label=\"Created\">\n          <ds-input [value]=\"p.createdDate\" placeholder=\"Created\" />\n        </ds-form-field>\n        <ds-form-field label=\"Category\">\n          <ds-input [value]=\"p.category\" placeholder=\"Category\" />\n        </ds-form-field>\n        <div class=\"full-width\">\n          <ds-form-field label=\"Description\" [fullWidth]=\"true\">\n            <ds-input [value]=\"p.description\" placeholder=\"Description\" />\n          </ds-form-field>\n        </div>\n      </div>\n\n      <p-divider />\n\n      <div class=\"action-buttons\">\n        <ds-button label=\"Edit\" severity=\"primary\" />\n        <ds-button label=\"Delete\" severity=\"danger\" />\n        <ds-button\n          label=\"Back to List\"\n          severity=\"secondary\"\n          [outlined]=\"true\"\n          (clicked)=\"goBack()\"\n        />\n      </div>\n    </div>\n  }\n</div>\n",
             "templateUrl": [],
             "viewProviders": [],
             "hostDirectives": [],
             "inputsClass": [],
             "outputsClass": [],
             "propertiesClass": [
+                {
+                    "name": "project",
+                    "defaultValue": "this.projectService.projectById(\n    Number(this.route.snapshot.paramMap.get('id'))\n  )",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 194
+                },
+                {
+                    "name": "projectService",
+                    "defaultValue": "inject(ProjectService)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 192,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "route",
+                    "defaultValue": "inject(ActivatedRoute)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 190,
+                    "modifierKind": [
+                        123
+                    ]
+                },
                 {
                     "name": "router",
                     "defaultValue": "inject(Router)",
@@ -603,7 +501,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 126,
+                    "line": 191,
                     "modifierKind": [
                         123
                     ]
@@ -616,7 +514,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 128,
+                    "line": 198,
                     "deprecated": false,
                     "deprecationMessage": ""
                 }
@@ -634,6 +532,15 @@
                     "name": "Divider"
                 },
                 {
+                    "name": "Skeleton"
+                },
+                {
+                    "name": "Message"
+                },
+                {
+                    "name": "DsFormField"
+                },
+                {
                     "name": "DsButton"
                 },
                 {
@@ -646,15 +553,15 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, inject } from '@angular/core';\nimport { Router } from '@angular/router';\nimport { Avatar } from 'primeng/avatar';\nimport { Divider } from 'primeng/divider';\nimport { DsButton, DsTag, DsInput } from '../../design-system/atoms';\n\n@Component({\n  selector: 'app-detail',\n  imports: [Avatar, Divider, DsButton, DsTag, DsInput],\n  template: `\n    <div class=\"detail-page\">\n      <div class=\"detail-card\">\n\n        <!-- Entity Header -->\n        <div class=\"entity-header\">\n          <p-avatar label=\"PA\" size=\"xlarge\" shape=\"circle\" />\n          <div class=\"entity-title\">\n            <h1>Project Alpha</h1>\n            <ds-tag value=\"Active\" severity=\"success\" />\n          </div>\n        </div>\n\n        <p-divider />\n\n        <!-- Info Section -->\n        <div class=\"info-section\">\n          <div class=\"field\">\n            <label>Project Name</label>\n            <ds-input [value]=\"'Project Alpha'\" placeholder=\"Project Name\" />\n          </div>\n          <div class=\"field\">\n            <label>Owner</label>\n            <ds-input [value]=\"'Sarah Chen'\" placeholder=\"Owner\" />\n          </div>\n          <div class=\"field\">\n            <label>Created</label>\n            <ds-input [value]=\"'January 15, 2026'\" placeholder=\"Created\" />\n          </div>\n          <div class=\"field\">\n            <label>Category</label>\n            <ds-input [value]=\"'Engineering'\" placeholder=\"Category\" />\n          </div>\n          <div class=\"field full-width\">\n            <label>Description</label>\n            <ds-input\n              [value]=\"'Core platform redesign and API modernization initiative'\"\n              placeholder=\"Description\"\n            />\n          </div>\n        </div>\n\n        <p-divider />\n\n        <!-- Action Buttons -->\n        <div class=\"action-buttons\">\n          <ds-button label=\"Edit\" severity=\"primary\" />\n          <ds-button label=\"Delete\" severity=\"danger\" />\n          <ds-button label=\"Back to List\" severity=\"secondary\" [outlined]=\"true\" (clicked)=\"goBack()\" />\n        </div>\n\n      </div>\n    </div>\n  `,\n  styles: `\n    .detail-page {\n      max-width: 720px;\n      margin: 2rem auto;\n      padding: 0 1rem;\n    }\n\n    .detail-card {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      padding: 2rem;\n    }\n\n    .entity-header {\n      display: flex;\n      align-items: center;\n      gap: 1rem;\n    }\n\n    .entity-title {\n      display: flex;\n      align-items: center;\n      gap: 0.75rem;\n    }\n\n    .entity-title h1 {\n      margin: 0;\n      font-size: 1.5rem;\n      font-weight: 600;\n      color: #1C1917;\n    }\n\n    .info-section {\n      display: grid;\n      grid-template-columns: 1fr 1fr;\n      gap: 1.25rem;\n    }\n\n    .info-section .full-width {\n      grid-column: 1 / -1;\n    }\n\n    .field {\n      display: flex;\n      flex-direction: column;\n      gap: 0.375rem;\n    }\n\n    .field label {\n      font-size: 0.875rem;\n      font-weight: 500;\n      color: #78716C;\n    }\n\n    .action-buttons {\n      display: flex;\n      gap: 0.75rem;\n    }\n  `,\n})\nexport class Detail {\n  private router = inject(Router);\n\n  goBack() {\n    this.router.navigate(['/list']);\n  }\n}\n",
+            "sourceCode": "import { Component, inject } from '@angular/core';\nimport { ActivatedRoute, Router } from '@angular/router';\nimport { Avatar } from 'primeng/avatar';\nimport { Divider } from 'primeng/divider';\nimport { Skeleton } from 'primeng/skeleton';\nimport { Message } from 'primeng/message';\nimport { ProjectService } from '../../services/project.service';\nimport { DsFormField } from '../../design-system/molecules/form-field/form-field';\nimport { DsButton } from '../../design-system/atoms/button/button';\nimport { DsTag } from '../../design-system/atoms/tag/tag';\nimport { DsInput } from '../../design-system/atoms/input/input';\n\n@Component({\n  selector: 'app-detail',\n  imports: [Avatar, Divider, Skeleton, Message, DsFormField, DsButton, DsTag, DsInput],\n  template: `\n    <div class=\"detail-page\">\n      @if (project.isLoading()) {\n        <div class=\"detail-card\">\n          <div class=\"skeleton-header\">\n            <p-skeleton shape=\"circle\" size=\"4rem\" />\n            <div class=\"skeleton-title\">\n              <p-skeleton width=\"200px\" height=\"28px\" />\n              <p-skeleton width=\"80px\" height=\"24px\" />\n            </div>\n          </div>\n          <p-divider />\n          <div class=\"info-section\">\n            @for (_ of [1, 2, 3, 4]; track $index) {\n              <div class=\"field\">\n                <p-skeleton width=\"80px\" height=\"14px\" />\n                <p-skeleton width=\"100%\" height=\"38px\" />\n              </div>\n            }\n            <div class=\"field full-width\">\n              <p-skeleton width=\"80px\" height=\"14px\" />\n              <p-skeleton width=\"100%\" height=\"38px\" />\n            </div>\n          </div>\n        </div>\n      } @else if (project.error()) {\n        <div class=\"detail-card error-card\">\n          <p-message severity=\"error\" text=\"Project not found\" />\n          <p class=\"error-detail\">The project you're looking for doesn't exist or couldn't be loaded.</p>\n          <ds-button\n            label=\"Back to List\"\n            severity=\"secondary\"\n            [outlined]=\"true\"\n            (clicked)=\"goBack()\"\n          />\n        </div>\n      } @else if (project.value(); as p) {\n        <div class=\"detail-card\">\n          <div class=\"entity-header\">\n            <p-avatar\n              [label]=\"p.ownerInitials\"\n              size=\"xlarge\"\n              shape=\"circle\"\n              [style]=\"{ 'background-color': p.color, color: 'var(--p-surface-0)' }\"\n            />\n            <div class=\"entity-title\">\n              <h1>{{ p.name }}</h1>\n              <ds-tag [value]=\"p.status\" [severity]=\"p.statusSeverity\" />\n            </div>\n          </div>\n\n          <p-divider />\n\n          <div class=\"info-section\">\n            <ds-form-field label=\"Project Name\">\n              <ds-input [value]=\"p.name\" placeholder=\"Project Name\" />\n            </ds-form-field>\n            <ds-form-field label=\"Owner\">\n              <ds-input [value]=\"p.owner\" placeholder=\"Owner\" />\n            </ds-form-field>\n            <ds-form-field label=\"Created\">\n              <ds-input [value]=\"p.createdDate\" placeholder=\"Created\" />\n            </ds-form-field>\n            <ds-form-field label=\"Category\">\n              <ds-input [value]=\"p.category\" placeholder=\"Category\" />\n            </ds-form-field>\n            <div class=\"full-width\">\n              <ds-form-field label=\"Description\" [fullWidth]=\"true\">\n                <ds-input [value]=\"p.description\" placeholder=\"Description\" />\n              </ds-form-field>\n            </div>\n          </div>\n\n          <p-divider />\n\n          <div class=\"action-buttons\">\n            <ds-button label=\"Edit\" severity=\"primary\" />\n            <ds-button label=\"Delete\" severity=\"danger\" />\n            <ds-button\n              label=\"Back to List\"\n              severity=\"secondary\"\n              [outlined]=\"true\"\n              (clicked)=\"goBack()\"\n            />\n          </div>\n        </div>\n      }\n    </div>\n  `,\n  styles: `\n    .detail-page {\n      max-width: 720px;\n      margin: 2rem auto;\n      padding: 0 1rem;\n    }\n\n    .detail-card {\n      background: var(--p-surface-0);\n      border: 1px solid var(--p-surface-border);\n      border-radius: 12px;\n      padding: 2rem;\n    }\n\n    .error-card {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      gap: 1rem;\n      text-align: center;\n    }\n\n    .error-detail {\n      color: var(--p-text-muted-color);\n      margin: 0;\n    }\n\n    .entity-header {\n      display: flex;\n      align-items: center;\n      gap: 1rem;\n    }\n\n    .entity-title {\n      display: flex;\n      align-items: center;\n      gap: 0.75rem;\n    }\n\n    .entity-title h1 {\n      margin: 0;\n      font-size: 1.5rem;\n      font-weight: 600;\n      color: var(--p-text-color);\n    }\n\n    .skeleton-header {\n      display: flex;\n      align-items: center;\n      gap: 1rem;\n    }\n\n    .skeleton-title {\n      display: flex;\n      align-items: center;\n      gap: 0.75rem;\n    }\n\n    .info-section {\n      display: grid;\n      grid-template-columns: 1fr 1fr;\n      gap: 1.25rem;\n    }\n\n    .info-section .full-width {\n      grid-column: 1 / -1;\n    }\n\n    .field {\n      display: flex;\n      flex-direction: column;\n      gap: 0.375rem;\n    }\n\n    .field.full-width {\n      grid-column: 1 / -1;\n    }\n\n    .action-buttons {\n      display: flex;\n      gap: 0.75rem;\n    }\n  `,\n})\nexport class Detail {\n  private route = inject(ActivatedRoute);\n  private router = inject(Router);\n  private projectService = inject(ProjectService);\n\n  project = this.projectService.projectById(\n    Number(this.route.snapshot.paramMap.get('id'))\n  );\n\n  goBack() {\n    this.router.navigate(['/list']);\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
-            "stylesData": "\n    .detail-page {\n      max-width: 720px;\n      margin: 2rem auto;\n      padding: 0 1rem;\n    }\n\n    .detail-card {\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      padding: 2rem;\n    }\n\n    .entity-header {\n      display: flex;\n      align-items: center;\n      gap: 1rem;\n    }\n\n    .entity-title {\n      display: flex;\n      align-items: center;\n      gap: 0.75rem;\n    }\n\n    .entity-title h1 {\n      margin: 0;\n      font-size: 1.5rem;\n      font-weight: 600;\n      color: #1C1917;\n    }\n\n    .info-section {\n      display: grid;\n      grid-template-columns: 1fr 1fr;\n      gap: 1.25rem;\n    }\n\n    .info-section .full-width {\n      grid-column: 1 / -1;\n    }\n\n    .field {\n      display: flex;\n      flex-direction: column;\n      gap: 0.375rem;\n    }\n\n    .field label {\n      font-size: 0.875rem;\n      font-weight: 500;\n      color: #78716C;\n    }\n\n    .action-buttons {\n      display: flex;\n      gap: 0.75rem;\n    }\n  \n",
+            "stylesData": "\n    .detail-page {\n      max-width: 720px;\n      margin: 2rem auto;\n      padding: 0 1rem;\n    }\n\n    .detail-card {\n      background: var(--p-surface-0);\n      border: 1px solid var(--p-surface-border);\n      border-radius: 12px;\n      padding: 2rem;\n    }\n\n    .error-card {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      gap: 1rem;\n      text-align: center;\n    }\n\n    .error-detail {\n      color: var(--p-text-muted-color);\n      margin: 0;\n    }\n\n    .entity-header {\n      display: flex;\n      align-items: center;\n      gap: 1rem;\n    }\n\n    .entity-title {\n      display: flex;\n      align-items: center;\n      gap: 0.75rem;\n    }\n\n    .entity-title h1 {\n      margin: 0;\n      font-size: 1.5rem;\n      font-weight: 600;\n      color: var(--p-text-color);\n    }\n\n    .skeleton-header {\n      display: flex;\n      align-items: center;\n      gap: 1rem;\n    }\n\n    .skeleton-title {\n      display: flex;\n      align-items: center;\n      gap: 0.75rem;\n    }\n\n    .info-section {\n      display: grid;\n      grid-template-columns: 1fr 1fr;\n      gap: 1.25rem;\n    }\n\n    .info-section .full-width {\n      grid-column: 1 / -1;\n    }\n\n    .field {\n      display: flex;\n      flex-direction: column;\n      gap: 0.375rem;\n    }\n\n    .field.full-width {\n      grid-column: 1 / -1;\n    }\n\n    .action-buttons {\n      display: flex;\n      gap: 0.75rem;\n    }\n  \n",
             "extends": []
         },
         {
             "name": "DsButton",
-            "id": "component-DsButton-f7391d13dbd509fa85d9a1081bb57d5117d553020610299c060179cb9f591cc39f5d994f21bd7995f2a3b04b488ce9c9381eb19b5f995973b1f18cf0a257608f",
+            "id": "component-DsButton-27ec9c941c15b6cd45cdb4491b99e62e033c15715c79245483478ee10069c3007107253cabdb33d5fef1901f82b1fe355cf388dc71947082741361675cc98466",
             "file": "src/app/design-system/atoms/button/button.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -677,7 +584,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 19,
+                    "line": 29,
                     "required": false
                 },
                 {
@@ -688,7 +595,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 21,
+                    "line": 31,
                     "required": false
                 },
                 {
@@ -700,7 +607,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 20,
+                    "line": 30,
                     "required": false
                 }
             ],
@@ -713,7 +620,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 22,
+                    "line": 32,
                     "required": false
                 }
             ],
@@ -729,18 +636,165 @@
                     "name": "Button"
                 }
             ],
-            "description": "",
-            "rawdescription": "\n",
+            "description": "<p>Atom: Thin wrapper around PrimeNG p-button.</p>\n<p>Exposes only the inputs the design system uses (label, severity, outlined).\nPrimeNG&#39;s full API (icon, size, loading, badge, etc.) is intentionally hidden —\nadd inputs only when the design system scope expands.</p>\n<p>Why wrap? Isolates consumers from PrimeNG API changes, enforces design constraints,\nand makes it possible to swap the underlying library without touching every consumer.</p>\n",
+            "rawdescription": "\n\nAtom: Thin wrapper around PrimeNG p-button.\n\nExposes only the inputs the design system uses (label, severity, outlined).\nPrimeNG's full API (icon, size, loading, badge, etc.) is intentionally hidden —\nadd inputs only when the design system scope expands.\n\nWhy wrap? Isolates consumers from PrimeNG API changes, enforces design constraints,\nand makes it possible to swap the underlying library without touching every consumer.\n",
             "type": "component",
-            "sourceCode": "import { Component, input, output } from '@angular/core';\nimport { Button } from 'primeng/button';\n\ntype ButtonSeverity = 'success' | 'info' | 'warn' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast';\n\n@Component({\n  selector: 'ds-button',\n  imports: [Button],\n  template: `\n    <p-button\n      [label]=\"label()\"\n      [severity]=\"severity()\"\n      [outlined]=\"outlined()\"\n      (onClick)=\"clicked.emit()\"\n    />\n  `,\n})\nexport class DsButton {\n  label = input<string>();\n  severity = input<ButtonSeverity>('primary');\n  outlined = input(false);\n  clicked = output<void>();\n}\n",
+            "sourceCode": "import { Component, input, output } from '@angular/core';\nimport { Button } from 'primeng/button';\n\ntype ButtonSeverity = 'success' | 'info' | 'warn' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast';\n\n/**\n * Atom: Thin wrapper around PrimeNG p-button.\n *\n * Exposes only the inputs the design system uses (label, severity, outlined).\n * PrimeNG's full API (icon, size, loading, badge, etc.) is intentionally hidden —\n * add inputs only when the design system scope expands.\n *\n * Why wrap? Isolates consumers from PrimeNG API changes, enforces design constraints,\n * and makes it possible to swap the underlying library without touching every consumer.\n */\n@Component({\n  selector: 'ds-button',\n  imports: [Button],\n  template: `\n    <p-button\n      [label]=\"label()\"\n      [severity]=\"severity()\"\n      [outlined]=\"outlined()\"\n      (onClick)=\"clicked.emit()\"\n    />\n  `,\n})\nexport class DsButton {\n  label = input<string>();\n  severity = input<ButtonSeverity>('primary');\n  outlined = input(false);\n  clicked = output<void>();\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
             "extends": []
         },
         {
+            "name": "DsEmptyState",
+            "id": "component-DsEmptyState-f81397d594cb3a802a2a7271c27ad3bf2094d3888dad1c83ce836fb2ea425117bc52eea9409dc758dacf6fc5221253752ce209fd03b28ec7cd563afe116425db",
+            "file": "src/app/design-system/atoms/empty-state/empty-state.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "ds-empty-state",
+            "styleUrls": [],
+            "styles": [
+                "\n    .empty-state {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n      padding: 48px;\n    }\n\n    .empty-icon {\n      font-size: 48px;\n      color: var(--p-text-muted-color);\n    }\n\n    .empty-message {\n      font-size: 16px;\n      color: var(--p-text-muted-color);\n      margin: 8px 0 0 0;\n      text-align: center;\n    }\n\n    ds-button {\n      margin-top: 16px;\n    }\n  "
+            ],
+            "template": "<div class=\"empty-state\">\n  <i class=\"pi {{ icon() }} empty-icon\"></i>\n  <p class=\"empty-message\">{{ message() }}</p>\n  @if (actionLabel()) {\n    <ds-button\n      [label]=\"actionLabel()!\"\n      severity=\"primary\"\n      (clicked)=\"actionClicked.emit()\"\n    />\n  }\n</div>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "actionLabel",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 49,
+                    "required": false
+                },
+                {
+                    "name": "icon",
+                    "defaultValue": "'pi-inbox'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 47,
+                    "required": false
+                },
+                {
+                    "name": "message",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 48,
+                    "required": true
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "actionClicked",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "void",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 50,
+                    "required": false
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "DsButton"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, input, output } from '@angular/core';\nimport { DsButton } from '../button/button';\n\n@Component({\n  selector: 'ds-empty-state',\n  imports: [DsButton],\n  template: `\n    <div class=\"empty-state\">\n      <i class=\"pi {{ icon() }} empty-icon\"></i>\n      <p class=\"empty-message\">{{ message() }}</p>\n      @if (actionLabel()) {\n        <ds-button\n          [label]=\"actionLabel()!\"\n          severity=\"primary\"\n          (clicked)=\"actionClicked.emit()\"\n        />\n      }\n    </div>\n  `,\n  styles: `\n    .empty-state {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n      padding: 48px;\n    }\n\n    .empty-icon {\n      font-size: 48px;\n      color: var(--p-text-muted-color);\n    }\n\n    .empty-message {\n      font-size: 16px;\n      color: var(--p-text-muted-color);\n      margin: 8px 0 0 0;\n      text-align: center;\n    }\n\n    ds-button {\n      margin-top: 16px;\n    }\n  `,\n})\nexport class DsEmptyState {\n  icon = input('pi-inbox');\n  message = input.required<string>();\n  actionLabel = input<string>();\n  actionClicked = output<void>();\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "\n    .empty-state {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n      padding: 48px;\n    }\n\n    .empty-icon {\n      font-size: 48px;\n      color: var(--p-text-muted-color);\n    }\n\n    .empty-message {\n      font-size: 16px;\n      color: var(--p-text-muted-color);\n      margin: 8px 0 0 0;\n      text-align: center;\n    }\n\n    ds-button {\n      margin-top: 16px;\n    }\n  \n",
+            "extends": []
+        },
+        {
+            "name": "DsFormField",
+            "id": "component-DsFormField-f3f54a9ded12ce24f04768dab70ab5702f561449f2fb862953b0474a0a7841cc51cba819e5172d0d9fae923255c7c3c72b954a8f8a4f81e2dc0626da25221b08",
+            "file": "src/app/design-system/molecules/form-field/form-field.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "ds-form-field",
+            "styleUrls": [],
+            "styles": [
+                "\n    .form-field {\n      display: flex;\n      flex-direction: column;\n      gap: 4px;\n    }\n\n    .form-field.full-width {\n      width: 100%;\n    }\n\n    .form-field-label {\n      font-size: 12px;\n      text-transform: uppercase;\n      letter-spacing: 0.05em;\n      color: var(--p-text-muted-color);\n    }\n  "
+            ],
+            "template": "<div class=\"form-field\" [class.full-width]=\"fullWidth()\">\n  <label class=\"form-field-label\">{{ label() }}</label>\n  <ng-content />\n</div>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "fullWidth",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 32,
+                    "required": false
+                },
+                {
+                    "name": "label",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 31,
+                    "required": true
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, input } from '@angular/core';\n\n@Component({\n  selector: 'ds-form-field',\n  template: `\n    <div class=\"form-field\" [class.full-width]=\"fullWidth()\">\n      <label class=\"form-field-label\">{{ label() }}</label>\n      <ng-content />\n    </div>\n  `,\n  styles: `\n    .form-field {\n      display: flex;\n      flex-direction: column;\n      gap: 4px;\n    }\n\n    .form-field.full-width {\n      width: 100%;\n    }\n\n    .form-field-label {\n      font-size: 12px;\n      text-transform: uppercase;\n      letter-spacing: 0.05em;\n      color: var(--p-text-muted-color);\n    }\n  `,\n})\nexport class DsFormField {\n  label = input.required<string>();\n  fullWidth = input(false);\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "\n    .form-field {\n      display: flex;\n      flex-direction: column;\n      gap: 4px;\n    }\n\n    .form-field.full-width {\n      width: 100%;\n    }\n\n    .form-field-label {\n      font-size: 12px;\n      text-transform: uppercase;\n      letter-spacing: 0.05em;\n      color: var(--p-text-muted-color);\n    }\n  \n",
+            "extends": []
+        },
+        {
             "name": "DsInput",
-            "id": "component-DsInput-09480c94dc32473825785ed31f0ba31b01dfbb2b79e1e0aa7d85c454f6b9a025828c4e2129fd826e1045ac0ea44d23a5827d84225a42be2a818d7bb42a030608",
+            "id": "component-DsInput-4b5de22ebded03b1b6aff745bc016ed77934a86d8348f04f108bb64a6cf976e519bab8cab71df1ac8d6c89270cefcd34e55810349df22c6f4f7221fd3e5d697d",
             "file": "src/app/design-system/atoms/input/input.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -764,7 +818,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 14,
+                    "line": 21,
                     "required": false
                 },
                 {
@@ -776,7 +830,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 13,
+                    "line": 20,
                     "required": false
                 }
             ],
@@ -790,7 +844,7 @@
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 13,
+                    "line": 20,
                     "required": false
                 }
             ],
@@ -810,18 +864,468 @@
                     "type": "module"
                 }
             ],
-            "description": "",
-            "rawdescription": "\n",
+            "description": "<p>Atom: Thin wrapper around PrimeNG InputText.</p>\n<p>Uses model() instead of input() for the value because the user types into\nthe field — both parent and child need to read and write the same value.\nThis enables two-way binding: [(value)]=&quot;searchTerm&quot;.</p>\n",
+            "rawdescription": "\n\nAtom: Thin wrapper around PrimeNG InputText.\n\nUses model() instead of input() for the value because the user types into\nthe field — both parent and child need to read and write the same value.\nThis enables two-way binding: [(value)]=\"searchTerm\".\n",
             "type": "component",
-            "sourceCode": "import { Component, input, model } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\nimport { InputText } from 'primeng/inputtext';\n\n@Component({\n  selector: 'ds-input',\n  imports: [InputText, FormsModule],\n  template: `\n    <input pInputText [(ngModel)]=\"value\" [placeholder]=\"placeholder()\" />\n  `,\n})\nexport class DsInput {\n  value = model<string>('');\n  placeholder = input<string>('');\n}\n",
+            "sourceCode": "import { Component, input, model } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\nimport { InputText } from 'primeng/inputtext';\n\n/**\n * Atom: Thin wrapper around PrimeNG InputText.\n *\n * Uses model() instead of input() for the value because the user types into\n * the field — both parent and child need to read and write the same value.\n * This enables two-way binding: [(value)]=\"searchTerm\".\n */\n@Component({\n  selector: 'ds-input',\n  imports: [InputText, FormsModule],\n  template: `\n    <input pInputText [(ngModel)]=\"value\" [placeholder]=\"placeholder()\" />\n  `,\n})\nexport class DsInput {\n  value = model<string>('');\n  placeholder = input<string>('');\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
             "extends": []
         },
         {
+            "name": "DsProjectCardGrid",
+            "id": "component-DsProjectCardGrid-ffc4e05eebbff81fc2c07a05b80fb53c36af244b953c683bc7b027386eda73e32929a7d8fe963d45bc78d6b4afb03843b5236bf148ec7247dc379feedf37075e",
+            "file": "src/app/design-system/organisms/project-card-grid/project-card-grid.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "ds-project-card-grid",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./project-card-grid.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "error",
+                    "defaultValue": "null",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string | null",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 20,
+                    "required": false
+                },
+                {
+                    "name": "isLoading",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 19,
+                    "required": false
+                },
+                {
+                    "name": "projects",
+                    "defaultValue": "[]",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Project[]",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 18,
+                    "required": false
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "projectSelected",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Project",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 21,
+                    "required": false
+                },
+                {
+                    "name": "retryClicked",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "void",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 22,
+                    "required": false
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "onCardKeydown",
+                    "args": [
+                        {
+                            "name": "event",
+                            "type": "KeyboardEvent",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "project",
+                            "type": "Project",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 24,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "event",
+                            "type": "KeyboardEvent",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "project",
+                            "type": "Project",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "DsEmptyState"
+                },
+                {
+                    "name": "DsButton"
+                },
+                {
+                    "name": "DsTag"
+                },
+                {
+                    "name": "Skeleton"
+                },
+                {
+                    "name": "Message"
+                },
+                {
+                    "name": "Card"
+                },
+                {
+                    "name": "Avatar"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, input, output } from '@angular/core';\nimport { Project } from '../../../models';\nimport { DsEmptyState } from '../../atoms/empty-state/empty-state';\nimport { DsButton } from '../../atoms/button/button';\nimport { DsTag } from '../../atoms/tag/tag';\nimport { Skeleton } from 'primeng/skeleton';\nimport { Message } from 'primeng/message';\nimport { Card } from 'primeng/card';\nimport { Avatar } from 'primeng/avatar';\n\n@Component({\n  selector: 'ds-project-card-grid',\n  imports: [DsEmptyState, DsButton, DsTag, Skeleton, Message, Card, Avatar],\n  templateUrl: './project-card-grid.html',\n  styleUrl: './project-card-grid.scss',\n})\nexport class DsProjectCardGrid {\n  projects = input<Project[]>([]);\n  isLoading = input(false);\n  error = input<string | null>(null);\n  projectSelected = output<Project>();\n  retryClicked = output<void>();\n\n  onCardKeydown(event: KeyboardEvent, project: Project): void {\n    if (event.key === 'Enter' || event.key === ' ') {\n      event.preventDefault();\n      this.projectSelected.emit(project);\n    }\n  }\n}\n",
+            "styleUrl": "./project-card-grid.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "@if (isLoading()) {\n  <div class=\"card-grid\">\n    @for (i of [1, 2, 3]; track i) {\n      <p-skeleton width=\"100%\" height=\"180px\" borderRadius=\"12px\" />\n    }\n  </div>\n} @else if (error()) {\n  <div class=\"state-container\">\n    <p-message severity=\"error\" [text]=\"error()!\" />\n    <ds-button\n      label=\"Retry\"\n      severity=\"secondary\"\n      [outlined]=\"true\"\n      (clicked)=\"retryClicked.emit()\"\n    />\n  </div>\n} @else if (projects().length === 0) {\n  <ds-empty-state message=\"No projects found\" />\n} @else {\n  <div class=\"card-grid\">\n    @for (project of projects(); track project.id) {\n      <p-card\n        class=\"project-card\"\n        tabindex=\"0\"\n        (click)=\"projectSelected.emit(project)\"\n        (keydown)=\"onCardKeydown($event, project)\"\n      >\n        <div class=\"project-card-body\">\n          <div class=\"project-header\">\n            <p-avatar\n              [label]=\"project.avatar\"\n              shape=\"circle\"\n              [style]=\"{ 'background-color': project.color, color: 'var(--p-surface-0)' }\"\n            />\n            <ds-tag [value]=\"project.status\" [severity]=\"project.statusSeverity\" />\n          </div>\n          <h3 class=\"project-name\">{{ project.name }}</h3>\n          <p class=\"project-description\">{{ project.description }}</p>\n          <div class=\"project-meta\">\n            <span class=\"meta-item\"><i class=\"pi pi-users\"></i> {{ project.members }} members</span>\n            <span class=\"meta-item\"><i class=\"pi pi-calendar\"></i> {{ project.deadline }}</span>\n          </div>\n        </div>\n      </p-card>\n    }\n  </div>\n}\n"
+        },
+        {
+            "name": "DsProjectTable",
+            "id": "component-DsProjectTable-e960be3126e14957d96241c584e10463a5774dabd9876762e6cb6035d73d744ae612fd78f7f0d3441063993a013c68bf835187e0815b13d3e0a56f6d37012567",
+            "file": "src/app/design-system/organisms/project-table/project-table.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "ds-project-table",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./project-table.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "error",
+                    "defaultValue": "null",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string | null",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 34,
+                    "required": false
+                },
+                {
+                    "name": "isLoading",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 33,
+                    "required": false
+                },
+                {
+                    "name": "projects",
+                    "defaultValue": "[]",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Project[]",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 32,
+                    "required": false
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "projectSelected",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Project",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 35,
+                    "required": false
+                },
+                {
+                    "name": "retryClicked",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "void",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 36,
+                    "required": false
+                }
+            ],
+            "propertiesClass": [
+                {
+                    "name": "filteredProjects",
+                    "defaultValue": "computed(() => {\n    const term = this.searchTerm().toLowerCase().trim();\n    if (!term) return this.projects();\n    return this.projects().filter(\n      (p) =>\n        p.name.toLowerCase().includes(term) ||\n        p.owner.toLowerCase().includes(term) ||\n        p.status.toLowerCase().includes(term),\n    );\n  })",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 40
+                },
+                {
+                    "name": "searchTerm",
+                    "defaultValue": "signal('')",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "unknown",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 38
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "clearSearch",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 55,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onSearch",
+                    "args": [
+                        {
+                            "name": "term",
+                            "type": "string",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 51,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "term",
+                            "type": "string",
+                            "optional": false,
+                            "dotDotDotToken": false,
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "DsEmptyState"
+                },
+                {
+                    "name": "DsButton"
+                },
+                {
+                    "name": "DsTag"
+                },
+                {
+                    "name": "DsSearchBar"
+                },
+                {
+                    "name": "Skeleton"
+                },
+                {
+                    "name": "Message"
+                },
+                {
+                    "name": "TableModule",
+                    "type": "module"
+                },
+                {
+                    "name": "Avatar"
+                }
+            ],
+            "description": "<p>Organism: Data-aware project table with search, filtering, and 5-state rendering.</p>\n<p>States: loading → error → empty → search-no-results → data\n(rendered in @if priority order in the template)</p>\n<p>Uses signal() for searchTerm (local state the parent doesn&#39;t need to see)\nand computed() for filteredProjects (derived state that auto-updates when\nprojects or searchTerm change — no manual state management needed).</p>\n<p>Does not fetch data — receives it via inputs. The parent (page) owns the\ndata lifecycle; this organism owns the presentation and filtering.</p>\n",
+            "rawdescription": "\n\nOrganism: Data-aware project table with search, filtering, and 5-state rendering.\n\nStates: loading → error → empty → search-no-results → data\n(rendered in @if priority order in the template)\n\nUses signal() for searchTerm (local state the parent doesn't need to see)\nand computed() for filteredProjects (derived state that auto-updates when\nprojects or searchTerm change — no manual state management needed).\n\nDoes not fetch data — receives it via inputs. The parent (page) owns the\ndata lifecycle; this organism owns the presentation and filtering.\n",
+            "type": "component",
+            "sourceCode": "import { Component, computed, input, output, signal } from '@angular/core';\nimport { Project } from '../../../models';\nimport { DsEmptyState } from '../../atoms/empty-state/empty-state';\nimport { DsButton } from '../../atoms/button/button';\nimport { DsTag } from '../../atoms/tag/tag';\nimport { DsSearchBar } from '../../molecules/search-bar/search-bar';\nimport { Skeleton } from 'primeng/skeleton';\nimport { Message } from 'primeng/message';\nimport { TableModule } from 'primeng/table';\nimport { Avatar } from 'primeng/avatar';\n\n/**\n * Organism: Data-aware project table with search, filtering, and 5-state rendering.\n *\n * States: loading → error → empty → search-no-results → data\n * (rendered in @if priority order in the template)\n *\n * Uses signal() for searchTerm (local state the parent doesn't need to see)\n * and computed() for filteredProjects (derived state that auto-updates when\n * projects or searchTerm change — no manual state management needed).\n *\n * Does not fetch data — receives it via inputs. The parent (page) owns the\n * data lifecycle; this organism owns the presentation and filtering.\n */\n@Component({\n  selector: 'ds-project-table',\n  imports: [DsEmptyState, DsButton, DsTag, DsSearchBar, Skeleton, Message, TableModule, Avatar],\n  templateUrl: './project-table.html',\n  styleUrl: './project-table.scss',\n})\nexport class DsProjectTable {\n  projects = input<Project[]>([]);\n  isLoading = input(false);\n  error = input<string | null>(null);\n  projectSelected = output<Project>();\n  retryClicked = output<void>();\n\n  searchTerm = signal('');\n\n  filteredProjects = computed(() => {\n    const term = this.searchTerm().toLowerCase().trim();\n    if (!term) return this.projects();\n    return this.projects().filter(\n      (p) =>\n        p.name.toLowerCase().includes(term) ||\n        p.owner.toLowerCase().includes(term) ||\n        p.status.toLowerCase().includes(term),\n    );\n  });\n\n  onSearch(term: string): void {\n    this.searchTerm.set(term);\n  }\n\n  clearSearch(): void {\n    this.searchTerm.set('');\n  }\n}\n",
+            "styleUrl": "./project-table.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "@if (isLoading()) {\n  <div class=\"skeleton-table\">\n    <p-skeleton width=\"100%\" height=\"40px\" borderRadius=\"12px 12px 0 0\" />\n    @for (i of [1, 2, 3, 4, 5]; track i) {\n      <div class=\"skeleton-row\">\n        <p-skeleton width=\"100%\" height=\"48px\" />\n      </div>\n    }\n  </div>\n} @else if (error()) {\n  <div class=\"state-container\">\n    <p-message severity=\"error\" [text]=\"error()!\" />\n    <ds-button\n      label=\"Retry\"\n      severity=\"secondary\"\n      [outlined]=\"true\"\n      (clicked)=\"retryClicked.emit()\"\n    />\n  </div>\n} @else if (projects().length === 0) {\n  <ds-empty-state message=\"No projects found\" />\n} @else {\n  <ds-search-bar\n    [(value)]=\"searchTerm\"\n    placeholder=\"Search projects...\"\n    (searched)=\"onSearch($event)\"\n  />\n\n  @if (filteredProjects().length === 0) {\n    <ds-empty-state\n      icon=\"pi-search\"\n      [message]=\"'No results for \\'' + searchTerm() + '\\''\"\n      actionLabel=\"Clear search\"\n      (actionClicked)=\"clearSearch()\"\n    />\n  } @else {\n    <div class=\"table-container\">\n      <p-table\n        [value]=\"filteredProjects()\"\n        [tableStyle]=\"{ 'min-width': '60rem' }\"\n        [rowHover]=\"true\"\n      >\n        <ng-template pTemplate=\"header\">\n          <tr>\n            <th pSortableColumn=\"id\">ID <p-sortIcon field=\"id\" /></th>\n            <th pSortableColumn=\"name\">Name <p-sortIcon field=\"name\" /></th>\n            <th>Owner</th>\n            <th>Status</th>\n            <th pSortableColumn=\"createdDate\">Created <p-sortIcon field=\"createdDate\" /></th>\n            <th>Action</th>\n          </tr>\n        </ng-template>\n        <ng-template pTemplate=\"body\" let-project>\n          <tr>\n            <td>{{ project.id }}</td>\n            <td class=\"name-cell\">{{ project.name }}</td>\n            <td>\n              <div class=\"owner-cell\">\n                <p-avatar\n                  [label]=\"project.ownerInitials\"\n                  shape=\"circle\"\n                  size=\"normal\"\n                />\n                <span>{{ project.owner }}</span>\n              </div>\n            </td>\n            <td>\n              <ds-tag [value]=\"project.status\" [severity]=\"project.statusSeverity\" />\n            </td>\n            <td class=\"date-cell\">{{ project.createdDate }}</td>\n            <td>\n              <ds-button\n                label=\"View\"\n                severity=\"secondary\"\n                [outlined]=\"true\"\n                (clicked)=\"projectSelected.emit(project)\"\n              />\n            </td>\n          </tr>\n        </ng-template>\n      </p-table>\n    </div>\n  }\n}\n"
+        },
+        {
+            "name": "DsSearchBar",
+            "id": "component-DsSearchBar-719d2cdbb6de09ee8df5612dca5b96c278834b0af46464fcdb6ce7b7e6bf4911d3d2ea663b7f21554565fde9cefeb1b074829f813da206d10ef1c241bec04ae4",
+            "file": "src/app/design-system/molecules/search-bar/search-bar.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "ds-search-bar",
+            "styleUrls": [],
+            "styles": [
+                "\n    .search-bar {\n      display: flex;\n      gap: 8px;\n      align-items: center;\n    }\n\n    ds-input {\n      flex: 1;\n    }\n  "
+            ],
+            "template": "<div class=\"search-bar\" (keydown.enter)=\"searched.emit(value())\">\n  <ds-input\n    [(value)]=\"value\"\n    [placeholder]=\"placeholder()\"\n  />\n  <ds-button\n    label=\"Search\"\n    severity=\"primary\"\n    (clicked)=\"searched.emit(value())\"\n  />\n</div>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "placeholder",
+                    "defaultValue": "'Search...'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 42,
+                    "required": false
+                },
+                {
+                    "name": "value",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 41,
+                    "required": false
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "searched",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 43,
+                    "required": false
+                },
+                {
+                    "name": "value",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 41,
+                    "required": false
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "DsInput"
+                },
+                {
+                    "name": "DsButton"
+                }
+            ],
+            "description": "<p>Molecule: Composes DsInput + DsButton with local interaction logic.</p>\n<p>model() on value enables two-way binding with parent.\noutput() on searched emits the current value when the user clicks Search\nor presses Enter — the parent decides what to do with the search term.\nThe (keydown.enter) handler on the wrapper enables keyboard submission.</p>\n",
+            "rawdescription": "\n\nMolecule: Composes DsInput + DsButton with local interaction logic.\n\nmodel() on value enables two-way binding with parent.\noutput() on searched emits the current value when the user clicks Search\nor presses Enter — the parent decides what to do with the search term.\nThe (keydown.enter) handler on the wrapper enables keyboard submission.\n",
+            "type": "component",
+            "sourceCode": "import { Component, input, model, output } from '@angular/core';\nimport { DsInput, DsButton } from '../../atoms';\n\n/**\n * Molecule: Composes DsInput + DsButton with local interaction logic.\n *\n * model() on value enables two-way binding with parent.\n * output() on searched emits the current value when the user clicks Search\n * or presses Enter — the parent decides what to do with the search term.\n * The (keydown.enter) handler on the wrapper enables keyboard submission.\n */\n@Component({\n  selector: 'ds-search-bar',\n  imports: [DsInput, DsButton],\n  template: `\n    <div class=\"search-bar\" (keydown.enter)=\"searched.emit(value())\">\n      <ds-input\n        [(value)]=\"value\"\n        [placeholder]=\"placeholder()\"\n      />\n      <ds-button\n        label=\"Search\"\n        severity=\"primary\"\n        (clicked)=\"searched.emit(value())\"\n      />\n    </div>\n  `,\n  styles: `\n    .search-bar {\n      display: flex;\n      gap: 8px;\n      align-items: center;\n    }\n\n    ds-input {\n      flex: 1;\n    }\n  `,\n})\nexport class DsSearchBar {\n  value = model('');\n  placeholder = input('Search...');\n  searched = output<string>();\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "\n    .search-bar {\n      display: flex;\n      gap: 8px;\n      align-items: center;\n    }\n\n    ds-input {\n      flex: 1;\n    }\n  \n",
+            "extends": []
+        },
+        {
             "name": "DsStatCard",
-            "id": "component-DsStatCard-dd1de689d32c089a8c1cbf5be4e912f45eab35e3c91454adbe09bf9a816077ae2c1d2387db5038fe11648c62190be7704ea5c7309f052ca0723b47de909bb41b",
+            "id": "component-DsStatCard-44f0bf52b1b7690a05a1500c10dcd5657d49334f1b2ceead1f3c10f0ff1b6be1dc6ec8e5133305e84ab692dffb73e0b7bd7f367a7ca570ec2ce310ddfec28295",
             "file": "src/app/design-system/molecules/stat-card/stat-card.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -831,7 +1335,7 @@
             "selector": "ds-stat-card",
             "styleUrls": [],
             "styles": [
-                "\n    .stat-card {\n      display: flex;\n      align-items: center;\n      gap: 16px;\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      padding: 24px;\n      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n    }\n\n    .stat-icon {\n      display: flex;\n      align-items: center;\n      justify-content: center;\n\n      .pi {\n        font-size: 32px;\n        color: #4338CA;\n      }\n    }\n\n    .stat-content {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .stat-value {\n      font-family: Inter, sans-serif;\n      font-size: 24px;\n      font-weight: 700;\n      line-height: 32px;\n      color: #1C1917;\n    }\n\n    .stat-label {\n      font-family: Inter, sans-serif;\n      font-size: 12px;\n      font-weight: 400;\n      line-height: 18px;\n      color: #78716C;\n    }\n  "
+                "\n    .stat-card {\n      display: flex;\n      align-items: center;\n      gap: 16px;\n      background: var(--p-surface-0);\n      border: 1px solid var(--p-surface-200);\n      border-radius: 12px;\n      padding: 24px;\n      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n    }\n\n    .stat-icon {\n      display: flex;\n      align-items: center;\n      justify-content: center;\n\n      .pi {\n        font-size: 32px;\n        color: var(--p-primary-color);\n      }\n    }\n\n    .stat-content {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .stat-value {\n      font-family: Inter, sans-serif;\n      font-size: 24px;\n      font-weight: 700;\n      line-height: 32px;\n      color: var(--p-text-color);\n    }\n\n    .stat-label {\n      font-family: Inter, sans-serif;\n      font-size: 12px;\n      font-weight: 400;\n      line-height: 18px;\n      color: var(--p-text-muted-color);\n    }\n  "
             ],
             "template": "<div class=\"stat-card\">\n  <div class=\"stat-icon\">\n    <i class=\"pi\" [class]=\"icon()\"></i>\n  </div>\n  <div class=\"stat-content\">\n    <span class=\"stat-value\">{{ value() }}</span>\n    <span class=\"stat-label\">{{ label() }}</span>\n  </div>\n</div>\n",
             "templateUrl": [],
@@ -885,11 +1389,113 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, input } from '@angular/core';\n\n@Component({\n  selector: 'ds-stat-card',\n  template: `\n    <div class=\"stat-card\">\n      <div class=\"stat-icon\">\n        <i class=\"pi\" [class]=\"icon()\"></i>\n      </div>\n      <div class=\"stat-content\">\n        <span class=\"stat-value\">{{ value() }}</span>\n        <span class=\"stat-label\">{{ label() }}</span>\n      </div>\n    </div>\n  `,\n  styles: `\n    .stat-card {\n      display: flex;\n      align-items: center;\n      gap: 16px;\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      padding: 24px;\n      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n    }\n\n    .stat-icon {\n      display: flex;\n      align-items: center;\n      justify-content: center;\n\n      .pi {\n        font-size: 32px;\n        color: #4338CA;\n      }\n    }\n\n    .stat-content {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .stat-value {\n      font-family: Inter, sans-serif;\n      font-size: 24px;\n      font-weight: 700;\n      line-height: 32px;\n      color: #1C1917;\n    }\n\n    .stat-label {\n      font-family: Inter, sans-serif;\n      font-size: 12px;\n      font-weight: 400;\n      line-height: 18px;\n      color: #78716C;\n    }\n  `,\n})\nexport class DsStatCard {\n  label = input.required<string>();\n  value = input.required<string>();\n  icon = input<string>('pi-chart-bar');\n}\n",
+            "sourceCode": "import { Component, input } from '@angular/core';\n\n@Component({\n  selector: 'ds-stat-card',\n  template: `\n    <div class=\"stat-card\">\n      <div class=\"stat-icon\">\n        <i class=\"pi\" [class]=\"icon()\"></i>\n      </div>\n      <div class=\"stat-content\">\n        <span class=\"stat-value\">{{ value() }}</span>\n        <span class=\"stat-label\">{{ label() }}</span>\n      </div>\n    </div>\n  `,\n  styles: `\n    .stat-card {\n      display: flex;\n      align-items: center;\n      gap: 16px;\n      background: var(--p-surface-0);\n      border: 1px solid var(--p-surface-200);\n      border-radius: 12px;\n      padding: 24px;\n      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n    }\n\n    .stat-icon {\n      display: flex;\n      align-items: center;\n      justify-content: center;\n\n      .pi {\n        font-size: 32px;\n        color: var(--p-primary-color);\n      }\n    }\n\n    .stat-content {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .stat-value {\n      font-family: Inter, sans-serif;\n      font-size: 24px;\n      font-weight: 700;\n      line-height: 32px;\n      color: var(--p-text-color);\n    }\n\n    .stat-label {\n      font-family: Inter, sans-serif;\n      font-size: 12px;\n      font-weight: 400;\n      line-height: 18px;\n      color: var(--p-text-muted-color);\n    }\n  `,\n})\nexport class DsStatCard {\n  label = input.required<string>();\n  value = input.required<string>();\n  icon = input<string>('pi-chart-bar');\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
-            "stylesData": "\n    .stat-card {\n      display: flex;\n      align-items: center;\n      gap: 16px;\n      background: #FFFFFF;\n      border: 1px solid #E7E5E4;\n      border-radius: 12px;\n      padding: 24px;\n      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n    }\n\n    .stat-icon {\n      display: flex;\n      align-items: center;\n      justify-content: center;\n\n      .pi {\n        font-size: 32px;\n        color: #4338CA;\n      }\n    }\n\n    .stat-content {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .stat-value {\n      font-family: Inter, sans-serif;\n      font-size: 24px;\n      font-weight: 700;\n      line-height: 32px;\n      color: #1C1917;\n    }\n\n    .stat-label {\n      font-family: Inter, sans-serif;\n      font-size: 12px;\n      font-weight: 400;\n      line-height: 18px;\n      color: #78716C;\n    }\n  \n",
+            "stylesData": "\n    .stat-card {\n      display: flex;\n      align-items: center;\n      gap: 16px;\n      background: var(--p-surface-0);\n      border: 1px solid var(--p-surface-200);\n      border-radius: 12px;\n      padding: 24px;\n      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n    }\n\n    .stat-icon {\n      display: flex;\n      align-items: center;\n      justify-content: center;\n\n      .pi {\n        font-size: 32px;\n        color: var(--p-primary-color);\n      }\n    }\n\n    .stat-content {\n      display: flex;\n      flex-direction: column;\n    }\n\n    .stat-value {\n      font-family: Inter, sans-serif;\n      font-size: 24px;\n      font-weight: 700;\n      line-height: 32px;\n      color: var(--p-text-color);\n    }\n\n    .stat-label {\n      font-family: Inter, sans-serif;\n      font-size: 12px;\n      font-weight: 400;\n      line-height: 18px;\n      color: var(--p-text-muted-color);\n    }\n  \n",
             "extends": []
+        },
+        {
+            "name": "DsStatGrid",
+            "id": "component-DsStatGrid-52f8c4402928816f0556e7acb026b936da7c64b195e75d3007d24cca47e17e09016234556c04064a7a43c6ecc5468410514710710f3ada99e1516a04d95a2920",
+            "file": "src/app/design-system/organisms/stat-grid/stat-grid.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "ds-stat-grid",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": [
+                "./stat-grid.html"
+            ],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "error",
+                    "defaultValue": "null",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string | null",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 18,
+                    "required": false
+                },
+                {
+                    "name": "isLoading",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 17,
+                    "required": false
+                },
+                {
+                    "name": "stats",
+                    "defaultValue": "[]",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "DashboardStats[]",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 16,
+                    "required": false
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "retryClicked",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "void",
+                    "indexKey": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 19,
+                    "required": false
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "DsStatCard"
+                },
+                {
+                    "name": "DsEmptyState"
+                },
+                {
+                    "name": "DsButton"
+                },
+                {
+                    "name": "Skeleton"
+                },
+                {
+                    "name": "Message"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, input, output } from '@angular/core';\nimport { DashboardStats } from '../../../models';\nimport { DsStatCard } from '../../molecules/stat-card/stat-card';\nimport { DsEmptyState } from '../../atoms/empty-state/empty-state';\nimport { DsButton } from '../../atoms/button/button';\nimport { Skeleton } from 'primeng/skeleton';\nimport { Message } from 'primeng/message';\n\n@Component({\n  selector: 'ds-stat-grid',\n  imports: [DsStatCard, DsEmptyState, DsButton, Skeleton, Message],\n  templateUrl: './stat-grid.html',\n  styleUrl: './stat-grid.scss',\n})\nexport class DsStatGrid {\n  stats = input<DashboardStats[]>([]);\n  isLoading = input(false);\n  error = input<string | null>(null);\n  retryClicked = output<void>();\n}\n",
+            "styleUrl": "./stat-grid.scss",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "templateData": "<!-- Organism state machine: all organisms follow this @if priority order.\n     1. Loading → skeleton placeholders\n     2. Error → error message + retry button\n     3. Empty → empty state message\n     4. Data → normal rendering\n     This convention ensures consistent UX across all data-aware components. -->\n@if (isLoading()) {\n  <div class=\"stat-grid\">\n    @for (i of [1, 2, 3, 4]; track i) {\n      <p-skeleton width=\"100%\" height=\"88px\" borderRadius=\"12px\" />\n    }\n  </div>\n} @else if (error()) {\n  <div class=\"state-container\">\n    <p-message severity=\"error\" [text]=\"error()!\" />\n    <ds-button\n      label=\"Retry\"\n      severity=\"secondary\"\n      [outlined]=\"true\"\n      (clicked)=\"retryClicked.emit()\"\n    />\n  </div>\n} @else if (stats().length === 0) {\n  <ds-empty-state message=\"No stats available\" />\n} @else {\n  <div class=\"stat-grid\">\n    @for (stat of stats(); track stat.label) {\n      <ds-stat-card [label]=\"stat.label\" [value]=\"stat.value\" [icon]=\"stat.icon\" />\n    }\n  </div>\n}\n"
         },
         {
             "name": "DsTag",
@@ -955,7 +1561,7 @@
         },
         {
             "name": "ListPage",
-            "id": "component-ListPage-327fa117679974c30fb0877bc86f847c93e8e414d1c2010322ebb7c1366190df4adcc5ea43e7044262e9ca4ee11e692d1949b58c88cfb87a40b1c84195e8ff2f",
+            "id": "component-ListPage-8952ada711ea85fb219773005d82c4918f9df0ab58a7e67503f7fa0d1064317c929395d44a546613987868acc4172a6b42d3e35a23d77fe1cd3228c26b82f6c6",
             "file": "src/app/pages/list/list.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -965,9 +1571,9 @@
             "selector": "app-list",
             "styleUrls": [],
             "styles": [
-                "\n    .list-page {\n      width: 100%;\n      padding: 2rem;\n      box-sizing: border-box;\n    }\n\n    .search-bar {\n      display: flex;\n      gap: 0.75rem;\n      margin-bottom: 1.5rem;\n      align-items: center;\n    }\n\n    .search-bar ds-input {\n      flex: 1;\n      max-width: 28rem;\n    }\n\n    :host ::ng-deep .list-table {\n      border: 1px solid #E7E5E4;\n      border-radius: 0.5rem;\n      overflow: hidden;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-thead > tr > th {\n      background: #F5F5F4;\n      color: #1C1917;\n      font-weight: 600;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr > td {\n      color: #1C1917;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr:hover {\n      background: #FAFAF9;\n    }\n\n    .project-link {\n      color: #1C1917;\n      text-decoration: none;\n      font-weight: 500;\n    }\n\n    .project-link:hover {\n      text-decoration: underline;\n    }\n\n    .owner-cell {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    :host ::ng-deep .owner-avatar {\n      background: #E7E5E4;\n      color: #1C1917;\n      font-size: 0.75rem;\n      width: 2rem;\n      height: 2rem;\n    }\n\n    .empty-message {\n      text-align: center;\n      padding: 2rem 1rem;\n      color: #78716c;\n    }\n  "
+                "\n    .list-page {\n      width: 100%;\n      padding: 2rem;\n      box-sizing: border-box;\n    }\n\n    .list-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: var(--p-text-color);\n      margin: 0 0 24px 0;\n    }\n  "
             ],
-            "template": "<div class=\"list-page\">\n  <div class=\"search-bar\">\n    <ds-input\n      [(value)]=\"searchTerm\"\n      placeholder=\"Search projects...\"\n    />\n    <ds-button\n      label=\"Search\"\n      severity=\"primary\"\n      (clicked)=\"onSearch()\"\n    />\n  </div>\n\n  <p-table\n    [value]=\"filteredProjects()\"\n    [tableStyle]=\"{ 'min-width': '60rem' }\"\n    styleClass=\"list-table\"\n    [rowHover]=\"true\"\n  >\n    <ng-template #header>\n      <tr>\n        <th>ID</th>\n        <th pSortableColumn=\"name\">Name <p-sortIcon field=\"name\" /></th>\n        <th>Owner</th>\n        <th>Status</th>\n        <th pSortableColumn=\"createdDate\">Created <p-sortIcon field=\"createdDate\" /></th>\n        <th>Action</th>\n      </tr>\n    </ng-template>\n    <ng-template #body let-project>\n      <tr>\n        <td>{{ project.id }}</td>\n        <td>\n          <a [routerLink]=\"['/detail', project.id]\" class=\"project-link\">\n            {{ project.name }}\n          </a>\n        </td>\n        <td>\n          <div class=\"owner-cell\">\n            <p-avatar\n              [label]=\"project.ownerInitials\"\n              shape=\"circle\"\n              size=\"normal\"\n              styleClass=\"owner-avatar\"\n            />\n            <span>{{ project.owner }}</span>\n          </div>\n        </td>\n        <td>\n          <ds-tag [value]=\"project.status\" [severity]=\"project.statusSeverity\" />\n        </td>\n        <td>{{ project.createdDate }}</td>\n        <td>\n          <ds-button\n            label=\"View\"\n            severity=\"secondary\"\n            [outlined]=\"true\"\n            (clicked)=\"onView(project.id)\"\n          />\n        </td>\n      </tr>\n    </ng-template>\n    <ng-template #emptymessage>\n      <tr>\n        <td colspan=\"6\" class=\"empty-message\">No projects found.</td>\n      </tr>\n    </ng-template>\n  </p-table>\n</div>\n",
+            "template": "<div class=\"list-page\">\n  <h1 class=\"list-title\">Projects</h1>\n  <ds-project-table\n    [projects]=\"projectService.projects.value() ?? []\"\n    [isLoading]=\"projectService.projects.isLoading()\"\n    [error]=\"projectService.projects.error()?.message ?? null\"\n    (projectSelected)=\"onProjectSelected($event)\"\n    (retryClicked)=\"projectService.projects.reload()\"\n  />\n</div>\n",
             "templateUrl": [],
             "viewProviders": [],
             "hostDirectives": [],
@@ -975,60 +1581,38 @@
             "outputsClass": [],
             "propertiesClass": [
                 {
-                    "name": "filteredProjects",
-                    "defaultValue": "computed(() => {\n    const term = this.searchTerm().toLowerCase().trim();\n    if (!term) return this.projects();\n    return this.projects().filter(\n      (p) =>\n        p.name.toLowerCase().includes(term) ||\n        p.owner.toLowerCase().includes(term) ||\n        p.status.toLowerCase().includes(term)\n    );\n  })",
+                    "name": "projectService",
+                    "defaultValue": "inject(ProjectService)",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "unknown",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 191
+                    "line": 38
                 },
                 {
-                    "name": "projects",
-                    "defaultValue": "signal<Project[]>([\n    { id: 1, name: 'Acme Redesign', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-01-05' },\n    { id: 2, name: 'Bolt Migration', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Active', statusSeverity: 'success', createdDate: '2026-01-12' },\n    { id: 3, name: 'Cedar Analytics', owner: 'James Wu', ownerInitials: 'JW', status: 'Review', statusSeverity: 'info', createdDate: '2026-01-18' },\n    { id: 4, name: 'Delta Platform', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-01-22' },\n    { id: 5, name: 'Echo Dashboard', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-01' },\n    { id: 6, name: 'Falcon API', owner: 'Priya Patel', ownerInitials: 'PP', status: 'Cancelled', statusSeverity: 'danger', createdDate: '2026-02-04' },\n    { id: 7, name: 'Granite CMS', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Review', statusSeverity: 'info', createdDate: '2026-02-10' },\n    { id: 8, name: 'Horizon Mobile', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-15' },\n    { id: 9, name: 'Iris Onboarding', owner: 'James Wu', ownerInitials: 'JW', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-02-19' },\n    { id: 10, name: 'Jade Payments', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-25' },\n    { id: 11, name: 'Kite Scheduler', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Review', statusSeverity: 'info', createdDate: '2026-03-01' },\n    { id: 12, name: 'Lunar Reporting', owner: 'Priya Patel', ownerInitials: 'PP', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-04' },\n    { id: 13, name: 'Mesa Auth', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Cancelled', statusSeverity: 'danger', createdDate: '2026-03-07' },\n    { id: 14, name: 'Nova Search', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-10' },\n    { id: 15, name: 'Orbit Sync', owner: 'James Wu', ownerInitials: 'JW', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-03-12' },\n    { id: 16, name: 'Pulse Monitor', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'Review', statusSeverity: 'info', createdDate: '2026-03-14' },\n    { id: 17, name: 'Quartz Billing', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-16' },\n    { id: 18, name: 'Ridge Infra', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-18' },\n  ])",
+                    "name": "router",
+                    "defaultValue": "inject(Router)",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "unknown",
                     "indexKey": "",
                     "optional": false,
                     "description": "",
-                    "line": 170,
+                    "line": 39,
                     "modifierKind": [
-                        123,
-                        148
+                        123
                     ]
-                },
-                {
-                    "name": "searchTerm",
-                    "defaultValue": "signal('')",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "unknown",
-                    "indexKey": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 168
                 }
             ],
             "methodsClass": [
                 {
-                    "name": "onSearch",
-                    "args": [],
-                    "optional": false,
-                    "returnType": "void",
-                    "typeParameters": [],
-                    "line": 202,
-                    "deprecated": false,
-                    "deprecationMessage": ""
-                },
-                {
-                    "name": "onView",
+                    "name": "onProjectSelected",
                     "args": [
                         {
-                            "name": "id",
-                            "type": "number",
+                            "name": "project",
+                            "type": "Project",
                             "optional": false,
                             "dotDotDotToken": false,
                             "deprecated": false,
@@ -1038,13 +1622,13 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 207,
+                    "line": 41,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
                         {
-                            "name": "id",
-                            "type": "number",
+                            "name": "project",
+                            "type": "Project",
                             "optional": false,
                             "dotDotDotToken": false,
                             "deprecated": false,
@@ -1063,32 +1647,16 @@
             "standalone": false,
             "imports": [
                 {
-                    "name": "RouterLink"
-                },
-                {
-                    "name": "TableModule",
-                    "type": "module"
-                },
-                {
-                    "name": "Avatar"
-                },
-                {
-                    "name": "DsButton"
-                },
-                {
-                    "name": "DsTag"
-                },
-                {
-                    "name": "DsInput"
+                    "name": "DsProjectTable"
                 }
             ],
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, computed, signal } from '@angular/core';\nimport { RouterLink } from '@angular/router';\nimport { TableModule } from 'primeng/table';\nimport { Avatar } from 'primeng/avatar';\nimport { DsButton, DsTag, DsInput } from '../../design-system/atoms';\n\ntype TagSeverity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast';\n\ninterface Project {\n  id: number;\n  name: string;\n  owner: string;\n  ownerInitials: string;\n  status: string;\n  statusSeverity: TagSeverity;\n  createdDate: string;\n}\n\n@Component({\n  selector: 'app-list',\n  imports: [RouterLink, TableModule, Avatar, DsButton, DsTag, DsInput],\n  template: `\n    <div class=\"list-page\">\n      <div class=\"search-bar\">\n        <ds-input\n          [(value)]=\"searchTerm\"\n          placeholder=\"Search projects...\"\n        />\n        <ds-button\n          label=\"Search\"\n          severity=\"primary\"\n          (clicked)=\"onSearch()\"\n        />\n      </div>\n\n      <p-table\n        [value]=\"filteredProjects()\"\n        [tableStyle]=\"{ 'min-width': '60rem' }\"\n        styleClass=\"list-table\"\n        [rowHover]=\"true\"\n      >\n        <ng-template #header>\n          <tr>\n            <th>ID</th>\n            <th pSortableColumn=\"name\">Name <p-sortIcon field=\"name\" /></th>\n            <th>Owner</th>\n            <th>Status</th>\n            <th pSortableColumn=\"createdDate\">Created <p-sortIcon field=\"createdDate\" /></th>\n            <th>Action</th>\n          </tr>\n        </ng-template>\n        <ng-template #body let-project>\n          <tr>\n            <td>{{ project.id }}</td>\n            <td>\n              <a [routerLink]=\"['/detail', project.id]\" class=\"project-link\">\n                {{ project.name }}\n              </a>\n            </td>\n            <td>\n              <div class=\"owner-cell\">\n                <p-avatar\n                  [label]=\"project.ownerInitials\"\n                  shape=\"circle\"\n                  size=\"normal\"\n                  styleClass=\"owner-avatar\"\n                />\n                <span>{{ project.owner }}</span>\n              </div>\n            </td>\n            <td>\n              <ds-tag [value]=\"project.status\" [severity]=\"project.statusSeverity\" />\n            </td>\n            <td>{{ project.createdDate }}</td>\n            <td>\n              <ds-button\n                label=\"View\"\n                severity=\"secondary\"\n                [outlined]=\"true\"\n                (clicked)=\"onView(project.id)\"\n              />\n            </td>\n          </tr>\n        </ng-template>\n        <ng-template #emptymessage>\n          <tr>\n            <td colspan=\"6\" class=\"empty-message\">No projects found.</td>\n          </tr>\n        </ng-template>\n      </p-table>\n    </div>\n  `,\n  styles: `\n    .list-page {\n      width: 100%;\n      padding: 2rem;\n      box-sizing: border-box;\n    }\n\n    .search-bar {\n      display: flex;\n      gap: 0.75rem;\n      margin-bottom: 1.5rem;\n      align-items: center;\n    }\n\n    .search-bar ds-input {\n      flex: 1;\n      max-width: 28rem;\n    }\n\n    :host ::ng-deep .list-table {\n      border: 1px solid #E7E5E4;\n      border-radius: 0.5rem;\n      overflow: hidden;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-thead > tr > th {\n      background: #F5F5F4;\n      color: #1C1917;\n      font-weight: 600;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr > td {\n      color: #1C1917;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr:hover {\n      background: #FAFAF9;\n    }\n\n    .project-link {\n      color: #1C1917;\n      text-decoration: none;\n      font-weight: 500;\n    }\n\n    .project-link:hover {\n      text-decoration: underline;\n    }\n\n    .owner-cell {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    :host ::ng-deep .owner-avatar {\n      background: #E7E5E4;\n      color: #1C1917;\n      font-size: 0.75rem;\n      width: 2rem;\n      height: 2rem;\n    }\n\n    .empty-message {\n      text-align: center;\n      padding: 2rem 1rem;\n      color: #78716c;\n    }\n  `,\n})\nexport class ListPage {\n  searchTerm = signal('');\n\n  private readonly projects = signal<Project[]>([\n    { id: 1, name: 'Acme Redesign', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-01-05' },\n    { id: 2, name: 'Bolt Migration', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Active', statusSeverity: 'success', createdDate: '2026-01-12' },\n    { id: 3, name: 'Cedar Analytics', owner: 'James Wu', ownerInitials: 'JW', status: 'Review', statusSeverity: 'info', createdDate: '2026-01-18' },\n    { id: 4, name: 'Delta Platform', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-01-22' },\n    { id: 5, name: 'Echo Dashboard', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-01' },\n    { id: 6, name: 'Falcon API', owner: 'Priya Patel', ownerInitials: 'PP', status: 'Cancelled', statusSeverity: 'danger', createdDate: '2026-02-04' },\n    { id: 7, name: 'Granite CMS', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Review', statusSeverity: 'info', createdDate: '2026-02-10' },\n    { id: 8, name: 'Horizon Mobile', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-15' },\n    { id: 9, name: 'Iris Onboarding', owner: 'James Wu', ownerInitials: 'JW', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-02-19' },\n    { id: 10, name: 'Jade Payments', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'Active', statusSeverity: 'success', createdDate: '2026-02-25' },\n    { id: 11, name: 'Kite Scheduler', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Review', statusSeverity: 'info', createdDate: '2026-03-01' },\n    { id: 12, name: 'Lunar Reporting', owner: 'Priya Patel', ownerInitials: 'PP', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-04' },\n    { id: 13, name: 'Mesa Auth', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Cancelled', statusSeverity: 'danger', createdDate: '2026-03-07' },\n    { id: 14, name: 'Nova Search', owner: 'Sarah Chen', ownerInitials: 'SC', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-10' },\n    { id: 15, name: 'Orbit Sync', owner: 'James Wu', ownerInitials: 'JW', status: 'On Hold', statusSeverity: 'warn', createdDate: '2026-03-12' },\n    { id: 16, name: 'Pulse Monitor', owner: 'Maria Lopez', ownerInitials: 'ML', status: 'Review', statusSeverity: 'info', createdDate: '2026-03-14' },\n    { id: 17, name: 'Quartz Billing', owner: 'Rory Ford', ownerInitials: 'RF', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-16' },\n    { id: 18, name: 'Ridge Infra', owner: 'Dev Nguyen', ownerInitials: 'DN', status: 'Active', statusSeverity: 'success', createdDate: '2026-03-18' },\n  ]);\n\n  filteredProjects = computed(() => {\n    const term = this.searchTerm().toLowerCase().trim();\n    if (!term) return this.projects();\n    return this.projects().filter(\n      (p) =>\n        p.name.toLowerCase().includes(term) ||\n        p.owner.toLowerCase().includes(term) ||\n        p.status.toLowerCase().includes(term)\n    );\n  });\n\n  onSearch(): void {\n    // Filtering is reactive via the computed signal; this hook exists\n    // for future enhancements (e.g. server-side search).\n  }\n\n  onView(id: number): void {\n    // Navigation could also be handled here programmatically if needed.\n  }\n}\n",
+            "sourceCode": "import { Component, inject } from '@angular/core';\nimport { Router } from '@angular/router';\nimport { ProjectService } from '../../services/project.service';\nimport { DsProjectTable } from '../../design-system/organisms/project-table/project-table';\nimport { Project } from '../../models';\n\n@Component({\n  selector: 'app-list',\n  imports: [DsProjectTable],\n  template: `\n    <div class=\"list-page\">\n      <h1 class=\"list-title\">Projects</h1>\n      <ds-project-table\n        [projects]=\"projectService.projects.value() ?? []\"\n        [isLoading]=\"projectService.projects.isLoading()\"\n        [error]=\"projectService.projects.error()?.message ?? null\"\n        (projectSelected)=\"onProjectSelected($event)\"\n        (retryClicked)=\"projectService.projects.reload()\"\n      />\n    </div>\n  `,\n  styles: `\n    .list-page {\n      width: 100%;\n      padding: 2rem;\n      box-sizing: border-box;\n    }\n\n    .list-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: var(--p-text-color);\n      margin: 0 0 24px 0;\n    }\n  `,\n})\nexport class ListPage {\n  projectService = inject(ProjectService);\n  private router = inject(Router);\n\n  onProjectSelected(project: Project) {\n    this.router.navigate(['/detail', project.id]);\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
-            "stylesData": "\n    .list-page {\n      width: 100%;\n      padding: 2rem;\n      box-sizing: border-box;\n    }\n\n    .search-bar {\n      display: flex;\n      gap: 0.75rem;\n      margin-bottom: 1.5rem;\n      align-items: center;\n    }\n\n    .search-bar ds-input {\n      flex: 1;\n      max-width: 28rem;\n    }\n\n    :host ::ng-deep .list-table {\n      border: 1px solid #E7E5E4;\n      border-radius: 0.5rem;\n      overflow: hidden;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-thead > tr > th {\n      background: #F5F5F4;\n      color: #1C1917;\n      font-weight: 600;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr > td {\n      color: #1C1917;\n      border-bottom: 1px solid #E7E5E4;\n      padding: 0.75rem 1rem;\n    }\n\n    :host ::ng-deep .list-table .p-datatable-tbody > tr:hover {\n      background: #FAFAF9;\n    }\n\n    .project-link {\n      color: #1C1917;\n      text-decoration: none;\n      font-weight: 500;\n    }\n\n    .project-link:hover {\n      text-decoration: underline;\n    }\n\n    .owner-cell {\n      display: flex;\n      align-items: center;\n      gap: 0.5rem;\n    }\n\n    :host ::ng-deep .owner-avatar {\n      background: #E7E5E4;\n      color: #1C1917;\n      font-size: 0.75rem;\n      width: 2rem;\n      height: 2rem;\n    }\n\n    .empty-message {\n      text-align: center;\n      padding: 2rem 1rem;\n      color: #78716c;\n    }\n  \n",
+            "stylesData": "\n    .list-page {\n      width: 100%;\n      padding: 2rem;\n      box-sizing: border-box;\n    }\n\n    .list-title {\n      font-size: 28px;\n      font-weight: 700;\n      color: var(--p-text-color);\n      margin: 0 0 24px 0;\n    }\n  \n",
             "extends": []
         }
     ],
@@ -1123,7 +1691,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "[]",
-                "defaultValue": "[\n  http.get('/api/projects', async () => {\n    await delay(300);\n    return HttpResponse.json(projects);\n  }),\n\n  http.get('/api/projects/:id', async ({ params }) => {\n    await delay(200);\n    const project = projects.find((p: any) => p.id === Number(params['id']));\n    if (!project) {\n      return HttpResponse.json({ message: 'Project not found' }, { status: 404 });\n    }\n    return HttpResponse.json(project);\n  }),\n\n  http.get('/api/stats', async () => {\n    await delay(250);\n    return HttpResponse.json(stats);\n  }),\n\n  http.get('/api/users', async () => {\n    await delay(200);\n    return HttpResponse.json(users);\n  }),\n]"
+                "defaultValue": "[\n  http.get('/api/projects', async () => {\n    await delay(300);\n    return HttpResponse.json(projects);\n  }),\n\n  http.get('/api/projects/:id', async ({ params }) => {\n    await delay(200);\n    const project = projects.find((p: any) => p.id === Number(params['id']));\n    if (!project) {\n      return HttpResponse.json({ message: 'Project not found' }, { status: 404 });\n    }\n    return HttpResponse.json(project);\n  }),\n\n  http.get('/api/stats', async () => {\n    await delay(250);\n    return HttpResponse.json(stats);\n  }),\n]"
             },
             {
                 "name": "routes",
@@ -1180,17 +1748,6 @@
                 "deprecationMessage": "",
                 "description": "",
                 "kind": 193
-            },
-            {
-                "name": "TagSeverity",
-                "ctype": "miscellaneous",
-                "subtype": "typealias",
-                "rawtype": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\"",
-                "file": "src/app/pages/list/list.ts",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "description": "",
-                "kind": 193
             }
         ],
         "enumerations": [],
@@ -1228,7 +1785,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "[]",
-                    "defaultValue": "[\n  http.get('/api/projects', async () => {\n    await delay(300);\n    return HttpResponse.json(projects);\n  }),\n\n  http.get('/api/projects/:id', async ({ params }) => {\n    await delay(200);\n    const project = projects.find((p: any) => p.id === Number(params['id']));\n    if (!project) {\n      return HttpResponse.json({ message: 'Project not found' }, { status: 404 });\n    }\n    return HttpResponse.json(project);\n  }),\n\n  http.get('/api/stats', async () => {\n    await delay(250);\n    return HttpResponse.json(stats);\n  }),\n\n  http.get('/api/users', async () => {\n    await delay(200);\n    return HttpResponse.json(users);\n  }),\n]"
+                    "defaultValue": "[\n  http.get('/api/projects', async () => {\n    await delay(300);\n    return HttpResponse.json(projects);\n  }),\n\n  http.get('/api/projects/:id', async ({ params }) => {\n    await delay(200);\n    const project = projects.find((p: any) => p.id === Number(params['id']));\n    if (!project) {\n      return HttpResponse.json({ message: 'Project not found' }, { status: 404 });\n    }\n    return HttpResponse.json(project);\n  }),\n\n  http.get('/api/stats', async () => {\n    await delay(250);\n    return HttpResponse.json(stats);\n  }),\n]"
                 }
             ],
             "src/app/app.routes.ts": [
@@ -1297,19 +1854,6 @@
                     "description": "",
                     "kind": 193
                 }
-            ],
-            "src/app/pages/list/list.ts": [
-                {
-                    "name": "TagSeverity",
-                    "ctype": "miscellaneous",
-                    "subtype": "typealias",
-                    "rawtype": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\"",
-                    "file": "src/app/pages/list/list.ts",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "description": "",
-                    "kind": 193
-                }
             ]
         }
     },
@@ -1340,7 +1884,7 @@
         ]
     },
     "coverage": {
-        "count": 0,
+        "count": 3,
         "status": "low",
         "files": [
             {
@@ -1377,8 +1921,8 @@
                 "type": "component",
                 "linktype": "component",
                 "name": "DsButton",
-                "coveragePercent": 0,
-                "coverageCount": "0/5",
+                "coveragePercent": 20,
+                "coverageCount": "1/5",
                 "status": "low"
             },
             {
@@ -1392,12 +1936,21 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/design-system/atoms/empty-state/empty-state.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DsEmptyState",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/design-system/atoms/input/input.ts",
                 "type": "component",
                 "linktype": "component",
                 "name": "DsInput",
-                "coveragePercent": 0,
-                "coverageCount": "0/4",
+                "coveragePercent": 25,
+                "coverageCount": "1/4",
                 "status": "low"
             },
             {
@@ -1420,12 +1973,57 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/design-system/molecules/form-field/form-field.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DsFormField",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/design-system/molecules/search-bar/search-bar.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DsSearchBar",
+                "coveragePercent": 20,
+                "coverageCount": "1/5",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/design-system/molecules/stat-card/stat-card.ts",
                 "type": "component",
                 "linktype": "component",
                 "name": "DsStatCard",
                 "coveragePercent": 0,
                 "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/design-system/organisms/project-card-grid/project-card-grid.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DsProjectCardGrid",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/design-system/organisms/project-table/project-table.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DsProjectTable",
+                "coveragePercent": 10,
+                "coverageCount": "1/10",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/design-system/organisms/stat-grid/stat-grid.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DsStatGrid",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
                 "status": "low"
             },
             {
@@ -1477,28 +2075,10 @@
                 "status": "low"
             },
             {
-                "filePath": "src/app/models/index.ts",
-                "type": "interface",
-                "linktype": "interface",
-                "name": "User",
-                "coveragePercent": 0,
-                "coverageCount": "0/6",
-                "status": "low"
-            },
-            {
                 "filePath": "src/app/pages/dashboard/dashboard.ts",
                 "type": "component",
                 "linktype": "component",
                 "name": "Dashboard",
-                "coveragePercent": 0,
-                "coverageCount": "0/6",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/pages/dashboard/dashboard.ts",
-                "type": "interface",
-                "linktype": "interface",
-                "name": "ActivityRow",
                 "coveragePercent": 0,
                 "coverageCount": "0/5",
                 "status": "low"
@@ -1509,7 +2089,7 @@
                 "linktype": "component",
                 "name": "Detail",
                 "coveragePercent": 0,
-                "coverageCount": "0/3",
+                "coverageCount": "0/6",
                 "status": "low"
             },
             {
@@ -1518,26 +2098,16 @@
                 "linktype": "component",
                 "name": "ListPage",
                 "coveragePercent": 0,
-                "coverageCount": "0/6",
+                "coverageCount": "0/4",
                 "status": "low"
             },
             {
-                "filePath": "src/app/pages/list/list.ts",
-                "type": "interface",
-                "linktype": "interface",
-                "name": "Project",
+                "filePath": "src/app/services/project.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "ProjectService",
                 "coveragePercent": 0,
-                "coverageCount": "0/8",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/pages/list/list.ts",
-                "type": "type alias",
-                "linktype": "miscellaneous",
-                "linksubtype": "typealias",
-                "name": "TagSeverity",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
+                "coverageCount": "0/4",
                 "status": "low"
             },
             {

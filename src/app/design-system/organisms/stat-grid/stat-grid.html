@@ -1,3 +1,9 @@
+<!-- Organism state machine: all organisms follow this @if priority order.
+     1. Loading → skeleton placeholders
+     2. Error → error message + retry button
+     3. Empty → empty state message
+     4. Data → normal rendering
+     This convention ensures consistent UX across all data-aware components. -->
 @if (isLoading()) {
   <div class="stat-grid">
     @for (i of [1, 2, 3, 4]; track i) {

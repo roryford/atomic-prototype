@@ -20,8 +20,11 @@ describe('DsSearchBar', () => {
     expect(component.placeholder()).toBe('Find projects...');
   });
 
-  // AC: GIVEN user types "Alpha", WHEN Search clicked, THEN emits searched with "Alpha"
-  it('should emit searched on button click', () => {
+  // PrimeNG's p-button (onClick) doesn't fire via DOM click dispatch in jsdom,
+  // so ds-button (clicked) never propagates up in this test environment.
+  // This test verifies the output exists and can emit. Full click-through
+  // testing requires Storybook play functions or Playwright.
+  it('should expose searched output on button click (PrimeNG onClick cannot be triggered in jsdom — verify in Storybook)', () => {
     fixture.detectChanges();
     const spy = vi.fn();
     component.searched.subscribe(spy);
@@ -29,7 +32,6 @@ describe('DsSearchBar', () => {
     component.value.set('Alpha');
     fixture.detectChanges();
 
-    // Simulate Search button click by emitting via the output
     component.searched.emit(component.value());
     expect(spy).toHaveBeenCalledWith('Alpha');
   });

@@ -2,7 +2,6 @@ import { http, HttpResponse, delay } from 'msw';
 
 import projects from './fixtures/projects.json';
 import stats from './fixtures/stats.json';
-import users from './fixtures/users.json';
 
 export const handlers = [
   http.get('/api/projects', async () => {
@@ -22,10 +21,5 @@ export const handlers = [
   http.get('/api/stats', async () => {
     await delay(250);
     return HttpResponse.json(stats);
-  }),
-
-  http.get('/api/users', async () => {
-    await delay(200);
-    return HttpResponse.json(users);
   }),
 ];

@@ -1,5 +1,7 @@
 # BA Guide: Where Business Analysis Adds Value
 
+> For QA checklists per atomic level, see [04-qa-per-atomic-level](./04-qa-per-atomic-level.md).
+
 Lessons from the prototype simulation on where a BA is most needed in the atomic design process.
 
 ---

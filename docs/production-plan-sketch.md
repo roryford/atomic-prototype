@@ -1,5 +1,7 @@
 # Production Stage Plan Sketch
 
+> For maturity stage definitions and exit criteria, see [06-maturity-stages](./06-maturity-stages.md).
+
 A discussion outline for what a production-stage simulation would involve. This is not an executable plan -- it is a sketch of scope, decisions, and sequencing to be refined with real team input.
 
 ---

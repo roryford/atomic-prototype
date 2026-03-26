@@ -2,7 +2,9 @@
   <div class="skeleton-table">
     <p-skeleton width="100%" height="40px" borderRadius="12px 12px 0 0" />
     @for (i of [1, 2, 3, 4, 5]; track i) {
-      <p-skeleton width="100%" height="48px" styleClass="skeleton-row" />
+      <div class="skeleton-row">
+        <p-skeleton width="100%" height="48px" />
+      </div>
     }
   </div>
 } @else if (error()) {

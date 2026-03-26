@@ -35,14 +35,14 @@ describe('DsButton', () => {
     expect(component.outlined()).toBe(true);
   });
 
-  // AC: GIVEN button, WHEN clicked, THEN emits clicked event
-  it('should emit clicked output when triggered', () => {
+  // PrimeNG's p-button (onClick) doesn't fire via DOM click dispatch in jsdom.
+  // This test verifies the output exists and can emit. Full click-through
+  // testing requires Storybook play functions or Playwright.
+  it('should expose clicked output (PrimeNG onClick cannot be triggered in jsdom — verify in Storybook)', () => {
     fixture.detectChanges();
     const spy = vi.fn();
     component.clicked.subscribe(spy);
 
-    // PrimeNG p-button (onClick) doesn't fire via DOM click in jsdom.
-    // Verify the output exists and emits correctly when the binding fires.
     component.clicked.emit();
     expect(spy).toHaveBeenCalledTimes(1);
   });

@@ -1,6 +1,19 @@
 {
   "name": "atomic-prototype",
+  "description": "Angular 21 + PrimeNG 21 atomic design prototype — component hierarchy, design tokens, and testing patterns for small teams",
   "version": "0.0.0",
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "primeng",
+    "atomic-design",
+    "design-system",
+    "storybook",
+    "design-tokens"
+  ],
+  "engines": {
+    "node": ">=25.0.0"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -9,7 +22,9 @@
     "test": "ng test",
     "storybook": "ng run atomic-prototype:storybook",
     "build-storybook": "ng run atomic-prototype:build-storybook",
-    "lint:styles": "stylelint 'src/**/*.{scss,css}'"
+    "lint:styles": "stylelint 'src/**/*.{scss,css}'",
+    "format": "prettier --write \"src/**/*.{ts,html,scss,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,html,scss,json}\""
   },
   "private": true,
   "packageManager": "npm@11.11.0",
@@ -40,6 +55,7 @@
     "@storybook/addon-docs": "^10.3.1",
     "@storybook/addon-onboarding": "^10.3.1",
     "@storybook/angular": "^10.3.1",
+    "@storybook/test": "^8.6.15",
     "jsdom": "^29.0.1",
     "msw": "^2.12.14",
     "prettier": "^3.8.1",

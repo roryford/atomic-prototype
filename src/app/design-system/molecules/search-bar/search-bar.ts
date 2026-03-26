@@ -1,6 +1,14 @@
 import { Component, input, model, output } from '@angular/core';
 import { DsInput, DsButton } from '../../atoms';
 
+/**
+ * Molecule: Composes DsInput + DsButton with local interaction logic.
+ *
+ * model() on value enables two-way binding with parent.
+ * output() on searched emits the current value when the user clicks Search
+ * or presses Enter — the parent decides what to do with the search term.
+ * The (keydown.enter) handler on the wrapper enables keyboard submission.
+ */
 @Component({
   selector: 'ds-search-bar',
   imports: [DsInput, DsButton],
