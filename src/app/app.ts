@@ -31,8 +31,8 @@ import { Button } from 'primeng/button';
       align-items: center;
       gap: 24px;
       padding: 8px 24px;
-      background: var(--p-surface-0);
-      border-bottom: 1px solid var(--p-surface-200);
+      background: var(--p-content-background);
+      border-bottom: 1px solid var(--p-content-border-color);
     }
 
     .nav-brand {
@@ -50,7 +50,7 @@ import { Button } from 'primeng/button';
     .app-content {
       flex: 1;
       padding: 24px;
-      background: var(--p-surface-50);
+      background: var(--p-content-background);
     }
   `,
 })

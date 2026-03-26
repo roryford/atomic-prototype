@@ -110,8 +110,8 @@ import { DsInput } from '../../design-system/atoms/input/input';
     }
 
     .detail-card {
-      background: var(--p-surface-0);
-      border: 1px solid var(--p-surface-border);
+      background: var(--p-content-background);
+      border: 1px solid var(--p-content-border-color);
       border-radius: 12px;
       padding: 2rem;
     }

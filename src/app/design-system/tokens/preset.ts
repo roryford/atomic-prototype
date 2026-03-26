@@ -127,9 +127,11 @@ const CustomPreset = definePreset(Aura, {
     },
   },
 
-  // Component tier: per-component overrides
-  // Use token references ({curly.brace} syntax) so values respond to dark mode.
-  // Hardcoded hex here would bypass colorScheme.dark and stay light-only.
+  // Component tier: structural overrides only (border-radius, padding, font).
+  // Do NOT override colors here — PrimeNG's Aura theme handles light/dark
+  // color switching automatically via the semantic colorScheme. Component-level
+  // color overrides bypass dark mode because {token} references resolve at
+  // build time, not runtime.
   components: {
     button: {
       root: {
@@ -138,26 +140,6 @@ const CustomPreset = definePreset(Aura, {
         paddingY: '8px',
         label: {
           fontWeight: '600',
-        },
-        primary: {
-          background: '{primary.600}',
-          hoverBackground: '{primary.500}',
-          color: '{primary.contrastColor}',
-          borderColor: '{primary.600}',
-          hoverBorderColor: '{primary.500}',
-        },
-        secondary: {
-          background: 'transparent',
-          hoverBackground: '{highlight.background}',
-          color: '{primary.600}',
-          borderColor: '{primary.600}',
-        },
-        danger: {
-          background: '#DC2626',
-          hoverBackground: '#B91C1C',
-          color: '#FFFFFF',
-          borderColor: '#DC2626',
-          hoverBorderColor: '#B91C1C',
         },
       },
     },
@@ -168,48 +150,14 @@ const CustomPreset = definePreset(Aura, {
         fontWeight: '600',
         padding: '2px 10px',
       },
-      // Tag severity colors are intentionally hardcoded — they represent
-      // status meaning (success=green, danger=red) that stays consistent
-      // across light/dark modes. Dark mode adapts via opacity/contrast,
-      // not by changing the semantic color.
-      success: {
-        background: '#DCFCE7',
-        color: '#16A34A',
-      },
-      warn: {
-        background: '#FEF3C7',
-        color: '#D97706',
-      },
-      danger: {
-        background: '#FEE2E2',
-        color: '#DC2626',
-      },
-      info: {
-        background: '{highlight.background}',
-        color: '{primary.600}',
-      },
     },
     card: {
       root: {
-        background: '{surface.0}',
         borderRadius: '12px',
         shadow: '0 1px 3px rgba(0,0,0,0.1)',
       },
       body: {
         padding: '24px',
-      },
-    },
-    datatable: {
-      headerCell: {
-        background: '{surface.100}',
-        color: '{text.color}',
-        borderColor: '{surface.200}',
-      },
-      bodyCell: {
-        borderColor: '{surface.200}',
-      },
-      row: {
-        hoverBackground: '{surface.50}',
       },
     },
   },
