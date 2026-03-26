@@ -139,9 +139,11 @@ semantic: {
 
 ```ts
 // In app.config.ts — tells PrimeNG which CSS class activates dark mode
-// Use 'html.dark-mode' (not '.dark-mode') so the selector has higher
-// specificity than :root and dark values always win regardless of CSS source order.
-providePrimeNG({ theme: { preset: CustomPreset, options: { darkModeSelector: 'html.dark-mode' } } })
+// Must use '.dark-mode' (class selector with leading dot).
+// PrimeNG generates: .dark-mode:root { vars } which correctly targets <html class="dark-mode">.
+// Do NOT use 'html.dark-mode' — PrimeNG treats it as a custom selector and generates
+// nested CSS that creates an impossible html.dark-mode :root rule.
+providePrimeNG({ theme: { preset: CustomPreset, options: { darkModeSelector: '.dark-mode' } } })
 ```
 
 ```ts
