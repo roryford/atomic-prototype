@@ -1,1 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles — use PrimeNG tokens for dark mode support */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--p-surface-ground);
+  color: var(--p-text-color);
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+}
