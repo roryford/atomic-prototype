@@ -123,6 +123,8 @@ For customizing the internal DOM elements of PrimeNG components (e.g., adding a 
 
 This section is the single reference for how dark mode works in this stack. Other docs reference it — if you're looking for dark mode guidance, you're in the right place.
 
+> **Note:** PrimeNG does not document the token behavior described below (raw vs derived tokens, component-tier resolution, surface scale conventions). These rules were discovered by testing the prototype and reading PrimeNG's source code. They apply to PrimeNG 21.1 with the Aura theme — verify if upgrading to a newer version.
+
 ### How It Works
 
 PrimeNG's `definePreset()` accepts a `colorScheme.dark` block alongside `colorScheme.light`. When the CSS class `.dark-mode` is present on the `<html>` element, PrimeNG swaps the underlying CSS custom property values automatically. No `!important` overrides needed — nested components cascade correctly.
