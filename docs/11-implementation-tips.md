@@ -18,7 +18,7 @@ Practical guidance from the POC and prototype simulations. These tips supplement
 
 ## Theming
 
-- **Always use CSS custom properties for colors** — see [05-token-pipeline](./05-token-pipeline.md) for the full token usage guide. Hardcoded hex is the #1 reason dark mode breaks.
+- **Always use CSS custom properties for colors** — see [05-token-pipeline § Dark Mode](./05-token-pipeline.md#4-dark-mode) for the full dark mode guide (toggle strategy, colorScheme nesting, Stylelint gap, production gaps). Hardcoded hex is the #1 reason dark mode breaks.
 
 - **`definePreset()` covers ~80% of design needs.** For the remaining ~20%:
   1. Try the `pt` (passthrough) API first -- it's type-safe and survives upgrades

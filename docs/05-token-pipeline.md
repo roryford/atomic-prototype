@@ -87,11 +87,7 @@ Designers work at the **primitive** and **semantic** tiers. Component tokens are
 | `borderRadius.default` | `dimension` | Semantic | `{radius.md}` |
 | `button.primaryBackground` | `color` | Component | `{colorPrimary}` |
 
-> **Dark mode rule:** When writing component styles, always use CSS custom properties (`var(--p-surface-50)`, `var(--p-text-color)`) instead of hardcoded hex values. Hardcoded hex values will not respond to dark mode toggling via `colorScheme.dark`. This is the most common theming mistake.
-
-### The Hard Part: `colorScheme` Nesting
-
-PrimeNG's semantic tier uses `colorScheme.light` / `colorScheme.dark` nesting to handle dark mode. Flat DTCG semantic tokens (e.g., `semantic/primary/color`) must be transformed into this nested structure. This is the single hardest mapping in the pipeline — your custom Style Dictionary format or script must handle it explicitly.
+> **Dark mode rule:** Always use CSS custom properties, not hardcoded hex. See [§ 4. Dark Mode](#4-dark-mode) below for the full guide.
 
 ### Token Path Quick Reference
 
@@ -123,11 +119,79 @@ For customizing the internal DOM elements of PrimeNG components (e.g., adding a 
 
 > **Warning:** The `pt` API key names differ from `definePreset()` token names. For example, DataTable uses `headerCell` in definePreset but `thead` in the pt API. Check PrimeNG's TypeScript types (`TablePassThroughOptions`) for correct pt keys.
 
-## 4. Composite Tokens
+## 4. Dark Mode
+
+This section is the single reference for how dark mode works in this stack. Other docs reference it — if you're looking for dark mode guidance, you're in the right place.
+
+### How It Works
+
+PrimeNG's `definePreset()` accepts a `colorScheme.dark` block alongside `colorScheme.light`. When the CSS class `.dark-mode` is present on the `<html>` element, PrimeNG swaps the underlying CSS custom property values automatically. No `!important` overrides needed — nested components cascade correctly.
+
+```ts
+// In definePreset() — semantic tier
+semantic: {
+  colorScheme: {
+    light: { primary: { color: '{blue.500}' }, surface: { 0: '#FFFFFF' } },
+    dark:  { primary: { color: '{blue.400}' }, surface: { 0: '#0C0A09' } }
+  }
+}
+```
+
+```ts
+// In app.config.ts — tells PrimeNG which CSS class activates dark mode
+providePrimeNG({ theme: { preset: CustomPreset, options: { darkModeSelector: '.dark-mode' } } })
+```
+
+```ts
+// Toggle in a component
+document.documentElement.classList.toggle('dark-mode');
+```
+
+See the working implementation at [`src/app/design-system/tokens/preset.ts`](../src/app/design-system/tokens/preset.ts) and [`src/app/app.config.ts`](../src/app/app.config.ts).
+
+### The #1 Rule
+
+**Always use CSS custom properties for colors.** Any hardcoded hex value (`background: #FAFAF9`) stays the same in both modes — it does not respond to the dark mode toggle. Use `var(--p-surface-50)`, `var(--p-text-color)`, etc. instead. This is the most common theming mistake and was found in 11 places during the prototype simulation.
+
+Stylelint's `color-no-hex` rule catches this in `.scss`/`.css` files, but cannot inspect inline `styles:` arrays in TypeScript decorators or `[style]` template bindings. A pre-commit grep or custom ESLint rule is needed for full coverage.
+
+### Toggle Strategy (team decision)
+
+The prototype uses a manual toggle button in the nav bar. A real team should decide:
+
+- **Manual toggle only** — user clicks a button, preference stored in localStorage
+- **OS preference only** — `prefers-color-scheme: dark` media query, no user control
+- **Both** — OS preference as default, manual toggle to override, preference persisted
+
+PrimeNG's `darkModeSelector` supports any CSS selector. For OS preference, use `darkModeSelector: 'system'` (PrimeNG 21+). For manual, use a class like `.dark-mode`.
+
+### The Hard Part: `colorScheme` Nesting
+
+Flat DTCG semantic tokens (e.g., `semantic/primary/color`) must be transformed into PrimeNG's nested `colorScheme.light` / `colorScheme.dark` structure. This is the single hardest mapping in the token pipeline — your custom Style Dictionary format or script must handle it explicitly.
+
+If using **Path B (PrimeOne UI Kit v4)**, light and dark values are defined as Figma Variable modes — both `colorScheme.light` and `colorScheme.dark` are generated automatically from a single source, eliminating manual dark-mode token mapping.
+
+### Risk: Nested Component Overrides
+
+Themed components composed inside other themed components (a button inside a card inside a dialog) can leak styles in dark mode. Spike this early: build one screen with nested overrides in both light and dark mode. If overrides compose cleanly, the strategy works. If not, change it before it propagates. See [10-derisking](./10-derisking.md) for the full risk checklist.
+
+### What This Prototype Is Missing
+
+The dark palette in this prototype was developer-invented — no designer specified the `colorScheme.dark` values. For production:
+
+- A designer should specify the dark palette (or use PrimeOne UI Kit which generates both modes)
+- Automated visual verification is needed (Chromatic Modes or Playwright theme-toggle snapshots)
+- The toggle strategy should be decided and documented
+
+See [production-plan-sketch](./production-plan-sketch.md) for the full production readiness discussion.
+
+---
+
+## 5. Composite Tokens
 
 Typography tokens in DTCG are composite — a single token bundles `fontFamily`, `fontSize`, `fontWeight`, and `lineHeight`. Style Dictionary handles these via expansion transforms (`expand: true` in config), but this requires explicit configuration. If you use a custom script instead, you need to destructure composites yourself.
 
-## 5. Which Output Goes Where
+## 6. Which Output Goes Where
 
 | Output file | Where it's used | Purpose |
 |-------------|----------------|---------|
