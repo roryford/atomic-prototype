@@ -124,6 +124,8 @@ const CustomPreset = definePreset(Aura, {
   },
 
   // Component tier: per-component overrides
+  // Use token references ({curly.brace} syntax) so values respond to dark mode.
+  // Hardcoded hex here would bypass colorScheme.dark and stay light-only.
   components: {
     button: {
       root: {
@@ -134,17 +136,17 @@ const CustomPreset = definePreset(Aura, {
           fontWeight: '600',
         },
         primary: {
-          background: '#4338CA',
-          hoverBackground: '#6366F1',
-          color: '#FFFFFF',
-          borderColor: '#4338CA',
-          hoverBorderColor: '#6366F1',
+          background: '{primary.600}',
+          hoverBackground: '{primary.500}',
+          color: '{primary.contrastColor}',
+          borderColor: '{primary.600}',
+          hoverBorderColor: '{primary.500}',
         },
         secondary: {
           background: 'transparent',
-          hoverBackground: '#E0E7FF',
-          color: '#4338CA',
-          borderColor: '#4338CA',
+          hoverBackground: '{highlight.background}',
+          color: '{primary.600}',
+          borderColor: '{primary.600}',
         },
         danger: {
           background: '#DC2626',
@@ -162,6 +164,10 @@ const CustomPreset = definePreset(Aura, {
         fontWeight: '600',
         padding: '2px 10px',
       },
+      // Tag severity colors are intentionally hardcoded — they represent
+      // status meaning (success=green, danger=red) that stays consistent
+      // across light/dark modes. Dark mode adapts via opacity/contrast,
+      // not by changing the semantic color.
       success: {
         background: '#DCFCE7',
         color: '#16A34A',
@@ -175,13 +181,13 @@ const CustomPreset = definePreset(Aura, {
         color: '#DC2626',
       },
       info: {
-        background: '#E0E7FF',
-        color: '#4338CA',
+        background: '{highlight.background}',
+        color: '{primary.600}',
       },
     },
     card: {
       root: {
-        background: '#FFFFFF',
+        background: '{surface.0}',
         borderRadius: '12px',
         shadow: '0 1px 3px rgba(0,0,0,0.1)',
       },
@@ -191,15 +197,15 @@ const CustomPreset = definePreset(Aura, {
     },
     datatable: {
       headerCell: {
-        background: '#F5F5F4',
-        color: '#1C1917',
-        borderColor: '#E7E5E4',
+        background: '{surface.100}',
+        color: '{text.color}',
+        borderColor: '{surface.200}',
       },
       bodyCell: {
-        borderColor: '#E7E5E4',
+        borderColor: '{surface.200}',
       },
       row: {
-        hoverBackground: '#FAFAF9',
+        hoverBackground: '{surface.50}',
       },
     },
   },
