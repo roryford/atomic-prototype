@@ -5,26 +5,26 @@ const CustomPreset = definePreset(Aura, {
   // Primitive tier: raw palette values
   primitive: {
     indigo: {
-      500: '#4338CA',  // Brand Indigo
-      400: '#6366F1',  // Brand Indigo Light
-      600: '#3730A3',  // Brand Indigo Dark
+      500: '#4338CA', // Brand Indigo
+      400: '#6366F1', // Brand Indigo Light
+      600: '#3730A3', // Brand Indigo Dark
     },
     red: {
-      500: '#DC2626',  // Danger Red
-      600: '#B91C1C',  // Danger Red Dark (hover)
+      500: '#DC2626', // Danger Red
+      600: '#B91C1C', // Danger Red Dark (hover)
     },
     green: {
-      500: '#16A34A',  // Success Green
+      500: '#16A34A', // Success Green
     },
     amber: {
-      500: '#D97706',  // Warning Amber
+      500: '#D97706', // Warning Amber
     },
     stone: {
-      50:  '#FAFAF9',  // Surface Warm
-      100: '#F5F5F4',  // Surface Muted
-      200: '#E7E5E4',  // Border color
-      500: '#78716C',  // Text Secondary
-      900: '#1C1917',  // Text Primary
+      50: '#FAFAF9', // Surface Warm
+      100: '#F5F5F4', // Surface Muted
+      200: '#E7E5E4', // Border color
+      500: '#78716C', // Text Secondary
+      900: '#1C1917', // Text Primary
     },
     borderRadius: {
       none: '0',
@@ -39,7 +39,7 @@ const CustomPreset = definePreset(Aura, {
   // Semantic tier: intent-based aliases
   semantic: {
     primary: {
-      50:  '#EEF2FF',
+      50: '#EEF2FF',
       100: '#E0E7FF',
       200: '#C7D2FE',
       300: '#A5B4FC',

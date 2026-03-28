@@ -13,9 +13,7 @@ import { InputText } from 'primeng/inputtext';
   selector: 'ds-input',
   imports: [InputText, FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <input pInputText [(ngModel)]="value" [placeholder]="placeholder()" />
-  `,
+  template: ` <input pInputText [(ngModel)]="value" [placeholder]="placeholder()" /> `,
 })
 export class DsInput {
   value = model<string>('');

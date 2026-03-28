@@ -1,7 +1,15 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { Button } from 'primeng/button';
 
-type ButtonSeverity = 'success' | 'info' | 'warn' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast';
+type ButtonSeverity =
+  | 'success'
+  | 'info'
+  | 'warn'
+  | 'danger'
+  | 'help'
+  | 'primary'
+  | 'secondary'
+  | 'contrast';
 
 /**
  * Atom: Thin wrapper around PrimeNG p-button.

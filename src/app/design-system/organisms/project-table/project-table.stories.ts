@@ -25,8 +25,8 @@ const mockProjects: Project[] = Array.from({ length: 18 }, (_, i) => {
     avatar: String.fromCharCode(65 + (i % 26)),
     color: ['#4338CA', '#0891B2', '#DC2626', '#16A34A', '#CA8A04', '#9333EA'][i % 6],
     members: (i % 8) + 2,
-    deadline: `2026-${String(((i % 12) + 1)).padStart(2, '0')}-15`,
-    createdDate: `2025-${String(((i % 12) + 1)).padStart(2, '0')}-01`,
+    deadline: `2026-${String((i % 12) + 1).padStart(2, '0')}-15`,
+    createdDate: `2025-${String((i % 12) + 1).padStart(2, '0')}-01`,
     category: categories[i % categories.length],
   };
 });

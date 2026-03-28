@@ -10,9 +10,27 @@ import { Button } from 'primeng/button';
     <nav class="app-nav">
       <div class="nav-brand">Atomic POC</div>
       <div class="nav-links">
-        <p-button label="Dashboard" [link]="true" routerLink="/dashboard" severity="secondary" [text]="true" />
-        <p-button label="List" [link]="true" routerLink="/list" severity="secondary" [text]="true" />
-        <p-button label="Detail" [link]="true" routerLink="/detail/1" severity="secondary" [text]="true" />
+        <p-button
+          label="Dashboard"
+          [link]="true"
+          routerLink="/dashboard"
+          severity="secondary"
+          [text]="true"
+        />
+        <p-button
+          label="List"
+          [link]="true"
+          routerLink="/list"
+          severity="secondary"
+          [text]="true"
+        />
+        <p-button
+          label="Detail"
+          [link]="true"
+          routerLink="/detail/1"
+          severity="secondary"
+          [text]="true"
+        />
       </div>
     </nav>
     <main class="app-content">

@@ -7,9 +7,7 @@ type TagSeverity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contr
   selector: 'ds-tag',
   imports: [Tag],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <p-tag [value]="value()" [severity]="severity()" />
-  `,
+  template: ` <p-tag [value]="value()" [severity]="severity()" /> `,
 })
 export class DsTag {
   value = input.required<string>();

@@ -16,15 +16,8 @@ import { DsInput, DsButton } from '../../atoms';
   template: `
     <!-- eslint-disable-next-line @angular-eslint/template/interactive-supports-focus -->
     <div class="search-bar" (keydown.enter)="searched.emit(value())">
-      <ds-input
-        [(value)]="value"
-        [placeholder]="placeholder()"
-      />
-      <ds-button
-        label="Search"
-        severity="primary"
-        (clicked)="searched.emit(value())"
-      />
+      <ds-input [(value)]="value" [placeholder]="placeholder()" />
+      <ds-button label="Search" severity="primary" (clicked)="searched.emit(value())" />
     </div>
   `,
   styles: `

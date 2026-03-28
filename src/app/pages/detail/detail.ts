@@ -42,7 +42,9 @@ import { DsInput } from '../../design-system/atoms/input/input';
       } @else if (project.error()) {
         <div class="detail-card error-card">
           <p-message severity="error" text="Project not found" />
-          <p class="error-detail">The project you're looking for doesn't exist or couldn't be loaded.</p>
+          <p class="error-detail">
+            The project you're looking for doesn't exist or couldn't be loaded.
+          </p>
           <ds-button
             label="Back to List"
             severity="secondary"
@@ -192,9 +194,7 @@ export class Detail {
   private router = inject(Router);
   private projectService = inject(ProjectService);
 
-  project = this.projectService.projectById(
-    Number(this.route.snapshot.paramMap.get('id'))
-  );
+  project = this.projectService.projectById(Number(this.route.snapshot.paramMap.get('id')));
 
   goBack() {
     this.router.navigate(['/list']);

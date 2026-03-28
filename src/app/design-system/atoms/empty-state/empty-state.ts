@@ -10,11 +10,7 @@ import { DsButton } from '../button/button';
       <i class="pi {{ icon() }} empty-icon"></i>
       <p class="empty-message">{{ message() }}</p>
       @if (actionLabel()) {
-        <ds-button
-          [label]="actionLabel()!"
-          severity="primary"
-          (clicked)="actionClicked.emit()"
-        />
+        <ds-button [label]="actionLabel()!" severity="primary" (clicked)="actionClicked.emit()" />
       }
     </div>
   `,
