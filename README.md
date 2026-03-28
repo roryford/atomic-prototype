@@ -19,6 +19,9 @@ prototype is useful for learning atomic design concepts, Angular 21 patterns
 (signals, httpResource, standalone components), and the surrounding process
 (PBIs, acceptance criteria, testing strategy).
 
+> **Note:** This repository is shared as a reference implementation. It is not
+> actively accepting contributions.
+
 ## Atomic Design Hierarchy
 
 ```
@@ -81,10 +84,6 @@ See [docs/README.md](./docs/README.md) for the full documentation index. Highlig
 
 - Angular 21.2, PrimeNG 21.1, Storybook 10.3, Vitest 4.1, MSW 2.12, TypeScript 5.9
 - ESLint (via angular-eslint), Playwright (E2E), GitHub Actions (CI/CD)
-
-## Contributing
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup instructions and guidelines.
 
 ## License
 

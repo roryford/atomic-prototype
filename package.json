@@ -1,7 +1,7 @@
 {
   "name": "atomic-prototype",
   "description": "Angular 21 + PrimeNG 21 atomic design prototype — component hierarchy, design tokens, and testing patterns for small teams",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "license": "MIT",
   "keywords": [
     "angular",
@@ -32,7 +32,6 @@
     "screenshots": "playwright test e2e/screenshots.spec.ts",
     "screenshots:components": "playwright test --config=playwright.storybook.config.ts"
   },
-  "private": true,
   "packageManager": "npm@11.11.0",
   "dependencies": {
     "@angular/animations": "^21.2.5",
