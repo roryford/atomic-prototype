@@ -2,6 +2,8 @@
 
 > **When to read:** When you are stuck at a fork in the road. This doc does not teach concepts -- it assumes you have read the foundational docs and need help making a specific decision. Read time: ~15 minutes (or jump to the section you need).
 
+These decision guides exist to reduce debate time, create consistent outcomes across the team, and prevent rework caused by ambiguous classifications. When two developers disagree on whether something is an atom or a molecule, or when the team is unsure which token pipeline to adopt, these structured trees give everyone the same path to an answer. The result is faster decisions and fewer "we should have done it the other way" reversals.
+
 These guides cover the five most common ambiguity points encountered during the prototype simulation. Each one gives you a structured path from question to answer.
 
 ---
@@ -51,7 +53,7 @@ These components do not fit neatly into one level. The prototype established the
 
 | Component | Ruling | Rationale |
 |-----------|--------|-----------|
-| Dropdown / Select | Atom | PrimeNG provides it as one component. Do not decompose its internal parts (trigger, overlay, option list). Wrap as one atom even though it contains multiple interactive parts. See 01-atomic-hierarchy SS Compound components. |
+| Dropdown / Select | Atom | PrimeNG provides it as one component. Do not decompose its internal parts (trigger, overlay, option list). Wrap as one atom even though it contains multiple interactive parts. See the compound components section in [01-atomic-hierarchy](./01-atomic-hierarchy.md). |
 | Calendar | Organism primitive | Has overlay rendering, complex date state, and internal templating. Configure at the organism level, not wrapped as an atom. |
 | Empty State | Atom | Custom atom built from native HTML (icon + message + optional action). PrimeNG does not provide one. Purely presentational, no state. |
 | A component with 5+ atoms | Likely organism | If it needs more than 4 atoms, it is probably managing enough complexity to be an organism. Check whether it also manages state -- if yes, definitely an organism. |
@@ -160,7 +162,7 @@ Most small teams should start on **Path 1** during POC and move to **Path 2 (fre
 
 **Decision rule:** If you are spending more than 30 minutes per design update translating Figma values to code, move to the next path. If not, stay where you are.
 
-See [05-token-pipeline](./05-token-pipeline.md) for implementation details on each path, dark mode rules, and the PrimeNG 3-tier token system. See [06-tooling-landscape](./06-tooling-landscape.md) SS Procurement Decision Guide for the general "when to add tooling" framework.
+See [05-token-pipeline](./05-token-pipeline.md) for implementation details on each path, dark mode rules, and the PrimeNG 3-tier token system. See the Procurement Decision Guide section in [06-tooling-landscape](./06-tooling-landscape.md) for the general "when to add tooling" framework.
 
 ---
 
@@ -232,7 +234,7 @@ PrimeNG's `(onClick)` does not fire from DOM click events in jsdom (the environm
 - **Workaround for molecules and organisms:** Use Storybook play functions or Playwright, which run in a real browser where PrimeNG events work correctly.
 - **Do not waste time debugging why click tests fail in Vitest.** This is a known limitation, not a bug in your code.
 
-See [07-qa-per-atomic-level](./07-qa-per-atomic-level.md) for the full test type matrix and [07-qa-per-atomic-level](./07-qa-per-atomic-level.md) SS PrimeNG Testing Limitation for details.
+See [07-qa-per-atomic-level](./07-qa-per-atomic-level.md) for the full test type matrix and the PrimeNG Testing Limitation section in that same doc for details.
 
 ---
 
@@ -275,7 +277,7 @@ Stop and write them. The BA (or product owner, or whoever fills that role) write
 The developer building the component proposes. The reviewer can challenge. Use the decision tree in Section 1 above. If the tree does not resolve it, ask: "Does it manage state?" If yes, it is an organism. If the disagreement persists, choose the higher level (it is easier to simplify later than to promote).
 
 **"The team cannot agree on whether to adopt a tool."**
-Tooling adoption requires team consensus. If consensus cannot be reached, the default is to not adopt. The burden of proof is on the person proposing the tool -- they must show that the manual approach is causing measurable pain (see [06-tooling-landscape](./06-tooling-landscape.md) SS Procurement Decision Guide).
+Tooling adoption requires team consensus. If consensus cannot be reached, the default is to not adopt. The burden of proof is on the person proposing the tool -- they must show that the manual approach is causing measurable pain (see the Procurement Decision Guide section in [06-tooling-landscape](./06-tooling-landscape.md)).
 
 See [08-pbi-and-ba-guide](./08-pbi-and-ba-guide.md) for PBI structure by level and where a BA adds the most value.
 

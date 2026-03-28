@@ -34,8 +34,8 @@ Read [00-quickstart](./00-quickstart.md) — it takes 2 minutes and routes you b
 | 09 | [Angular Direction](./09-angular-direction.md) | What Angular 21 features affect my architecture? | 10 min |
 | 10 | [De-risking](./10-derisking.md) | What risks will I hit and how do I handle them? | 8 min |
 | 11 | [Implementation Tips](./11-implementation-tips.md) | What are the practical gotchas and solutions? | varies |
-| 12 | [Decision Guides](./12-decision-guides.md) | How do I make key architectural and process decisions? | 10 min |
-| 13 | [Designers Guide](./13-designers-guide.md) | How does a designer work in this process? | 10 min |
+| 12 | [Decision Guides](./12-decision-guides.md) | How do I make key architectural and process decisions? | 15 min |
+| 13 | [Designers Guide](./13-designers-guide.md) | How does a designer work in this process? | 15 min |
 | 14 | [Replication Guide](./14-replication-guide.md) | How do I replicate this approach on a new project? | 12 min |
 
 ## Prototype Findings
@@ -60,6 +60,7 @@ Results from a simulated prototype build using this process.
 
 - **Developer (new):** 00 → 01 → 02 → 03 → 11 → explore `src/`
 - **Developer (prototype):** above + 05 → 07 → 10
-- **BA / Product Owner:** 00 → 01 → 02 → 08 → acceptance-criteria
+- **BA / Product Owner:** 00 → 01 → 02 → 08 → 10 → 12 → acceptance-criteria
 - **Designer:** 00 → 13 → 01 → 05 (tokens section) → 04 → component-catalogue
+- **Evaluator (deciding whether to adopt):** 00 → simulation-report → 02 → 10 → 12
 - **Tech Lead:** 00 → 01 → 02 → 06 → simulation-report

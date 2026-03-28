@@ -11,9 +11,9 @@ using Brad Frost's Atomic Design principles in Angular 21 with PrimeNG 21. It
 pairs real, runnable components with the process documentation a small team
 needs to adopt atomic design without guesswork.
 
-The repository includes process documentation (13 guides covering hierarchy,
-tokens, QA, tooling, and maturity stages) alongside working code (4 atoms,
-3 molecules, 3 organisms, and 3 pages). Every component is exercised in
+The repository includes process documentation (15 guides covering hierarchy,
+tokens, QA, tooling, decision-making, and maturity stages) alongside working
+code (4 atoms, 3 molecules, 3 organisms, and 3 pages). Every component is exercised in
 Storybook and covered by Vitest unit tests.
 
 Target audience: small teams (2-4 developers) building design systems. This
@@ -69,7 +69,7 @@ src/app/
   pages/          — Dashboard, List, Detail
   services/       — ProjectService (httpResource-based)
   mocks/          — MSW handlers + fixture data
-docs/             — Process guides (00-12) + prototype findings
+docs/             — Process guides (00-14) + prototype findings
 ```
 
 ## Documentation

@@ -1,6 +1,8 @@
 # Replication Guide
 
 > **Who is this for?** A developer (or small team) who wants to build a project like this from scratch, not fork this repo. Read time: ~25 minutes. Working time: 2-4 hours to reach a running app with one atom, one story, one test, and MSW mocking.
+>
+> **Time estimate:** Teams already on Node 25 and Angular 21 can reach a running app in 2-4 hours. Teams that need to upgrade their environment should budget an additional half-day for setup.
 
 This guide walks through every step to replicate this prototype's architecture in a new Angular 21 + PrimeNG 21 project. Each section builds on the previous one. By the end, you will have a working atomic design system with Storybook, Vitest, and Mock Service Worker -- the same foundation this repo demonstrates.
 
@@ -27,6 +29,8 @@ For what the end state looks like, browse this prototype's `src/` directory alon
 ## 1. Prerequisites
 
 You need exact version alignment. Angular 21 requires Node 25+.
+
+> **Team prerequisite:** This guide assumes at least one team member has prior Angular experience. Teams new to both Angular and atomic design should learn Angular fundamentals first.
 
 | Tool | Version | How to verify |
 |------|---------|---------------|
@@ -80,6 +84,8 @@ legacy-peer-deps=true
 ```
 
 This is required because Storybook 10's peer dependency declarations lag behind Angular 21. Without it, `npm install` will fail when you add Storybook later.
+
+> **Shelf life:** This workaround exists because Storybook 10's peer dependency declarations lag behind Angular 21. Check periodically whether this is still needed — once Storybook fully supports Angular 21, remove it.
 
 Lock the package manager version in `package.json`:
 
@@ -546,6 +552,8 @@ describe('DsButton', () => {
 });
 ```
 
+> **Note:** The `vi` global is provided by Angular's built-in Vitest integration. If you see 'vi is not defined', verify your `angular.json` test target uses `@angular/build:unit-test`.
+
 ### Run it
 
 ```bash
@@ -727,7 +735,7 @@ Not everything in this prototype is needed from day one. The following are expli
 | Skip this | Why | When to add |
 |-----------|-----|-------------|
 | **Dark mode** | The `darkModeSelector` is configured but unused. Focus on one color scheme first. | Prototype stage, after the semantic color scheme is stable. |
-| **E2E tests (Playwright)** | Integration tests are expensive to write and maintain. Unit tests and Storybook cover POC needs. | Prototype stage, once page flows stabilize. |
+| **E2E tests (Playwright)** | Integration tests are expensive to write and maintain. Unit tests and Storybook cover POC needs. When ready at Prototype stage: `npm install -D @playwright/test && npx playwright install chromium`. | Prototype stage, once page flows stabilize. |
 | **CI pipeline** | Nothing to gate. The POC never ships to users. | Prototype stage, when the team is merging PRs. |
 | **Visual regression testing** | Requires a stable component library to compare against. Meaningless when components change daily. | Production stage, after the design system is frozen. |
 | **Accessibility automation (axe-core in CI)** | Important, but the POC goal is proving feasibility, not compliance. | Prototype stage. Add `@storybook/addon-a11y` early for manual checks. |

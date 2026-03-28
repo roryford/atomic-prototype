@@ -99,6 +99,7 @@ At minimum, every component spec should include:
 - Border radius
 - States (default, hover, focus, active, disabled)
 - Responsive behavior at each breakpoint (mobile, tablet, desktop, wide)
+- Icon names — browse the available set at the PrimeIcons documentation (primeng.org/icons)
 
 At prototype maturity, also include: loading skeleton dimensions, empty state layout, and error state patterns. See the "Prototype Phase Extensions" in [design-spec](./design-spec.md) for examples of each.
 
@@ -135,6 +136,8 @@ These changes need a developer to write custom CSS or modify component templates
 | **Custom empty/error states** | Different layout or illustration per organism | Requires template and possibly new atoms |
 | **Table cell formatting** | Custom cell content (progress bars, inline actions) | Requires `pTemplate` configuration at organism level |
 | **Font family** | Changing the typeface globally | No token exists; requires a global CSS change |
+
+> **To change the typeface**, provide the font name and weights needed; the developer sets it in `src/styles.scss`.
 
 ### Cannot do without significant workarounds
 
@@ -191,6 +194,8 @@ Change indigo.500 (primitive)
 
 This is why specifying tokens correctly at the primitive and semantic level matters more than specifying individual component colors. Get the palette right, and components follow.
 
+> **Need a token that does not exist?** Follow the same process described in [section 6 (Requesting Component Features)](#6-requesting-component-features) — token additions are typically a quick change.
+
 ---
 
 ## 5. Dark Mode Design Process
@@ -207,7 +212,7 @@ The prototype's dark palette was invented by the developer. It works, but it was
 
 | Token group | What to specify | Light mode reference | Design consideration |
 |-------------|----------------|---------------------|---------------------|
-| **Surface scale** | 11 shades (0 through 950) | Stone palette from #FAFAF9 to #0C0A09 | In dark mode, the scale direction stays the same: 0 is lightest, 900 is darkest. PrimeNG expects this. |
+| **Surface scale** | 11 shades (0 through 950) | Stone palette from #FAFAF9 to #0C0A09 | In dark mode, the scale direction stays the same: 0 is lightest, 900 is darkest. PrimeNG expects this. PrimeNG's derived tokens handle the flip automatically — `--p-content-background` resolves to a light surface value in light mode and a dark surface value in dark mode. You define the raw values; PrimeNG picks the right one for each mode. |
 | **Primary color** | 4 values: color, contrast, hover, active | Indigo 500/White/400/600 | In dark mode, primary typically shifts lighter (e.g., from 500 to 400) for sufficient contrast against dark backgrounds |
 | **Text colors** | 4 values: color, hover, muted, hoverMuted | Stone 900/950/500/600 | Dark mode text should be light (e.g., Stone 50 for primary, Stone 300 for muted) |
 | **Highlight colors** | 4 values: background, focusBg, color, focusColor | Indigo 100/200/600/700 | Reduce background opacity or use darker tints to avoid glare |
@@ -227,6 +232,19 @@ The prototype's dark palette was invented by the developer. It works, but it was
 ### How to deliver the dark palette
 
 Use the same format as the light mode spec in [design-spec](./design-spec.md), but add a "Dark Mode" column or a separate table. The developer will map your values into the `colorScheme.dark` block of the preset file. If you are using Tokens Studio or the PrimeOne UI Kit, both light and dark values can be exported together -- see [05-token-pipeline](./05-token-pipeline.md#4-dark-mode) for details.
+
+### Responsive Design
+
+The design system uses **reflow**, not restructure. Components rearrange within their containers using CSS Grid and Flexbox at defined breakpoints — they do not transform into entirely different layouts.
+
+| Breakpoint | Width | Typical behavior |
+|------------|-------|------------------|
+| **Mobile** | < 640px | Single column; cards and stat grids stack vertically |
+| **Tablet** | 640px – 1023px | Two-column layouts; tables may scroll horizontally |
+| **Desktop** | 1024px – 1439px | Full multi-column layouts |
+| **Wide** | ≥ 1440px | Max-width container; extra space becomes margin |
+
+When specifying a component, indicate how it should stack or reflow at each breakpoint. See the breakpoint values in [design-spec](./design-spec.md).
 
 ---
 

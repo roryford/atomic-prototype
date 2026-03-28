@@ -32,9 +32,22 @@ Not all checks are equally important. When time is limited -- and on a small tea
 
 A component at POC stage passes review with only Tier 1 checks complete. A component claiming Prototype maturity must pass Tier 1 and Tier 2. Production maturity requires all three tiers.
 
+> **Exception:** Atoms should have at least one default-state story even at POC stage, since token drift -- the primary atom risk -- is most easily caught visually.
+
 ### When You're Short on Time
 
 At minimum, complete all Tier 1 checks. These are the correctness and safety checks that prevent cascading defects. If a Tier 2 check is skipped, note it in the PR description as a follow-up item so it is tracked and not forgotten. Never skip Tier 1.
+
+---
+
+## Demonstrated vs. Recommended Practices
+
+This document describes both practices that are **demonstrated** in the prototype codebase and practices that are **recommended** but not yet implemented. When following the checklists, be aware of the distinction:
+
+- **Demonstrated in the prototype:** Vitest unit tests, Storybook stories, Playwright E2E tests, manual accessibility checklist.
+- **Recommended but not yet implemented:** Storybook play functions (interaction tests), ESLint boundary rules, Stylelint token-audit rule, axe-core in CI.
+
+Recommended practices are included because they represent the target QA posture. Adopt them as the team and codebase mature.
 
 ---
 
@@ -167,7 +180,8 @@ Organisms are complex, self-contained UI sections. This is where **real data ent
 - [ ] [T1] Services are injected only for this organism's concerns; no cross-organism coupling
 - [ ] [T1] Graceful degradation on API failure, timeout, malformed data
 - [ ] [T2] Signals / observables propagate correctly to child molecules
-- [ ] [T3] OnPush change detection strategy; no unnecessary re-renders
+- [ ] [T1] `changeDetection: OnPush` is set on the component
+- [ ] [T3] No unnecessary re-renders (verified via profiling)
 - [ ] [T2] Interaction tests cover state-dependent user flows
 
 ### Manual Approach vs Tooling-Accelerated
@@ -270,7 +284,8 @@ Pages are routed components that wire real data to templates and organisms. They
 - [ ] [T1] Route resolves correctly; guards redirect as expected
 - [ ] [T1] Resolver loads data before render; loading state shows during resolution
 - [ ] [T1] Full user journey works (land, interact, submit, confirm)
-- [ ] [T2] Error paths handled: 401, 403, 404, 500, network timeout
+- [ ] [T1] Basic error handling: 500, network failure, timeout render a user-visible error state
+- [ ] [T2] Exhaustive HTTP status coverage: 401, 403, 404 each handled with appropriate redirect or message
 - [ ] [T3] Performance budget met: LCP < 2.5s, INP < 200ms, CLS < 0.1
 - [ ] [T3] Cross-browser: Chrome, Firefox, Safari verified (Edge in CI if available)
 
@@ -480,6 +495,26 @@ If using visual regression tooling (Chromatic, Percy, or similar) with PrimeNG c
 2. **Overlay viewport sizing.** PrimeNG overlays (dropdowns, dialogs, tooltips) position themselves relative to the viewport. If Chromatic's viewport size differs from your Storybook development viewport, overlays appear in different positions. Fix by setting explicit viewport sizes in your Storybook story parameters for any story that renders an overlay.
 
 These are mitigation steps, not blockers. Visual regression tooling works well with PrimeNG once these two sources of noise are eliminated.
+
+---
+
+## Regression Testing
+
+When a shared atom changes, run the full test suite (`npm test`) to verify that consuming molecules and organisms still behave correctly. Even a small change to an atom's styling or API can cascade through dozens of components.
+
+TypeScript compiler errors are the first line of defense for API contract changes. If an atom's `input()` type signature changes, every consuming molecule and organism fails to compile before a single test runs. Treat compiler errors as free regression coverage and fix them before running the test suite.
+
+For larger teams or growing codebases, consider affected-component-only testing (Nx-style `affected:test`) to keep CI fast. This approach runs tests only for components in the dependency graph of the changed file, reducing feedback time from minutes to seconds on large monorepos.
+
+---
+
+## Test Data Management
+
+Use `src/app/mocks/fixtures/` as the single source of truth for test data. Unit tests, Storybook stories, and Playwright E2E tests should all import from these shared fixtures rather than defining their own inline mock data.
+
+Avoid creating divergent mock data in each test file. Duplicated fixtures drift over time -- one test uses an old data shape while another uses a new one, and neither reflects the real API response. Shared fixtures eliminate this class of inconsistency.
+
+Keep fixture data realistic but minimal. Each fixture should exercise a specific state (loading, error, empty, populated) without maintaining large datasets. A fixture with 2-3 representative items is usually sufficient; save large-dataset testing for dedicated performance scenarios.
 
 ---
 

@@ -169,11 +169,17 @@ On a 2-4 person team, the process is the people. Keep talking. Keep showing each
 
 ## Scaling Beyond Four People
 
+The practices above are designed for your current team size. This section is a reference for if and when the team grows — you do not need to plan for it now.
+
 The practices above assume 2-4 people who can align through conversation. As the team grows, some patterns need to change.
 
 **5-8 people.** Replace verbal syncs with async written updates — a shared Slack channel or running doc where decisions are recorded, not just discussed. Assign component ownership: one person per atomic level or feature slice, so two developers are not editing the same molecule independently. The weekly Storybook review becomes a standing meeting with a checklist, not an ad-hoc walkthrough.
 
-**8+ people or multiple feature teams.** Each team owns a vertical slice — one page plus its organisms, molecules, and atoms. Shared atoms and tokens need a designated owner to prevent drift (two teams tweaking the same button token in different directions). PR reviews for shared components require cross-team sign-off. At this scale, consider a dedicated design system team that owns atoms, tokens, and the Storybook instance.
+**8+ people or multiple feature teams.** Each team owns a vertical slice — one page plus its organisms, molecules, and atoms. Shared atoms and tokens need a designated owner to prevent drift (two teams tweaking the same button token in different directions). PR reviews for shared components require cross-team sign-off. At this scale, consider a dedicated design system team that owns atoms, tokens, and the Storybook instance. Additional concerns at this size:
+
+- **Shared state management.** Introduce a signal store or shared services layer so that cross-team state (user context, feature flags, shared filters) lives in one place rather than being duplicated across vertical slices.
+- **CI pipeline parallelization.** Run affected-component-only testing — use build graph analysis (e.g., Nx affected or Angular's native project references) so that a change to one atom only triggers tests for that atom and its dependents, not the entire suite.
+- **Component versioning.** Apply semver to shared atoms when breaking changes are needed. A breaking input/output change to DsButton should be a major version bump so consuming teams can upgrade on their own schedule rather than coordinating a simultaneous migration.
 
 **Communication patterns shift with size:**
 - 2-4 people: just say it out loud
