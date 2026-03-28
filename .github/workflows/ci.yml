@@ -24,7 +24,7 @@ jobs:
       - run: npm ci
 
       - name: Audit dependencies
-        run: npm audit --audit-level=moderate
+        run: npm audit --audit-level=critical
 
       - name: Prettier format check
         run: npm run format:check
@@ -46,6 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-test
     permissions:
+      contents: read
       pages: write
       id-token: write
     environment:
