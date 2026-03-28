@@ -2,6 +2,8 @@
 
 An Angular 21 + PrimeNG 21 prototype demonstrating atomic design methodology for small teams.
 
+**[Browse the component library](https://roryford.github.io/atomic-prototype/)**
+
 ## What Is This?
 
 This is a working prototype that demonstrates how to build a component library
