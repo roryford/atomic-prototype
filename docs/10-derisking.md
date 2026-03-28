@@ -116,7 +116,7 @@ The `color-no-hex` rule catches hex values in `.scss` and `.css` files but canno
 
 **How you'll notice:** Stylelint reports zero violations but a manual audit of `.ts` component files reveals hardcoded hex colors in inline `styles:` arrays.
 
-**What to do:** Mitigate by: extracting inline styles to `.scss` files for molecules and above (per [03-project-structure](./03-project-structure.md)), adding hex checks to the PR review checklist, or writing a custom ESLint rule.
+**What to do:** Mitigate by: extracting inline styles to `.scss` files for molecules and above (per [03-project-structure](./03-project-structure.md)), adding hex checks to the PR review checklist, or writing a custom ESLint rule. **Update:** The enhanced prototype partially addresses this gap — ESLint (via `angular-eslint`) is now configured, providing the infrastructure for a future custom hex-detection rule. Shared SCSS extraction (`_shared.scss`) has begun for organism-level styles, bringing them under Stylelint's reach.
 
 ### `httpResource()` Experimental API
 

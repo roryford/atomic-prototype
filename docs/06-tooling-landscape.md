@@ -148,8 +148,11 @@ The simulation phase validated several tools against real Angular 21 + PrimeNG 2
 | Stylelint | Partial coverage | Catches hex in `.scss` but blind to inline TypeScript styles |
 | Vitest | Fast, minimal setup | 36 tests in ~2s; jsdom limitation with PrimeNG clicks |
 | `httpResource()` | Clean but experimental | `@experimental 19.2` — wrap behind service methods to isolate risk |
+| ESLint + angular-eslint | Smooth setup, valuable | Schematic handles config; needs `eslint-config-prettier` for Prettier coexistence; selector rules need both `app` and `ds` prefixes; two template a11y rules need inline suppression for `ng-content` and delegating wrappers |
+| Playwright | Seamless with MSW | MSW service worker intercepts transparently — no extra E2E mock setup; PrimeNG `p-button` with `[link]="true"` renders as `<button>`, not `<a>`; deterministic mock data enables hardcoded assertions |
+| GitHub Actions CI | Straightforward | Node 25 via `.nvmrc`; `ng test` needs `--watch=false` for CI; Storybook deploys to GitHub Pages on merge to main |
 
-These verdicts informed the "Evaluate When" column in Section 2. None of the tools required significant configuration effort, but each had at least one gotcha worth knowing in advance.
+These verdicts informed the "Evaluate When" column in Section 2. None of the tools required significant configuration effort, but each had at least one gotcha worth knowing in advance. ESLint, Playwright, and GitHub Actions CI were adopted during the enhanced prototype phase, confirming their "Evaluate When" recommendations.
 
 For detailed findings, see [simulation-report](./simulation-report.md).
 

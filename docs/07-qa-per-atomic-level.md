@@ -341,7 +341,7 @@ Lint (ESLint + Prettier) --> Unit + Integration Tests --> Storybook Build
 PR mergeable (all green)
 ```
 
-On merge to main (if E2E tests exist):
+On merge to main:
 
 ```
 Merge to main
@@ -350,7 +350,7 @@ Merge to main
 E2E tests (Playwright) --> Deploy to staging
 ```
 
-That is the whole pipeline for a small team. Add complexity only when you have evidence you need it.
+That is the whole pipeline for a small team. Add complexity only when you have evidence you need it. The enhanced prototype implements this exact pipeline in `.github/workflows/ci.yml`, with Playwright E2E tests available via `npm run e2e`.
 
 ### When to Add More
 

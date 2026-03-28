@@ -54,6 +54,7 @@ src/app/
 │   │   │   ├── _semantic.scss
 │   │   │   └── preset.ts               # Generated definePreset()
 │   │   └── index.ts                     # Barrel export for generated outputs
+│   ├── _shared.scss                       # Shared classes and mixins
 │   ├── atoms/
 │   │   ├── button/
 │   │   │   ├── button.ts                # Inline template (thin wrapper)
@@ -120,6 +121,19 @@ Optional top-level additions at prototype stage:
 
 ```
 .stylelintrc.json                        # Enforces color-no-hex rule
+```
+
+CI, linting, and E2E testing additions at enhanced prototype stage:
+
+```
+eslint.config.js                         # ESLint flat config (angular-eslint + prettier)
+playwright.config.ts                     # Playwright E2E configuration
+e2e/                                     # Playwright test files
+├── navigation.spec.ts
+├── dashboard.spec.ts
+└── projects.spec.ts
+.github/workflows/ci.yml                # PR checks + Storybook deploy
+.npmrc                                   # legacy-peer-deps for Storybook 10 compat
 ```
 
 ### Component file convention

@@ -22,7 +22,7 @@ Then pick your role-based path below.
 00 -> 01 -> 02 -> 03 -> [11-implementation-tips](./11-implementation-tips.md) -> explore `src/`
 
 **Developer (prototype work):**
-All of the above, plus [05-token-pipeline](./05-token-pipeline.md) -> [07-qa-per-atomic-level](./07-qa-per-atomic-level.md) -> [10-derisking](./10-derisking.md)
+All of the above, plus [05-token-pipeline](./05-token-pipeline.md) -> [07-qa-per-atomic-level](./07-qa-per-atomic-level.md) -> [10-derisking](./10-derisking.md) -> [production-plan-sketch](./production-plan-sketch.md) (for Wave 1 implementation status)
 
 **BA / Product Owner:**
 00 -> 01 -> 02 -> [08-pbi-and-ba-guide](./08-pbi-and-ba-guide.md) -> [acceptance-criteria](./acceptance-criteria.md)
@@ -41,6 +41,8 @@ This repo is a working prototype. Explore these files to see the hierarchy in pr
 - **Molecule:** `src/app/design-system/molecules/search-bar/search-bar.ts`
 - **Organism:** `src/app/design-system/organisms/project-table/project-table.ts`
 - **Page:** `src/app/pages/dashboard/dashboard.ts`
+
+The prototype includes CI, linting, and E2E testing. Run `npm run lint` for ESLint, `npm run e2e` for Playwright E2E tests. CI runs automatically on PRs via GitHub Actions (`.github/workflows/ci.yml`).
 
 ## Reference Implementation
 

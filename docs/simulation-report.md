@@ -280,17 +280,17 @@ The list chunk is disproportionately large due to PrimeNG's `TableModule` transi
 
 1. **Replace experimental `httpResource` with stable API when available.** The `@experimental 19.2` tag means the API surface could change. Wrapping behind service abstractions (already done in this prototype) isolates the risk. Monitor Angular release notes for stabilization.
 
-2. **Add E2E tests (Playwright) for user journeys.** The three user journeys are completable but only validated via unit tests and manual inspection. Playwright tests would provide automated regression coverage for navigation flows and PrimeNG button clicks that jsdom cannot handle.
+2. **Add E2E tests (Playwright) for user journeys.** The three user journeys are completable but only validated via unit tests and manual inspection. Playwright tests would provide automated regression coverage for navigation flows and PrimeNG button clicks that jsdom cannot handle. **Update: Implemented.** Playwright E2E smoke tests now cover all three user journeys. See Section 11.
 
 3. **Add visual regression testing (Chromatic) when designer reviews start.** Storybook stories are already in place — connecting Chromatic would catch unintended visual changes across all component states, both light and dark mode.
 
-4. **Extract inline styles to `.scss` files for Stylelint coverage.** All 11 hex violations were in inline TypeScript styles. Moving these styles to component `.scss` files would bring them under Stylelint's reach without needing a custom ESLint rule. Alternatively, add a pre-commit grep script to catch hex values in `.ts` files.
+4. **Extract inline styles to `.scss` files for Stylelint coverage.** All 11 hex violations were in inline TypeScript styles. Moving these styles to component `.scss` files would bring them under Stylelint's reach without needing a custom ESLint rule. Alternatively, add a pre-commit grep script to catch hex values in `.ts` files. **Update: Partially done.** Shared SCSS extraction (`_shared.scss`) covers 3 organisms. ESLint is in place for future custom rules.
 
 5. **Investigate `@defer` for the list page table to reduce lazy chunk size.** The list chunk is 465.93 KB due to PrimeNG `TableModule` transitive dependencies. Using Angular's `@defer` block to load the table on viewport visibility could further reduce initial page load for the list route.
 
 6. **Add error boundary pattern for unexpected rendering errors.** The current error handling covers API failures (via `httpResource().error()`) but not unexpected rendering errors (e.g., null reference in a template expression). An `ErrorHandler` subclass or `@defer` with error block would provide a fallback UI.
 
-7. **Establish pre-commit hook for hex color detection.** A grep-based check (`grep -rn '#[0-9A-Fa-f]\{3,8\}' src/app/ --include='*.ts'`) in a pre-commit hook would catch inline hex values that Stylelint misses, until a proper ESLint rule is implemented.
+7. **Establish pre-commit hook for hex color detection.** A grep-based check (`grep -rn '#[0-9A-Fa-f]\{3,8\}' src/app/ --include='*.ts'`) in a pre-commit hook would catch inline hex values that Stylelint misses, until a proper ESLint rule is implemented. **Update: Partially addressed.** ESLint is now configured via `angular-eslint`. A custom hex-detection rule can be added to the existing config rather than a separate pre-commit hook.
 
 8. **Document Angular-specific Storybook setup.** The process docs should explicitly state that Angular projects must use `ng run` commands for Storybook and that CSS imports in `preview.ts` require the CDN workaround or `angular.json` styles array approach.
 

@@ -336,6 +336,36 @@ PrimeNG's `(onClick)` output on `p-button` does not fire from native DOM click e
 
 ---
 
+## Enhanced Prototype Learnings
+
+- **OnPush + signals is the expected default.** All 14 components in the prototype use `ChangeDetectionStrategy.OnPush`. With signal-based inputs and zoneless change detection, OnPush adds no behavioral change -- it's a free performance guarantee and signals intent. New components should always set it.
+
+  ```typescript
+  @Component({
+    selector: 'ds-button',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    // ...
+  })
+  ```
+
+- **Wildcard routes must redirect directly to the target.** `{ path: '**', redirectTo: '' }` does not chain through a second `redirectTo`. Angular's router stops at `/` without following the `pathMatch: 'full'` redirect. Use `{ path: '**', redirectTo: 'dashboard' }` (or whatever your home route is) directly.
+
+- **ESLint + Prettier coexistence requires `eslint-config-prettier`.** The `@angular-eslint/schematics` schematic does not add it automatically. Without it, ESLint formatting rules conflict with Prettier. Install `eslint-config-prettier` and add it to the flat config array.
+
+- **ESLint selector prefix: allow both `app` and `ds`.** The angular-eslint schematic defaults to allowing only the `app` prefix. Design system components use `ds-` selectors, so update both `component-selector` and `directive-selector` rules to accept `['app', 'ds']`.
+
+- **`.npmrc` `legacy-peer-deps=true` is required for Storybook 10.** `@storybook/test@8.6.15` declares a peer dependency on `storybook@^8.x` but the project uses `storybook@10.x`. Without this flag, `npm install` fails. Remove when the Storybook team resolves the peer dependency conflict.
+
+- **Playwright + MSW requires no extra setup.** MSW's service worker intercepts requests in the browser, so Playwright E2E tests use the same mocks as dev mode automatically. Mock data in `fixtures/*.json` is deterministic -- E2E assertions can hardcode expected values. Configure Playwright's `webServer` to auto-start `ng serve`.
+
+- **Shared SCSS: use `@use`, not `@import`.** Organism SCSS files import shared utilities via `@use '../../shared' as shared;`. The `_` prefix on `_shared.scss` follows the SCSS partial convention. Angular's compiler resolves `@use` at build time within component `styleUrl` files. Place shared SCSS at the design-system root (`src/app/design-system/_shared.scss`).
+
+- **Two ESLint template rules need inline suppression.** `@angular-eslint/template/label-has-associated-control` fires on `<label>` in `DsFormField` because the associated input is projected via `<ng-content>` -- ESLint cannot see through content projection. `@angular-eslint/template/interactive-supports-focus` fires on the `DsSearchBar` wrapper `<div>` that delegates `keydown.enter` to focusable children inside it. Both are valid patterns suppressed with inline `eslint-disable-next-line` comments.
+
+> **See also:** [simulation-report.md](./simulation-report.md) Section 11 for the full list of enhanced prototype additions.
+
+---
+
 ## Process Tips
 
 - **Design and dev start together, not sequentially.** The designer shares token values (even rough ones) and the developer starts building the same week. Don't wait for a "final" design -- iterate together.
