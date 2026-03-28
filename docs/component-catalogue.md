@@ -16,24 +16,28 @@
 Thin wrappers around a single PrimeNG primitive or native HTML element. Purely presentational, no business logic.
 
 ### DsButton
+[`button.ts`](../src/app/design-system/atoms/button/button.ts) · [`button.stories.ts`](../src/app/design-system/atoms/button/button.stories.ts) · [`button.spec.ts`](../src/app/design-system/atoms/button/button.spec.ts)
 
 | Primary | Secondary | Danger | Outlined |
 |---|---|---|---|
 | ![Primary](./screenshots/components/atoms/button-primary.png) | ![Secondary](./screenshots/components/atoms/button-secondary.png) | ![Danger](./screenshots/components/atoms/button-danger.png) | ![Outlined](./screenshots/components/atoms/button-outlined.png) |
 
 ### DsTag
+[`tag.ts`](../src/app/design-system/atoms/tag/tag.ts) · [`tag.stories.ts`](../src/app/design-system/atoms/tag/tag.stories.ts) · [`tag.spec.ts`](../src/app/design-system/atoms/tag/tag.spec.ts)
 
 | Success | Warning | Danger | Info |
 |---|---|---|---|
 | ![Success](./screenshots/components/atoms/tag-success.png) | ![Warning](./screenshots/components/atoms/tag-warning.png) | ![Danger](./screenshots/components/atoms/tag-danger.png) | ![Info](./screenshots/components/atoms/tag-info.png) |
 
 ### DsInput
+[`input.ts`](../src/app/design-system/atoms/input/input.ts) · [`input.stories.ts`](../src/app/design-system/atoms/input/input.stories.ts) · [`input.spec.ts`](../src/app/design-system/atoms/input/input.spec.ts)
 
 | Default | With placeholder |
 |---|---|
 | ![Default](./screenshots/components/atoms/input-default.png) | ![Placeholder](./screenshots/components/atoms/input-placeholder.png) |
 
 ### DsEmptyState
+[`empty-state.ts`](../src/app/design-system/atoms/empty-state/empty-state.ts) · [`empty-state.stories.ts`](../src/app/design-system/atoms/empty-state/empty-state.stories.ts) · [`empty-state.spec.ts`](../src/app/design-system/atoms/empty-state/empty-state.spec.ts)
 
 | Default (no action) | With action button |
 |---|---|
@@ -46,14 +50,17 @@ Thin wrappers around a single PrimeNG primitive or native HTML element. Purely p
 Compositions of 2–4 atoms that function as a single reusable unit.
 
 ### DsStatCard
+[`stat-card.ts`](../src/app/design-system/molecules/stat-card/stat-card.ts) · [`stat-card.stories.ts`](../src/app/design-system/molecules/stat-card/stat-card.stories.ts) · [`stat-card.spec.ts`](../src/app/design-system/molecules/stat-card/stat-card.spec.ts)
 
 ![StatCard](./screenshots/components/molecules/stat-card-default.png)
 
 ### DsSearchBar
+[`search-bar.ts`](../src/app/design-system/molecules/search-bar/search-bar.ts) · [`search-bar.stories.ts`](../src/app/design-system/molecules/search-bar/search-bar.stories.ts) · [`search-bar.spec.ts`](../src/app/design-system/molecules/search-bar/search-bar.spec.ts)
 
 ![SearchBar](./screenshots/components/molecules/search-bar-default.png)
 
 ### DsFormField
+[`form-field.ts`](../src/app/design-system/molecules/form-field/form-field.ts) · [`form-field.stories.ts`](../src/app/design-system/molecules/form-field/form-field.stories.ts) · [`form-field.spec.ts`](../src/app/design-system/molecules/form-field/form-field.spec.ts)
 
 | Default | Full width |
 |---|---|
@@ -66,6 +73,7 @@ Compositions of 2–4 atoms that function as a single reusable unit.
 Complex, self-contained UI sections where real data enters. Every organism handles four states: loading, error, empty, and data.
 
 ### DsStatGrid
+[`stat-grid.ts`](../src/app/design-system/organisms/stat-grid/stat-grid.ts) · [`stat-grid.html`](../src/app/design-system/organisms/stat-grid/stat-grid.html) · [`stat-grid.stories.ts`](../src/app/design-system/organisms/stat-grid/stat-grid.stories.ts) · [`stat-grid.spec.ts`](../src/app/design-system/organisms/stat-grid/stat-grid.spec.ts)
 
 | Loading | Error |
 |---|---|
@@ -76,6 +84,7 @@ Complex, self-contained UI sections where real data enters. Every organism handl
 | ![Empty](./screenshots/components/organisms/stat-grid-empty.png) | ![Data](./screenshots/components/organisms/stat-grid-data.png) |
 
 ### DsProjectCardGrid
+[`project-card-grid.ts`](../src/app/design-system/organisms/project-card-grid/project-card-grid.ts) · [`project-card-grid.html`](../src/app/design-system/organisms/project-card-grid/project-card-grid.html) · [`project-card-grid.stories.ts`](../src/app/design-system/organisms/project-card-grid/project-card-grid.stories.ts) · [`project-card-grid.spec.ts`](../src/app/design-system/organisms/project-card-grid/project-card-grid.spec.ts)
 
 | Loading | Error |
 |---|---|
@@ -86,6 +95,7 @@ Complex, self-contained UI sections where real data enters. Every organism handl
 | ![Empty](./screenshots/components/organisms/card-grid-empty.png) | ![Data](./screenshots/components/organisms/card-grid-data.png) |
 
 ### DsProjectTable
+[`project-table.ts`](../src/app/design-system/organisms/project-table/project-table.ts) · [`project-table.html`](../src/app/design-system/organisms/project-table/project-table.html) · [`project-table.stories.ts`](../src/app/design-system/organisms/project-table/project-table.stories.ts) · [`project-table.spec.ts`](../src/app/design-system/organisms/project-table/project-table.spec.ts)
 
 | Loading | Error |
 |---|---|
