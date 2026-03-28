@@ -2,6 +2,13 @@
 
 > Visual reference for every design-system component, captured from Storybook. Regenerate with `npm run screenshots:components`.
 
+## Contents
+
+- [Level 1 — Atoms](#level-1--atoms): [DsButton](#dsbutton) · [DsTag](#dstag) · [DsInput](#dsinput) · [DsEmptyState](#dsemptystate)
+- [Level 2 — Molecules](#level-2--molecules): [DsStatCard](#dsstatcard) · [DsSearchBar](#dssearchbar) · [DsFormField](#dsformfield)
+- [Level 3 — Organisms](#level-3--organisms): [DsStatGrid](#dsstatgrid) · [DsProjectCardGrid](#dsprojectcardgrid) · [DsProjectTable](#dsprojecttable)
+- [The Cascade in Practice](#the-cascade-in-practice)
+
 ---
 
 ## Level 1 — Atoms
