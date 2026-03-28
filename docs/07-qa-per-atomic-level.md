@@ -34,7 +34,7 @@ Atoms are thin wrappers around a single PrimeNG primitive or native HTML element
 
 ### What to Check
 
-- [ ] Uses design tokens, not hardcoded values (`var(--primary-500)`, not `#3B82F6`)
+- [ ] Uses design tokens, not hardcoded values (`var(--p-primary-color)`, not `#3B82F6`)
 - [ ] Every `input()` has a sensible default; every `output()` emits correctly
 - [ ] Storybook stories cover all visual states (default, hover, focus, active, disabled, loading)
 - [ ] ARIA roles present, keyboard focus visible, contrast ratio passes
@@ -211,7 +211,7 @@ Templates are page-level layout shells that define spatial structure through `ng
 
 | Criterion | Threshold |
 |---|---|
-| Responsive correctness | Layout correct at all five breakpoints |
+| Responsive correctness | Layout correct at all defined breakpoints (see [design-spec](./design-spec.md)) |
 | Slot projection | Empty, single-child, and multi-child slots all render |
 | Data independence | Zero entity-data bindings; zero service injections |
 | Accessibility (layout) | Landmark roles correct; skip-nav functional |
@@ -335,7 +335,7 @@ Keep it simple. One pipeline runs on every PR:
 PR opened / updated
     |
     v
-Lint (ESLint + Prettier) --> Unit + Integration Tests --> Storybook Build
+Lint (Prettier + Stylelint + ESLint) --> Unit Tests --> Build
     |
     v
 PR mergeable (all green)
@@ -347,10 +347,12 @@ On merge to main:
 Merge to main
     |
     v
-E2E tests (Playwright) --> Deploy to staging
+Same checks + Storybook deploy (GitHub Pages)
 ```
 
-That is the whole pipeline for a small team. Add complexity only when you have evidence you need it. The enhanced prototype implements this exact pipeline in `.github/workflows/ci.yml`, with Playwright E2E tests available via `npm run e2e`.
+E2E tests (Playwright) are available via `npm run e2e` and can be added to CI when the team decides on the trigger policy (every PR vs merge-only).
+
+That is the whole pipeline for a small team. Add complexity only when you have evidence you need it. The enhanced prototype implements this pipeline in `.github/workflows/ci.yml`.
 
 ### When to Add More
 

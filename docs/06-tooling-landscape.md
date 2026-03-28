@@ -14,7 +14,7 @@ These three are non-negotiable. All workflows, manual or automated, build on the
 
 ### Angular 21.x
 
-Application framework. Signal-based reactivity, zoneless change detection, standalone components by default. The CLI provides scaffolding, builds, and a bundled Vitest test runner. Version 22 is expected May 2026.
+Application framework. Signal-based reactivity, zoneless change detection, standalone components by default. The CLI provides scaffolding, builds, and a bundled Vitest test runner. The Angular team follows a regular major release cadence.
 
 > **Note:** Pin exact versions in `package.json`, not in process docs. Patch versions drift frequently.
 
@@ -56,7 +56,7 @@ Every function below can be done manually. Tools are accelerators you adopt when
 | Unit testing | Angular CLI default (Vitest in v21). **Note:** PrimeNG `(onClick)` does not fire via DOM click in jsdom. Full interaction testing requires Storybook play functions or Playwright. | Already bundled — no procurement needed | Day 1 |
 | E2E testing | Manual testing of user flows | Cypress (free), Playwright (free) | Prototype — when core flows are stable enough to automate |
 | Accessibility testing | Manual keyboard + screen reader testing | axe-core (free, recommended standard), pa11y (free), Storybook a11y addon (free). **Gate:** zero critical/serious violations. | Prototype — from first atom |
-| CSS/SCSS linting | Manual code review | Stylelint + `color-no-hex` rule | POC — from first component |
+| CSS/SCSS linting | Manual code review | Stylelint + `color-no-hex` rule. Note: `stylelint-declaration-use-css-custom-properties` was evaluated but is not available on npm. | POC — from first component |
 | Code formatting | Manual style adherence | Prettier (free) | POC — from first component |
 | TypeScript linting | Manual code review | ESLint + `@angular-eslint` (free) | Prototype — when team grows past 2 |
 | Bundle analysis | Check build output sizes | source-map-explorer (free, recommended), webpack-bundle-analyzer | Prototype — when initial bundle exceeds budget |

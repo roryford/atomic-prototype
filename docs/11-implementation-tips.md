@@ -255,7 +255,7 @@ PrimeNG-specific configuration in `.storybook/preview.ts`:
 import { applicationConfig } from '@storybook/angular';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
-import CustomPreset from '../src/app/theme/preset';
+import CustomPreset from '../src/app/design-system/tokens/preset';
 
 const preview: Preview = {
   decorators: [
@@ -298,27 +298,22 @@ Prevent the #1 dark mode gotcha (hardcoded hex values) at the linter level:
 `.stylelintrc.json`:
 ```json
 {
-  "plugins": ["stylelint-declaration-use-css-custom-properties"],
+  "extends": ["stylelint-config-standard-scss"],
   "rules": {
-    "color-no-hex": true,
-    "mavrin/stylelint-declaration-use-css-custom-properties": {
-      "cssDefinitions": ["color"],
-      "ignoreValues": ["transparent", "inherit", "currentColor"]
-    }
+    "color-no-hex": true
   }
 }
 ```
 
-- `color-no-hex` flags all hex values (built-in Stylelint rule)
-- `stylelint-declaration-use-css-custom-properties` enforces `var(--*)` for color properties
+The `stylelint-declaration-use-css-custom-properties` plugin was evaluated but is not available on npm. `color-no-hex` alone provides the core protection against hardcoded hex values in SCSS files.
 
-Neither auto-suggests the correct `--p-*` token -- inspect `@primeng/themes/aura` source or browser DevTools for the mapping.
+`color-no-hex` does not auto-suggest the correct `--p-*` token -- inspect `@primeng/themes/aura` source or browser DevTools for the mapping.
 
 For the full linting tool landscape, see [06-tooling-landscape](./06-tooling-landscape.md).
 
 ### Test Runner Setup
 
-If the project was scaffolded with `--skip-tests`, there is no `test` target in `angular.json`. Add the target manually using `@angular/build:unit-test` (Vitest-based). Install `vitest` and `jsdom` as dev dependencies. Use `--no-watch` flag (not `--watch=false` -- Angular 21 changed the syntax). Angular 21's default test runner completes 36 tests in ~2 seconds.
+If the project was scaffolded with `--skip-tests`, there is no `test` target in `angular.json`. Add the target manually using `@angular/build:unit-test` (Vitest-based). Install `vitest` and `jsdom` as dev dependencies. Use `--watch=false` flag for CI (e.g., `npm run test -- --watch=false`). Angular 21's default test runner completes 36 tests in ~2 seconds.
 
 ### PrimeNG Interaction Testing Limitation
 

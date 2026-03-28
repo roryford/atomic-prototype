@@ -87,13 +87,13 @@ Manual verification items that cannot be fully covered by unit tests or Storyboo
 ## Dark Mode
 
 ### Toggle Behavior
-- [ ] Locate the dark mode toggle in the navigation bar
+- [ ] Locate the dark mode toggle (if implemented in the current build)
 - [ ] Click toggle — page transitions to dark theme
 - [ ] Click toggle again — page transitions back to light theme
 
 ### Dark Mode Visual Checks
 - [ ] **Nav bar:** Background changes from light to dark surface color
-- [ ] **Stat cards:** Background uses `var(--p-surface-0)` (resolves to dark value)
+- [ ] **Stat cards:** Background adapts to dark theme (uses derived tokens like `var(--p-content-background)`, not raw surface tokens)
 - [ ] **Project cards:** Background and text colors invert appropriately
 - [ ] **Table:** Background, row striping, and text adapt to dark theme
 - [ ] **Tags:** Severity colors (success green, danger red) remain visible and distinguishable

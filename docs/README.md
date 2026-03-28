@@ -23,7 +23,7 @@ Read [00-quickstart](./00-quickstart.md) — it takes 2 minutes and routes you b
 |---|-----|-----------------|-----------|
 | 04 | [Parallel Development](./04-parallel-development.md) | How do design and dev work together? | 8 min |
 | 05 | [Token Pipeline](./05-token-pipeline.md) | How do design tokens flow from Figma to code? | 10 min |
-| 06 | [Tooling Landscape](./06-tooling-landscape.md) | Which tools should we adopt and when? | 5 min |
+| 06 | [Tooling Landscape](./06-tooling-landscape.md) | Which tools should we adopt and when? | 8 min |
 | 07 | [QA Per Atomic Level](./07-qa-per-atomic-level.md) | How do I test and certify a component? | 12 min |
 | 08 | [PBI and BA Guide](./08-pbi-and-ba-guide.md) | How do I write PBIs? Where does the BA add value? | 12 min |
 

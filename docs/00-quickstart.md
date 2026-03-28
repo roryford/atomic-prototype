@@ -44,6 +44,18 @@ This repo is a working prototype. Explore these files to see the hierarchy in pr
 
 The prototype includes CI, linting, and E2E testing. Run `npm run lint` for ESLint, `npm run e2e` for Playwright E2E tests. CI runs automatically on PRs via GitHub Actions (`.github/workflows/ci.yml`).
 
+## What's Implemented
+
+This prototype includes:
+
+- **4 atoms:** DsButton, DsTag, DsInput, DsEmptyState
+- **3 molecules:** DsStatCard, DsSearchBar, DsFormField
+- **3 organisms:** DsStatGrid, DsProjectCardGrid, DsProjectTable
+- **3 pages:** Dashboard, List, Detail
+- **Tooling:** CI (GitHub Actions), ESLint, Stylelint, Playwright E2E, Storybook, Vitest, MSW mocks
+
+Not yet implemented: templates (directory exists as placeholder), real API integration, authentication, visual regression testing, axe-core in CI, performance budgets in CI.
+
 ## Reference Implementation
 
 This repository serves as both the process documentation and the working reference implementation. The Angular 21 prototype in this repo demonstrates the patterns, project structure, and tooling choices described in the docs above -- including atomic component decomposition, design token theming via `definePreset()`, MSW-based API mocking, Storybook stories, and Vitest-based testing. Rather than pointing to a separate repo, you can explore the `src/` directory alongside these docs to see the theory applied in practice.

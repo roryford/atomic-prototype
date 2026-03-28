@@ -33,7 +33,7 @@ The goal is speed-to-screen. You prove a PrimeNG preset can approximate the Figm
 
 See `src/app/app.config.ts` for the working PrimeNG bootstrap configuration.
 
-See `src/app/theme/preset.ts` for the working preset with Figma-sampled values.
+See `src/app/design-system/tokens/preset.ts` for the working preset with Figma-sampled values.
 
 At this stage every value is hand-picked from Figma using a color-picker. That is fine -- the preset exists only to prove the theme _can_ work, not to be pixel-perfect.
 
@@ -67,28 +67,20 @@ src/app/
 │   │   └── index.ts                     # Barrel export
 │   ├── molecules/
 │   │   ├── search-bar/
-│   │   │   ├── search-bar.ts
-│   │   │   ├── search-bar.html
-│   │   │   ├── search-bar.scss
+│   │   │   ├── search-bar.ts            # Inline template (composition of atoms)
 │   │   │   ├── search-bar.spec.ts
 │   │   │   └── search-bar.stories.ts
 │   │   └── index.ts
 │   ├── organisms/
-│   │   ├── data-table/
-│   │   │   ├── data-table.ts
-│   │   │   ├── data-table.html
-│   │   │   ├── data-table.scss
-│   │   │   ├── data-table.spec.ts
-│   │   │   └── data-table.stories.ts
+│   │   ├── project-table/
+│   │   │   ├── project-table.ts
+│   │   │   ├── project-table.html
+│   │   │   ├── project-table.scss
+│   │   │   ├── project-table.spec.ts
+│   │   │   └── project-table.stories.ts
 │   │   └── index.ts
 │   └── templates/                       # Only if layout patterns emerge
-│       ├── sidebar-layout/
-│       │   ├── sidebar-layout.ts
-│       │   ├── sidebar-layout.html
-│       │   ├── sidebar-layout.scss
-│       │   ├── sidebar-layout.spec.ts
-│       │   └── sidebar-layout.stories.ts
-│       └── index.ts
+│       └── index.ts                     # Barrel — empty until templates are created
 ├── pages/
 │   ├── dashboard/
 │   ├── detail/
@@ -98,11 +90,10 @@ src/app/
 │   ├── handlers.ts                        # API endpoint handlers
 │   └── fixtures/
 │       ├── projects.json                  # Realistic test data
-│       └── users.json
+│       └── stats.json                     # Dashboard stats data
 ├── models/
 │   └── index.ts                           # Shared interfaces (Project, User, etc.)
 ├── services/
-│   ├── user.service.ts
 │   └── project.service.ts
 ├── app.routes.ts
 ├── app.config.ts
@@ -138,13 +129,13 @@ e2e/                                     # Playwright test files
 
 ### Component file convention
 
-The rule is simple: **atoms with a one-line template use inline template and styles. Everything else gets separate files.**
+The rule is simple: **atoms and molecules use inline templates and styles. Organisms and above use separate `.html` and `.scss` files because their templates are non-trivial.**
 
 Atoms are thin PrimeNG wrappers. Their template is often a single element with bound inputs.
 
 > **Import note:** Use standalone imports (`import { Button } from 'primeng/button'`) rather than module imports. Use `TableModule` only for organism primitives that need template directives (`pTemplate`, `pSortableColumn`).
 
-Molecules and above always use separate `.html` and `.scss` files because their templates are non-trivial.
+Organisms and above always use separate `.html` and `.scss` files because their templates are non-trivial.
 
 ### How components import each other
 
@@ -195,7 +186,7 @@ export const routes: Routes = [
   {
     path: 'list',
     loadComponent: () =>
-      import('./pages/list/list').then(m => m.List),
+      import('./pages/list/list').then(m => m.ListPage),
   },
   {
     path: 'detail/:id',
@@ -226,26 +217,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 22 }
+        with: { node-version-file: .nvmrc }
       - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint:styles
       - run: npm run lint
-      - run: npm run test -- --coverage
+      - run: npm run test -- --watch=false
       - run: npm run build
 
+  # E2E (when added to CI):
+  # Currently runs locally via `npm run e2e`
   e2e:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 22 }
+        with: { node-version-file: .nvmrc }
       - run: npm ci
       - run: npx playwright install --with-deps
       - run: npm run e2e
 ```
 
-On every PR: lint, test, build. On merge to main: the same checks plus Playwright E2E. One file, two jobs. If visual regression testing (Chromatic) or token sync automation become necessary, add them as steps in this same workflow or as a second workflow at that point -- not before.
+On every PR: format check, style lint, lint, test, build. E2E tests currently run locally via `npm run e2e`; add them to CI when the suite is stable. One file, two jobs. If visual regression testing (Chromatic) or token sync automation become necessary, add them as steps in this same workflow or as a second workflow at that point -- not before.
 
 ### When to consider Nx
 
@@ -305,7 +299,7 @@ Alternatively, use the Angular CLI:
 ng generate component design-system/atoms/tooltip --inline-template --inline-style --skip-tests
 ```
 
-Then add the `.spec.ts` and `.stories.ts` files manually. For molecules and above, drop the `--inline-template --inline-style` flags.
+Then add the `.spec.ts` and `.stories.ts` files manually. For organisms and above, drop the `--inline-template --inline-style` flags.
 
 ---
 

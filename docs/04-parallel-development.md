@@ -58,11 +58,11 @@ These four topics do not require a formal kickoff meeting. They can happen over 
 
 These questions surfaced during the prototype simulation. A real team should discuss them in their first alignment conversation:
 
-1. **Selector prefix** — used `app-` (Angular default). [03-project-structure](./03-project-structure.md) suggests `ds-` for design system components at prototype stage. When to switch?
-2. **Breakpoint values** — used 640/1024/1440 from design spec. [10-derisking](./10-derisking.md) mentions breakpoints but doesn't specify values. [07-qa-per-atomic-level](./07-qa-per-atomic-level.md)'s reference mentions 320/768/1024/1440/1920. Which is canonical?
+1. **Selector prefix** — resolved: design system components use `ds-` prefix, page-level components keep `app-`. See the prototype for the working pattern.
+2. **Breakpoint values** — the prototype uses 640/1024/1440 from [design-spec](./design-spec.md). See that doc for the canonical definitions.
 3. **Dark mode strategy** — See [05-token-pipeline § Dark Mode](./05-token-pipeline.md#4-dark-mode) for the full guide. The prototype uses a manual toggle; the team should decide between manual, OS preference, or both.
-4. **File naming convention** — Angular 21 uses 2025 naming (`button.ts`, class `Button`) not legacy (`button.component.ts`, class `ButtonComponent`). The docs use legacy naming throughout. Which should the team adopt?
-5. **Atom wrapper depth** — [01-atomic-hierarchy](./01-atomic-hierarchy.md) says "thin wrapper" but doesn't specify: should the wrapper re-expose every PrimeNG input, or only the ones the design system uses?
+4. **File naming convention** — resolved: the project uses Angular 21's 2025 naming convention (`button.ts`, class `DsButton`). See [03-project-structure](./03-project-structure.md) for the full convention.
+5. **Atom wrapper depth** — resolved: expose only the inputs the design system currently uses, not every PrimeNG input. See [01-atomic-hierarchy](./01-atomic-hierarchy.md) § Wrapper input depth.
 
 ---
 

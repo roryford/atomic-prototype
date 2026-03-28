@@ -20,11 +20,11 @@ This report covers the prototype phase of an Angular 21 atomic design simulation
 
 **What was not simulated:**
 
-- E2E testing (Playwright)
 - Visual regression testing (Chromatic)
-- CI/CD pipeline integration
 - Real API integration or authentication
 - Designer handoff review
+
+**Subsequently added in the enhanced prototype phase (Section 11):** CI/CD pipeline (GitHub Actions), E2E testing (Playwright), ESLint, shared SCSS.
 
 **Key stats:**
 
