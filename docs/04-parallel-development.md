@@ -167,6 +167,23 @@ On a 2-4 person team, the process is the people. Keep talking. Keep showing each
 
 ---
 
+## Scaling Beyond Four People
+
+The practices above assume 2-4 people who can align through conversation. As the team grows, some patterns need to change.
+
+**5-8 people.** Replace verbal syncs with async written updates — a shared Slack channel or running doc where decisions are recorded, not just discussed. Assign component ownership: one person per atomic level or feature slice, so two developers are not editing the same molecule independently. The weekly Storybook review becomes a standing meeting with a checklist, not an ad-hoc walkthrough.
+
+**8+ people or multiple feature teams.** Each team owns a vertical slice — one page plus its organisms, molecules, and atoms. Shared atoms and tokens need a designated owner to prevent drift (two teams tweaking the same button token in different directions). PR reviews for shared components require cross-team sign-off. At this scale, consider a dedicated design system team that owns atoms, tokens, and the Storybook instance.
+
+**Communication patterns shift with size:**
+- 2-4 people: just say it out loud
+- 5-8 people: shared Slack channel with pinned decisions
+- 8+ people: RFC docs for cross-cutting changes (new tokens, shared component API changes, breaking updates)
+
+The core principle does not change — design and dev run in parallel, feedback happens continuously, fixes go as low as possible. What changes is how you make that visible when not everyone is in the same conversation.
+
+---
+
 ## Cross-References
 
 - For what to build at each maturity level, see [02-maturity-stages.md](./02-maturity-stages.md).

@@ -353,6 +353,18 @@ Before writing an organism PBI, ask:
 
 ---
 
+## 7. Scaling the BA Role
+
+**2-4 people.** One BA covers all component levels. State discovery is collaborative — the BA, designer, and developer walk through organisms together, often in the same conversation.
+
+**5-8 people.** The BA focuses on organisms and pages, where state complexity and user intent matter most. Atom and molecule PBIs can be developer-written with BA review — a quick scan for missing scope boundaries and acceptance criteria gaps, not full authorship.
+
+**8+ people.** Consider a BA per feature team plus a shared BA for cross-cutting concerns: tokens, shared components, design system governance, and the canonical data model. The per-team BA owns state discovery and acceptance criteria for their slice. The shared BA prevents divergence — two teams defining "Project" differently, or writing conflicting empty-state patterns.
+
+The principle stays the same at every size: someone must ask "what happens when there is no data?" before code is written. What changes is whether that someone is the same person for every component or a distributed role with coordination.
+
+---
+
 ## Cross-References
 
 - For atomic level definitions, see [01-atomic-hierarchy](./01-atomic-hierarchy.md)

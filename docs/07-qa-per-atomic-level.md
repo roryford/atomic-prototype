@@ -10,6 +10,34 @@ Companion to the hierarchy defined in [01-atomic-hierarchy.md](./01-atomic-hiera
 
 ---
 
+## Triage Priority
+
+Not all checks are equally important. When time is limited -- and on a small team it always is -- you need to know which checks to run first and which can wait. The triage tiers below map directly to the maturity stages defined in [02-maturity-stages.md](./02-maturity-stages.md).
+
+### Tier Definitions
+
+**Tier 1 -- Must-have for merge.** These checks prevent bugs in production. If any Tier 1 check fails, the PR does not merge. Examples: input/output contract correctness, four-state coverage for organisms (loading, empty, populated, error), zero critical accessibility violations.
+
+**Tier 2 -- Should-have for certification.** These checks ensure quality beyond basic correctness. Required at Prototype stage and above. Examples: all visual states covered in Storybook, interaction tests for molecules, responsive verification for templates.
+
+**Tier 3 -- Nice-to-have for polish.** These checks ensure excellence. Required at Production stage. Examples: performance budgets, cross-browser testing, visual regression, animation smoothness.
+
+### Maturity Stage Mapping
+
+| Maturity Stage | Required Tiers |
+|---|---|
+| POC | Tier 1 only |
+| Prototype | Tier 1 + Tier 2 |
+| Production | Tier 1 + Tier 2 + Tier 3 |
+
+A component at POC stage passes review with only Tier 1 checks complete. A component claiming Prototype maturity must pass Tier 1 and Tier 2. Production maturity requires all three tiers.
+
+### When You're Short on Time
+
+At minimum, complete all Tier 1 checks. These are the correctness and safety checks that prevent cascading defects. If a Tier 2 check is skipped, note it in the PR description as a follow-up item so it is tracked and not forgotten. Never skip Tier 1.
+
+---
+
 ## Core Principle: Self-Certifying Levels
 
 Each atomic level is **independently certifiable**. A component at level N can only be certified if every component it consumes at level N-1 is already certified. QA never "reaches down" -- it trusts the level below.
@@ -34,12 +62,12 @@ Atoms are thin wrappers around a single PrimeNG primitive or native HTML element
 
 ### What to Check
 
-- [ ] Uses design tokens, not hardcoded values (`var(--p-primary-color)`, not `#3B82F6`)
-- [ ] Every `input()` has a sensible default; every `output()` emits correctly
-- [ ] Storybook stories cover all visual states (default, hover, focus, active, disabled, loading)
-- [ ] ARIA roles present, keyboard focus visible, contrast ratio passes
-- [ ] Zero service injections; zero imports from higher levels
-- [ ] Wrapper adds negligible size over raw PrimeNG primitive
+- [ ] [T1] Uses design tokens, not hardcoded values (`var(--p-primary-color)`, not `#3B82F6`)
+- [ ] [T1] Every `input()` has a sensible default; every `output()` emits correctly
+- [ ] [T2] Storybook stories cover all visual states (default, hover, focus, active, disabled, loading)
+- [ ] [T1] ARIA roles present, keyboard focus visible, contrast ratio passes
+- [ ] [T1] Zero service injections; zero imports from higher levels
+- [ ] [T3] Wrapper adds negligible size over raw PrimeNG primitive
 
 ### Manual Approach vs Tooling-Accelerated
 
@@ -82,12 +110,12 @@ Molecules compose 2-4 atoms into a single reusable unit with local interaction l
 
 ### What to Check
 
-- [ ] All consumed atoms are certified
-- [ ] Cross-atom wiring is correct (label `for` matches input `id`, error displays on validation failure)
-- [ ] Interaction logic works (focus chain, validation trigger, toggle states)
-- [ ] Works with different input combinations without modification (proven in Storybook args)
-- [ ] Zero service injections; no store reads or writes
-- [ ] Interaction tests cover user flows (click, type, tab sequences)
+- [ ] [T1] All consumed atoms are certified
+- [ ] [T1] Cross-atom wiring is correct (label `for` matches input `id`, error displays on validation failure)
+- [ ] [T1] Interaction logic works (focus chain, validation trigger, toggle states)
+- [ ] [T2] Works with different input combinations without modification (proven in Storybook args)
+- [ ] [T1] Zero service injections; no store reads or writes
+- [ ] [T2] Interaction tests cover user flows (click, type, tab sequences)
 
 ### Manual Approach vs Tooling-Accelerated
 
@@ -133,14 +161,14 @@ Organisms are complex, self-contained UI sections. This is where **real data ent
 
 ### What to Check
 
-- [ ] All consumed molecules are certified
-- [ ] All four states render correctly: loading, empty, populated, error
-- [ ] State transitions work: loading to populated, error to retry, empty to populated
-- [ ] Services are injected only for this organism's concerns; no cross-organism coupling
-- [ ] Graceful degradation on API failure, timeout, malformed data
-- [ ] Signals / observables propagate correctly to child molecules
-- [ ] OnPush change detection strategy; no unnecessary re-renders
-- [ ] Interaction tests cover state-dependent user flows
+- [ ] [T1] All consumed molecules are certified
+- [ ] [T1] All four states render correctly: loading, empty, populated, error
+- [ ] [T1] State transitions work: loading to populated, error to retry, empty to populated
+- [ ] [T1] Services are injected only for this organism's concerns; no cross-organism coupling
+- [ ] [T1] Graceful degradation on API failure, timeout, malformed data
+- [ ] [T2] Signals / observables propagate correctly to child molecules
+- [ ] [T3] OnPush change detection strategy; no unnecessary re-renders
+- [ ] [T2] Interaction tests cover state-dependent user flows
 
 ### Manual Approach vs Tooling-Accelerated
 
@@ -189,13 +217,13 @@ Templates are page-level layout shells that define spatial structure through `ng
 
 ### What to Check
 
-- [ ] All named `ng-content` slots render projected content correctly
-- [ ] Layout reflows correctly at all defined breakpoints (see [04-parallel-development](./04-parallel-development.md) for canonical values)
-- [ ] Empty slots collapse gracefully; multi-child slots render correctly
-- [ ] Zero `input()` properties bound to entity data (layout-config inputs are acceptable)
-- [ ] No `ngIf`, `ngFor`, service injections, or subscriptions
-- [ ] Landmark roles (`main`, `nav`, `aside`) are correct; skip-nav works
-- [ ] Content overflow scrolls or truncates gracefully, never breaks layout
+- [ ] [T1] All named `ng-content` slots render projected content correctly
+- [ ] [T2] Layout reflows correctly at all defined breakpoints (see [04-parallel-development](./04-parallel-development.md) for canonical values)
+- [ ] [T1] Empty slots collapse gracefully; multi-child slots render correctly
+- [ ] [T1] Zero `input()` properties bound to entity data (layout-config inputs are acceptable)
+- [ ] [T1] No `ngIf`, `ngFor`, service injections, or subscriptions
+- [ ] [T1] Landmark roles (`main`, `nav`, `aside`) are correct; skip-nav works
+- [ ] [T2] Content overflow scrolls or truncates gracefully, never breaks layout
 
 ### Manual Approach vs Tooling-Accelerated
 
@@ -238,13 +266,13 @@ Pages are routed components that wire real data to templates and organisms. They
 
 ### What to Check
 
-- [ ] All consumed templates and organisms are certified
-- [ ] Route resolves correctly; guards redirect as expected
-- [ ] Resolver loads data before render; loading state shows during resolution
-- [ ] Full user journey works (land, interact, submit, confirm)
-- [ ] Error paths handled: 401, 403, 404, 500, network timeout
-- [ ] Performance budget met: LCP < 2.5s, INP < 200ms, CLS < 0.1
-- [ ] Cross-browser: Chrome, Firefox, Safari verified (Edge in CI if available)
+- [ ] [T1] All consumed templates and organisms are certified
+- [ ] [T1] Route resolves correctly; guards redirect as expected
+- [ ] [T1] Resolver loads data before render; loading state shows during resolution
+- [ ] [T1] Full user journey works (land, interact, submit, confirm)
+- [ ] [T2] Error paths handled: 401, 403, 404, 500, network timeout
+- [ ] [T3] Performance budget met: LCP < 2.5s, INP < 200ms, CLS < 0.1
+- [ ] [T3] Cross-browser: Chrome, Firefox, Safari verified (Edge in CI if available)
 
 ### Manual Approach vs Tooling-Accelerated
 
