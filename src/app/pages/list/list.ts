@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { DsProjectTable } from '../../design-system/organisms/project-table/project-table';
@@ -7,6 +7,7 @@ import { Project } from '../../models';
 @Component({
   selector: 'app-list',
   imports: [DsProjectTable],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="list-page">
       <h1 class="list-title">Projects</h1>

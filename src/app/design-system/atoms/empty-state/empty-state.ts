@@ -1,9 +1,10 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { DsButton } from '../button/button';
 
 @Component({
   selector: 'ds-empty-state',
   imports: [DsButton],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="empty-state">
       <i class="pi {{ icon() }} empty-icon"></i>

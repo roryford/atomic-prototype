@@ -296,7 +296,22 @@ The list chunk is disproportionately large due to PrimeNG's `TableModule` transi
 
 ---
 
-## 11. Detailed Findings Log
+## 11. Enhanced Prototype Additions
+
+After the initial prototype simulation, four enhancements from the [production plan](./production-plan-sketch.md) Wave 1 (plus shared SCSS from Wave 5) were brought forward into the prototype. The goal was to close the most impactful gaps identified in this report — specifically the lack of CI, linting, E2E coverage, and SCSS reuse — while the prototype was still fresh and easy to iterate on.
+
+Several quick wins were also committed alongside: a wildcard 404 route, dark mode persistence via localStorage, typed mock handlers (removing `any`), ARIA attributes on project cards (`role="button"`, `aria-label`), and OnPush change detection on all 14 components.
+
+**What was added:**
+
+- **GitHub Actions CI** (`.github/workflows/ci.yml`) — PR checks run format:check, lint:styles, ESLint, unit tests, and build. On merge to main, Storybook deploys to GitHub Pages. This implements the recommended PR pipeline from Section 3.
+- **angular-eslint** — Full ESLint setup via `@angular-eslint/schematics` with `eslint-config-prettier` to avoid Prettier conflicts. Available via `npm run lint` and `npm run lint:fix`. Partially addresses the inline hex gap (Section 2) by providing infrastructure for a future custom rule.
+- **Playwright E2E** — `playwright.config.ts` + `e2e/` directory with smoke tests for navigation/routing (redirect, nav links, 404), dashboard (stat cards, project cards, click-through), and projects (list table, detail view, error state, back navigation). This addresses the E2E gap identified in Sections 2 and 10.
+- **Shared SCSS utilities** — `src/app/design-system/_shared.scss` with a `.state-container` class (extracted from 3 organisms) and a `responsive-grid` mixin (extracted from grid patterns). This begins the Wave 5 inline style extraction.
+
+---
+
+## 12. Detailed Findings Log
 
 ### Was the folder restructure straightforward?
 
@@ -430,7 +445,7 @@ MSW adds two new lazy chunks to the dev build: `chunk-N64DA4IT.js` (249.63 kB ra
 
 ---
 
-## 12. Key Lessons
+## 13. Key Lessons
 
 > **Things to Avoid**
 >

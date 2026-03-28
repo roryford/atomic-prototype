@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { DsStatGrid } from '../../design-system/organisms/stat-grid/stat-grid';
@@ -9,6 +9,7 @@ import { Project } from '../../models';
 @Component({
   selector: 'app-dashboard',
   imports: [DsStatGrid, DsProjectCardGrid, DsButton],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="dashboard">
       <header class="dashboard-header">
@@ -94,6 +95,7 @@ export class Dashboard {
   }
 
   toggleDarkMode() {
-    document.documentElement.classList.toggle('dark-mode');
+    const isDark = document.documentElement.classList.toggle('dark-mode');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }
 }

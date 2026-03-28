@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Avatar } from 'primeng/avatar';
 import { Divider } from 'primeng/divider';
@@ -13,6 +13,7 @@ import { DsInput } from '../../design-system/atoms/input/input';
 @Component({
   selector: 'app-detail',
   imports: [Avatar, Divider, Skeleton, Message, DsFormField, DsButton, DsTag, DsInput],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="detail-page">
       @if (project.isLoading()) {

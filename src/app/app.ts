@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink, Button],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <nav class="app-nav">
       <div class="nav-brand">Atomic POC</div>
@@ -54,4 +55,10 @@ import { Button } from 'primeng/button';
     }
   `,
 })
-export class App {}
+export class App {
+  constructor() {
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark-mode');
+    }
+  }
+}

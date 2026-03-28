@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import { Project } from '../../../models';
 import { DsEmptyState } from '../../atoms/empty-state/empty-state';
 import { DsButton } from '../../atoms/button/button';
@@ -25,6 +25,7 @@ import { Avatar } from 'primeng/avatar';
 @Component({
   selector: 'ds-project-table',
   imports: [DsEmptyState, DsButton, DsTag, DsSearchBar, Skeleton, Message, TableModule, Avatar],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './project-table.html',
   styleUrl: './project-table.scss',
 })

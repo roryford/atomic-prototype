@@ -3,14 +3,11 @@ import { DsEmptyState } from './empty-state';
 
 describe('DsEmptyState', () => {
   let fixture: ComponentFixture<DsEmptyState>;
-  let component: DsEmptyState;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DsEmptyState],
     }).compileComponents();
     fixture = TestBed.createComponent(DsEmptyState);
-    component = fixture.componentInstance;
   });
 
   // AC: GIVEN icon="pi-inbox" message="No data", WHEN rendered, THEN shows icon + message centered

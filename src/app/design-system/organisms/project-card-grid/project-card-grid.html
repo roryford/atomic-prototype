@@ -21,6 +21,8 @@
     @for (project of projects(); track project.id) {
       <p-card
         class="project-card"
+        role="button"
+        [attr.aria-label]="'View project ' + project.name"
         tabindex="0"
         (click)="projectSelected.emit(project)"
         (keydown)="onCardKeydown($event, project)"

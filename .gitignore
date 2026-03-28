@@ -48,3 +48,7 @@ storybook-static
 documentation.json
 tools/token-pipeline/node_modules/
 tools/token-pipeline/output/
+
+# Playwright
+playwright-report/
+test-results/

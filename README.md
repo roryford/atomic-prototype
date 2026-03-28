@@ -46,6 +46,10 @@ npm install
 npm start              # Dev server at http://localhost:4200
 npm run storybook      # Component library at http://localhost:6006
 npm test               # 36 unit tests via Vitest
+npm run lint           # ESLint (TypeScript + templates)
+npm run lint:fix       # ESLint auto-fix
+npm run e2e            # Playwright E2E tests (headless)
+npm run e2e:ui         # Playwright E2E with UI
 ```
 
 ## Project Structure
@@ -76,6 +80,7 @@ See [docs/README.md](./docs/README.md) for the full documentation index. Highlig
 ## Tech Stack
 
 - Angular 21.2, PrimeNG 21.1, Storybook 10.3, Vitest 4.1, MSW 2.12, TypeScript 5.9
+- ESLint (via angular-eslint), Playwright (E2E), GitHub Actions (CI/CD)
 
 ## Contributing
 

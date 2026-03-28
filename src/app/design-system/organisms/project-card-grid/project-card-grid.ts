@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { Project } from '../../../models';
 import { DsEmptyState } from '../../atoms/empty-state/empty-state';
 import { DsButton } from '../../atoms/button/button';
@@ -11,6 +11,7 @@ import { Avatar } from 'primeng/avatar';
 @Component({
   selector: 'ds-project-card-grid',
   imports: [DsEmptyState, DsButton, DsTag, Skeleton, Message, Card, Avatar],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './project-card-grid.html',
   styleUrl: './project-card-grid.scss',
 })

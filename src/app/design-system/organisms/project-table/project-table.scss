@@ -1,3 +1,5 @@
+@use '../../shared' as shared;
+
 :host {
   display: block;
 }
@@ -16,14 +18,6 @@ ds-search-bar {
 
 .skeleton-row {
   margin-bottom: 4px;
-}
-
-.state-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 24px;
 }
 
 .table-container {
@@ -49,7 +43,7 @@ ds-search-bar {
   gap: 0.5rem;
 }
 
-@media (max-width: 639px) {
+@media (width <= 639px) {
   .table-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;

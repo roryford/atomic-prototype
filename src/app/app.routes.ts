@@ -5,4 +5,5 @@ export const routes: Routes = [
   { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard) },
   { path: 'list', loadComponent: () => import('./pages/list/list').then(m => m.ListPage) },
   { path: 'detail/:id', loadComponent: () => import('./pages/detail/detail').then(m => m.Detail) },
+  { path: '**', redirectTo: '' },
 ];

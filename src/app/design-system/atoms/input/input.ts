@@ -1,4 +1,4 @@
-import { Component, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 
@@ -12,6 +12,7 @@ import { InputText } from 'primeng/inputtext';
 @Component({
   selector: 'ds-input',
   imports: [InputText, FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <input pInputText [(ngModel)]="value" [placeholder]="placeholder()" />
   `,

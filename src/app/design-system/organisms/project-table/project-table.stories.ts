@@ -3,7 +3,7 @@ import { within, userEvent } from '@storybook/test';
 import { DsProjectTable } from './project-table';
 import type { Project } from '../../../models';
 
-const statuses: Array<{ status: string; severity: 'success' | 'info' | 'warn' | 'danger' }> = [
+const statuses: { status: string; severity: 'success' | 'info' | 'warn' | 'danger' }[] = [
   { status: 'Active', severity: 'success' },
   { status: 'Planning', severity: 'info' },
   { status: 'At Risk', severity: 'warn' },

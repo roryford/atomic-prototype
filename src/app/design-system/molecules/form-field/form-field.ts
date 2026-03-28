@@ -1,9 +1,11 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'ds-form-field',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="form-field" [class.full-width]="fullWidth()">
+      <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
       <label class="form-field-label">{{ label() }}</label>
       <ng-content />
     </div>

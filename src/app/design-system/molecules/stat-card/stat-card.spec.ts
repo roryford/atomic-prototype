@@ -3,14 +3,11 @@ import { DsStatCard } from './stat-card';
 
 describe('DsStatCard', () => {
   let fixture: ComponentFixture<DsStatCard>;
-  let component: DsStatCard;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DsStatCard],
     }).compileComponents();
     fixture = TestBed.createComponent(DsStatCard);
-    component = fixture.componentInstance;
   });
 
   // AC: GIVEN label + value + icon, WHEN rendered, THEN shows icon left, value + label stacked right

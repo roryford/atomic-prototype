@@ -4,14 +4,11 @@ import { DashboardStats } from '../../../models';
 
 describe('DsStatGrid', () => {
   let fixture: ComponentFixture<DsStatGrid>;
-  let component: DsStatGrid;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DsStatGrid],
     }).compileComponents();
     fixture = TestBed.createComponent(DsStatGrid);
-    component = fixture.componentInstance;
   });
 
   // AC: GIVEN isLoading=true, WHEN rendered, THEN shows 4 skeleton rectangles (88px height)

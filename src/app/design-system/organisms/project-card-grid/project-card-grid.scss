@@ -1,27 +1,7 @@
+@use '../../shared' as shared;
+
 .card-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-}
-
-@media (min-width: 640px) {
-  .card-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .card-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.state-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 24px;
+  @include shared.responsive-grid($cols-sm: 2, $cols-md: 3);
 }
 
 .project-card {
@@ -29,7 +9,7 @@
   transition: box-shadow 0.2s ease;
 
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
   }
 
   &:focus {

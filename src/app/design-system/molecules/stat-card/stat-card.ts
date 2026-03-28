@@ -1,7 +1,8 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'ds-stat-card',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="stat-card">
       <div class="stat-icon">

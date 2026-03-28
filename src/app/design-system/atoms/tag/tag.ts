@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Tag } from 'primeng/tag';
 
 type TagSeverity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast';
@@ -6,6 +6,7 @@ type TagSeverity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contr
 @Component({
   selector: 'ds-tag',
   imports: [Tag],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <p-tag [value]="value()" [severity]="severity()" />
   `,

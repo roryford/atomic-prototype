@@ -1,0 +1,27 @@
+.state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px;
+}
+
+@mixin responsive-grid($cols-sm: 2, $cols-md: 3, $cols-lg: null) {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+
+  @media (width >= 640px) {
+    grid-template-columns: repeat($cols-sm, 1fr);
+  }
+
+  @media (width >= 1024px) {
+    grid-template-columns: repeat($cols-md, 1fr);
+  }
+
+  @if $cols-lg {
+    @media (width >= 1440px) {
+      grid-template-columns: repeat($cols-lg, 1fr);
+    }
+  }
+}

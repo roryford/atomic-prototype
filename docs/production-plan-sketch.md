@@ -41,11 +41,11 @@ Nothing is thrown away at random. The component file structure, design token var
 - But: no E2E test coverage for state transitions
 - List page lazy chunk is 466KB due to TableModule transitive dependencies -- needs `@defer` or tree-shaking
 
-**Pages (3 components).** Only smoke tests exist (render-without-error). No E2E coverage, no route guard testing against real auth, no performance budget enforcement, no cross-browser verification.
+**Pages (3 components).** Only smoke tests exist (render-without-error). ~~No E2E coverage~~ **Update:** Playwright E2E smoke tests now cover navigation/routing, dashboard, and project flows (see [Enhanced Prototype Additions](./simulation-report.md#enhanced-prototype-additions)). Remaining gaps: no route guard testing against real auth, no performance budget enforcement, no cross-browser verification.
 
 **Dark mode.** Works mechanically, but the dark palette was developer-invented. No designer-specified dark values. No automated visual verification (would need Chromatic Modes or Playwright theme-toggle snapshots).
 
-**Inline style hex values.** 11 violations were found and fixed, but Stylelint cannot inspect TypeScript `styles:` arrays. No automated prevention exists beyond PR review checklist items.
+**Inline style hex values.** 11 violations were found and fixed, but Stylelint cannot inspect TypeScript `styles:` arrays. No automated prevention exists beyond PR review checklist items. **Update:** ESLint (via `angular-eslint` + `eslint-config-prettier`) is now configured in the prototype. While it does not include a custom hex-detection rule, it provides the infrastructure to add one. The Stylelint gap is partially addressed.
 
 ---
 
@@ -71,13 +71,15 @@ The process docs recommend starting simple:
 
 **On merge to main:** E2E tests (Playwright) -> Deploy to staging
 
+> **Update — implemented in enhanced prototype:** GitHub Actions CI (`.github/workflows/ci.yml`) now runs on PRs: `format:check`, `lint:styles`, `lint` (ESLint), `test` (Vitest), and `build`. On merge to main, Storybook deploys to GitHub Pages. The recommended PR pipeline is in place. E2E runs are available via `npm run e2e`. Remaining decisions: staging environment for post-merge E2E, and monitoring ownership.
+
 **Add when pain justifies it:**
 - Visual regression (Chromatic/Percy) when visual regressions slip through PRs
 - axe-core check when accessibility issues reach production
 - Bundle size check when size creeps up unnoticed
 - Lighthouse CI when performance degrades without anyone noticing
 
-**Decision needed:** What is the merge target? Is there a staging environment? Who monitors CI failures?
+**Decision needed:** ~~What is the merge target?~~ Is there a staging environment? Who monitors CI failures?
 
 ### E2E Testing
 
@@ -85,6 +87,8 @@ Playwright is the recommended tool. Three user journeys are already defined and 
 1. Browse Projects (dashboard -> detail -> list)
 2. Search and Filter (list -> search -> filter -> detail)
 3. Handle Errors (404, partial failure, retry)
+
+> **Update — implemented in enhanced prototype:** Playwright is set up (`playwright.config.ts` + `e2e/` directory) with smoke tests covering navigation and routing (redirect, nav links, 404), dashboard (stat cards, project cards, click-through), and projects (list table, detail view, error state, back navigation). Run via `npm run e2e` or `npm run e2e:ui`.
 
 **Decision needed:** Run E2E on every PR or only on merge? How to handle flaky tests (retries: 2, quarantine after one week)?
 
@@ -137,10 +141,18 @@ For the full tooling landscape and procurement decision guide, see [06-tooling-l
 
 High-level sequencing. Each wave builds on the previous.
 
-### Wave 1: CI/CD Pipeline + E2E Test Infrastructure
+### Wave 1: CI/CD Pipeline + E2E Test Infrastructure — IMPLEMENTED
 
-- Set up CI pipeline (lint -> unit tests -> Storybook build on PR; E2E on merge)
-- Write Playwright E2E tests for the three user journeys
+> **Status: Implemented in the enhanced prototype.** The core items from this wave are now in place:
+> - GitHub Actions CI runs on PRs (format:check, lint:styles, ESLint, unit tests, build) and deploys Storybook to GitHub Pages on merge to main
+> - ESLint configured via `@angular-eslint/schematics` with `eslint-config-prettier`
+> - Playwright E2E tests cover navigation/routing, dashboard, and project flows
+> - Shared SCSS utilities extracted to `src/app/design-system/_shared.scss` (from Wave 5 scope)
+>
+> **Remaining from this wave:** axe-core accessibility checks in CI, bundle size budget check on PR, Playwright retry/quarantine policy.
+
+- ~~Set up CI pipeline (lint -> unit tests -> Storybook build on PR; E2E on merge)~~ Done
+- ~~Write Playwright E2E tests for the three user journeys~~ Done (smoke tests)
 - Add axe-core accessibility checks to CI
 - Establish bundle size budget check on PR
 - Decide on Playwright retry/quarantine policy for flaky tests
@@ -178,11 +190,13 @@ High-level sequencing. Each wave builds on the previous.
 
 ### Wave 5: Error Boundaries + Monitoring + Production Polish
 
+> **Partial progress:** Shared SCSS extraction has begun — `src/app/design-system/_shared.scss` contains a `.state-container` class (extracted from 3 organisms) and a `responsive-grid` mixin (extracted from grid patterns). Remaining inline style extraction and other items in this wave are not yet addressed.
+
 - Implement global `ErrorHandler` override with external monitoring integration
 - Add `@defer` error blocks as component-level error boundaries where appropriate
 - Designer-specified dark mode palette (replace developer-invented values)
 - Automated dark mode visual verification (Chromatic Modes or Playwright snapshots)
-- Extract remaining inline styles to `.scss` for Stylelint coverage
+- ~~Extract remaining inline styles to `.scss` for Stylelint coverage~~ Partially done (shared SCSS for 3 organisms)
 - RTL and print styles if audience requires them
 - Cross-browser verification (Chrome, Firefox, Safari; Edge in CI if available)
 

@@ -1,31 +1,5 @@
+@use '../../shared' as shared;
+
 .stat-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-}
-
-@media (min-width: 640px) {
-  .stat-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .stat-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1440px) {
-  .stat-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.state-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 24px;
+  @include shared.responsive-grid($cols-sm: 2, $cols-md: 3, $cols-lg: 4);
 }
