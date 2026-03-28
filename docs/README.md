@@ -39,8 +39,12 @@ Read [00-quickstart](./00-quickstart.md) — it takes 2 minutes and routes you b
 
 Results from a simulated prototype build using this process.
 
+**Visual Reference**
+- [component-catalogue.md](./component-catalogue.md) — Screenshots of every component at every atomic level
+
 **Specification**
 - [design-spec.md](./design-spec.md) — Simulated Figma design handoff values (includes prototype extensions for loading/error/empty states)
+
 **Results**
 - [simulation-report.md](./simulation-report.md) — Full report: hypotheses, findings, lessons learned
 - [acceptance-criteria.md](./acceptance-criteria.md) — Given/When/Then criteria per component

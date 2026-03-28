@@ -109,6 +109,7 @@ This repository serves as both the process documentation and the working referen
 
 | Doc | What it answers |
 |-----|-----------------|
+| [component-catalogue](./component-catalogue.md) | Visual reference for every component (atoms → molecules → organisms) |
 | [design-spec](./design-spec.md) | Design specification (includes prototype extensions) |
 | [simulation-report](./simulation-report.md) | Simulation findings |
 | [acceptance-criteria](./acceptance-criteria.md) | Acceptance criteria |
