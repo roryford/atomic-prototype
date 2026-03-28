@@ -56,6 +56,22 @@ This prototype includes:
 
 Not yet implemented: templates (directory exists as placeholder), real API integration, authentication, visual regression testing, axe-core in CI, performance budgets in CI.
 
+## Screenshots
+
+| Dashboard (light) | Dashboard (dark) |
+|---|---|
+| ![Dashboard light mode](./screenshots/dashboard-light.png) | ![Dashboard dark mode](./screenshots/dashboard-dark.png) |
+
+| List page | Detail page | Error state |
+|---|---|---|
+| ![List page](./screenshots/list-table.png) | ![Detail page](./screenshots/detail-page.png) | ![Error state](./screenshots/detail-error.png) |
+
+| Mobile (375px) | Wide (1440px) |
+|---|---|
+| ![Dashboard mobile](./screenshots/dashboard-mobile.png) | ![Dashboard wide](./screenshots/dashboard-wide.png) |
+
+> Screenshots are captured programmatically via `npx playwright test e2e/screenshots.spec.ts`. Re-run to update after visual changes.
+
 ## Reference Implementation
 
 This repository serves as both the process documentation and the working reference implementation. The Angular 21 prototype in this repo demonstrates the patterns, project structure, and tooling choices described in the docs above -- including atomic component decomposition, design token theming via `definePreset()`, MSW-based API mocking, Storybook stories, and Vitest-based testing. Rather than pointing to a separate repo, you can explore the `src/` directory alongside these docs to see the theory applied in practice.

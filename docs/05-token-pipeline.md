@@ -139,6 +139,10 @@ semantic: {
 }
 ```
 
+| Light mode | Dark mode |
+|---|---|
+| ![Dashboard light](./screenshots/dashboard-light.png) | ![Dashboard dark](./screenshots/dashboard-dark.png) |
+
 ```ts
 // In app.config.ts — tells PrimeNG which CSS class activates dark mode
 // Must use '.dark-mode' (class selector with leading dot).

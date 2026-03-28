@@ -41,6 +41,10 @@ This report covers the prototype phase of an Angular 21 atomic design simulation
 | Findings logged | 8 |
 | Hypotheses tested | 9 (6 confirmed, 2 confirmed with caveats, 1 partial) |
 
+**Playwright E2E results:**
+
+![Playwright test report](./screenshots/playwright-report.png)
+
 **Overall assessment:** The atomic design process documentation is sufficient to guide a small team through a prototype build. All three user journeys are completable. The primary gaps are around inline style linting (Stylelint cannot inspect TypeScript files) and Storybook invocation (must use `ng run`, not `storybook dev`). Bundle size improved significantly with lazy loading (49% raw reduction). The experimental status of `httpResource()` is the main technical risk for production.
 
 ---
