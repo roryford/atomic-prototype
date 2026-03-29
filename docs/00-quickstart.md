@@ -64,6 +64,30 @@ This prototype includes:
 
 Not yet implemented: templates (directory exists as placeholder), real API integration, authentication, visual regression testing, axe-core in CI, performance budgets in CI.
 
+## Known Limitations
+
+This is a prototype scoped to demonstrate atomic design methodology, not a production design system. These limitations are intentional — they mark where the prototype ends and production work begins.
+
+**Theming.** One theme with light and dark modes. No multi-brand support, density modes, or high-contrast accessibility themes. The token architecture supports these — the preset structure allows multiple themes via `definePreset()` — but only one is implemented.
+
+**Layout primitives.** Pages use CSS grid and flex directly. There are no reusable layout components (grid, spacer, container, shell). The templates level in the atomic hierarchy is scaffolded but empty. A production system would need layout primitives before scaling past a handful of pages.
+
+**Accessibility automation.** Manual a11y checklists exist (see [07-qa-per-atomic-level](./07-qa-per-atomic-level.md) and [manual-test-checklist](./manual-test-checklist.md)), Storybook has the a11y addon installed, and keyboard navigation rules are documented per level. What's missing is automated enforcement — axe-core is not in CI. Manual review catches issues; automation prevents regressions.
+
+**Forms.** DsFormField demonstrates the molecule pattern, but there is no form validation framework, error strategy, or form layout system. PrimeNG forms are used minimally. Production forms need dedicated patterns.
+
+**Backend.** MSW provides realistic API mocking gated behind `isDevMode()`. There is no API client abstraction, auth flow, or real data layer. This is intentional — it keeps the prototype focused on UI architecture.
+
+**Internationalization.** No i18n pipeline, RTL support, or locale-aware formatting. These are production concerns that interact heavily with the token and component layers but are outside the scope of demonstrating atomic structure.
+
+**Icons.** PrimeIcons are used via PrimeNG. There is no custom icon library, icon tokens, or icon component. A production system with custom iconography would need these.
+
+**Motion.** PrimeNG controls its own animation lifecycle. There are no custom duration tokens, easing tokens, or motion guidelines. Custom animation patterns would need to be layered on top.
+
+**Figma library.** This is a code-first prototype. There is no Figma file, token sync, or component specs in Figma. The [Designer's Guide](./13-designers-guide.md) describes the handoff workflow, but the design artefacts themselves are not included.
+
+**Distribution.** This is a reference repository, not a publishable npm package. There is no versioning strategy, monorepo structure, or release pipeline. See [production-plan-sketch](./production-plan-sketch.md) for notes on what a production release pipeline would require.
+
 ## Screenshots
 
 | Dashboard (light) | Dashboard (dark) |
