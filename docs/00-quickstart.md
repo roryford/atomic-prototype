@@ -16,8 +16,6 @@ Start here. This repo contains process documentation for building Angular 21 + P
 
 ## After This, Read the Foundations (in order)
 
-You're in the right place. After this page, continue with:
-
 1. **[01-atomic-hierarchy](./01-atomic-hierarchy.md)** -- Component taxonomy and cascade rule
 2. **[02-maturity-stages](./02-maturity-stages.md)** -- POC, Prototype, Production quality levels
 3. **[03-project-structure](./03-project-structure.md)** -- Where files go, how they're named
@@ -36,114 +34,12 @@ All of the above, plus [05-token-pipeline](./05-token-pipeline.md) -> [07-qa-per
 00 -> 01 -> 02 -> [08-pbi-and-ba-guide](./08-pbi-and-ba-guide.md) -> [acceptance-criteria](./acceptance-criteria.md)
 
 **Designer:**
-00 -> 01 -> [05-token-pipeline](./05-token-pipeline.md) -> [04-parallel-development](./04-parallel-development.md) -> [design-spec](./design-spec.md)
+00 -> [13-designers-guide](./13-designers-guide.md) -> 01 -> [05-token-pipeline](./05-token-pipeline.md) -> [04-parallel-development](./04-parallel-development.md) -> [design-spec](./design-spec.md)
 
 **Tech Lead:**
 00 -> 01 -> 02 -> [06-tooling-landscape](./06-tooling-landscape.md) -> [simulation-report](./simulation-report.md)
 
-## See It in Code
+**Evaluator (deciding whether to adopt):**
+00 -> [simulation-report](./simulation-report.md) -> 02 -> [10-derisking](./10-derisking.md) -> [12-decision-guides](./12-decision-guides.md)
 
-This repo is a working prototype. Explore these files to see the hierarchy in practice:
-
-- **Atom:** `src/app/design-system/atoms/button/button.ts`
-- **Molecule:** `src/app/design-system/molecules/search-bar/search-bar.ts`
-- **Organism:** `src/app/design-system/organisms/project-table/project-table.ts`
-- **Page:** `src/app/pages/dashboard/dashboard.ts`
-
-The prototype includes CI, linting, and E2E testing. Run `npm run lint` for ESLint, `npm run e2e` for Playwright E2E tests. CI runs automatically on PRs via GitHub Actions (`.github/workflows/ci.yml`).
-
-## What's Implemented
-
-This prototype includes:
-
-- **4 atoms:** DsButton, DsTag, DsInput, DsEmptyState
-- **3 molecules:** DsStatCard, DsSearchBar, DsFormField
-- **3 organisms:** DsStatGrid, DsProjectCardGrid, DsProjectTable
-- **3 pages:** Dashboard, List, Detail
-- **Tooling:** CI (GitHub Actions), ESLint, Stylelint, Playwright E2E, Storybook, Vitest, MSW mocks
-
-Not yet implemented: templates (directory exists as placeholder), real API integration, authentication, visual regression testing, axe-core in CI, performance budgets in CI.
-
-## Known Limitations
-
-This is a prototype scoped to demonstrate atomic design methodology, not a production design system. These limitations are intentional — they mark where the prototype ends and production work begins.
-
-**Theming.** One theme with light and dark modes. No multi-brand support, density modes, or high-contrast accessibility themes. The token architecture supports these — the preset structure allows multiple themes via `definePreset()` — but only one is implemented.
-
-**Layout primitives.** Pages use CSS grid and flex directly. There are no reusable layout components (grid, spacer, container, shell). The templates level in the atomic hierarchy is scaffolded but empty. A production system would need layout primitives before scaling past a handful of pages.
-
-**Accessibility automation.** Manual a11y checklists exist (see [07-qa-per-atomic-level](./07-qa-per-atomic-level.md) and [manual-test-checklist](./manual-test-checklist.md)), Storybook has the a11y addon installed, and keyboard navigation rules are documented per level. What's missing is automated enforcement — axe-core is not in CI. Manual review catches issues; automation prevents regressions.
-
-**Forms.** DsFormField demonstrates the molecule pattern, but there is no form validation framework, error strategy, or form layout system. PrimeNG forms are used minimally. Production forms need dedicated patterns.
-
-**Backend.** MSW provides realistic API mocking gated behind `isDevMode()`. There is no API client abstraction, auth flow, or real data layer. This is intentional — it keeps the prototype focused on UI architecture.
-
-**Internationalization.** No i18n pipeline, RTL support, or locale-aware formatting. These are production concerns that interact heavily with the token and component layers but are outside the scope of demonstrating atomic structure.
-
-**Icons.** PrimeIcons are used via PrimeNG. There is no custom icon library, icon tokens, or icon component. A production system with custom iconography would need these.
-
-**Motion.** PrimeNG controls its own animation lifecycle. There are no custom duration tokens, easing tokens, or motion guidelines. Custom animation patterns would need to be layered on top.
-
-**Figma library.** This is a code-first prototype. There is no Figma file, token sync, or component specs in Figma. The [Designer's Guide](./13-designers-guide.md) describes the handoff workflow, but the design artefacts themselves are not included.
-
-**Distribution.** This is a reference repository, not a publishable npm package. There is no versioning strategy, monorepo structure, or release pipeline. See [production-plan-sketch](./production-plan-sketch.md) for notes on what a production release pipeline would require.
-
-## Screenshots
-
-| Dashboard (light) | Dashboard (dark) |
-|---|---|
-| ![Dashboard light mode](./screenshots/dashboard-light.png) | ![Dashboard dark mode](./screenshots/dashboard-dark.png) |
-
-| List page | Detail page | Error state |
-|---|---|---|
-| ![List page](./screenshots/list-table.png) | ![Detail page](./screenshots/detail-page.png) | ![Error state](./screenshots/detail-error.png) |
-
-| Mobile (375px) | Wide (1440px) |
-|---|---|
-| ![Dashboard mobile](./screenshots/dashboard-mobile.png) | ![Dashboard wide](./screenshots/dashboard-wide.png) |
-
-> Screenshots are captured programmatically via `npx playwright test e2e/screenshots.spec.ts`. Re-run to update after visual changes.
-
-## Reference Implementation
-
-This repository serves as both the process documentation and the working reference implementation. The Angular 21 prototype in this repo demonstrates the patterns, project structure, and tooling choices described in the docs above -- including atomic component decomposition, design token theming via `definePreset()`, MSW-based API mocking, Storybook stories, and Vitest-based testing. Rather than pointing to a separate repo, you can explore the `src/` directory alongside these docs to see the theory applied in practice.
-
-## Full Doc Index
-
-### Foundations
-
-| # | Doc | What it answers |
-|---|-----|-----------------|
-| 00 | [Quickstart](./00-quickstart.md) (this file) | Where to start, reading paths by role |
-| 01 | [Atomic Hierarchy](./01-atomic-hierarchy.md) | 5-level component taxonomy and cascade rule |
-| 02 | [Maturity Stages](./02-maturity-stages.md) | POC, Prototype, Production quality levels |
-| 03 | [Project Structure](./03-project-structure.md) | Directory layouts, naming, imports |
-
-### Building
-
-| # | Doc | What it answers |
-|---|-----|-----------------|
-| 04 | [Parallel Development](./04-parallel-development.md) | How design and dev run together |
-| 05 | [Token Pipeline](./05-token-pipeline.md) | Figma -> definePreset() flow |
-| 06 | [Tooling Landscape](./06-tooling-landscape.md) | Locked stack + optional accelerators |
-| 07 | [QA Per Atomic Level](./07-qa-per-atomic-level.md) | Testing requirements per level |
-| 08 | [PBI and BA Guide](./08-pbi-and-ba-guide.md) | PBI templates + BA guide |
-
-### Reference
-
-| # | Doc | What it answers |
-|---|-----|-----------------|
-| 09 | [Angular Direction](./09-angular-direction.md) | Angular 21 features + signal patterns |
-| 10 | [Derisking](./10-derisking.md) | Risks to spike early |
-| 11 | [Implementation Tips](./11-implementation-tips.md) | Practical gotchas from real implementation |
-
-### Prototype Findings
-
-| Doc | What it answers |
-|-----|-----------------|
-| [component-catalogue](./component-catalogue.md) | Visual reference for every component (atoms → molecules → organisms) |
-| [design-spec](./design-spec.md) | Design specification (includes prototype extensions) |
-| [simulation-report](./simulation-report.md) | Simulation findings |
-| [acceptance-criteria](./acceptance-criteria.md) | Acceptance criteria |
-| [manual-test-checklist](./manual-test-checklist.md) | Manual test checklist |
-| [production-plan-sketch](./production-plan-sketch.md) | Production plan sketch |
+See [docs/README.md](./README.md) for the full documentation index.
