@@ -1,0 +1,12 @@
+{
+  "name": "Atomic Tokens",
+  "id": "atomic-tokens-sync",
+  "api": "1.0.0",
+  "editorType": ["figma"],
+  "main": "code.js",
+  "ui": "ui.html",
+  "networkAccess": {
+    "allowedDomains": ["https://raw.githubusercontent.com"],
+    "reasoning": "Fetches design token JSON files from GitHub raw content URLs."
+  }
+}

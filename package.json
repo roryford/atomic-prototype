@@ -30,7 +30,8 @@
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
     "screenshots": "playwright test e2e/screenshots.spec.ts",
-    "screenshots:components": "playwright test --config=playwright.storybook.config.ts"
+    "screenshots:components": "playwright test --config=playwright.storybook.config.ts",
+    "build:tokens": "npm run build --prefix tools/token-pipeline && cp tools/token-pipeline/output/preset.ts src/app/design-system/tokens/preset.ts"
   },
   "packageManager": "npm@11.11.0",
   "dependencies": {

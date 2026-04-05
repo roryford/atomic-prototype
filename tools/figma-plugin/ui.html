@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      font-size: 13px;
+      color: #1C1917;
+      background: #FAFAF9;
+      padding: 16px;
+    }
+
+    h1 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    p.subtitle {
+      color: #78716C;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .section {
+      background: #fff;
+      border: 1px solid #E7E5E4;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .section-desc {
+      color: #78716C;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1px solid #E7E5E4;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      background: #F5F5F4;
+      color: #1C1917;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      border-color: #4338CA;
+      background: #fff;
+    }
+
+    textarea {
+      height: 100px;
+      resize: vertical;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s;
+    }
+
+    .btn-primary {
+      background: #4338CA;
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: #6366F1; }
+    .btn-primary:disabled { background: #A5B4FC; cursor: not-allowed; }
+
+    .btn-secondary {
+      background: #E7E5E4;
+      color: #1C1917;
+    }
+
+    .btn-secondary:hover { background: #D6D3D1; }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .status {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      display: none;
+    }
+
+    .status.success { background: #DCFCE7; color: #166534; display: block; }
+    .status.error   { background: #FEE2E2; color: #991B1B; display: block; }
+    .status.info    { background: #E0E7FF; color: #3730A3; display: block; }
+
+    .tab-row {
+      display: flex;
+      border-bottom: 1px solid #E7E5E4;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      color: #78716C;
+      margin-bottom: -1px;
+    }
+
+    .tab.active {
+      color: #4338CA;
+      border-bottom-color: #4338CA;
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+  </style>
+</head>
+<body>
+  <h1>Atomic Tokens</h1>
+  <p class="subtitle">Sync design tokens between this codebase and Figma Variables.</p>
+
+  <div class="tab-row">
+    <div class="tab active" data-tab="import">Import → Figma</div>
+    <div class="tab" data-tab="export">Export → JSON</div>
+  </div>
+
+  <!-- Import panel -->
+  <div class="panel active" id="panel-import">
+    <div class="section">
+      <div class="section-title">Load tokens</div>
+      <div class="section-desc">
+        Fetch from a URL (e.g. GitHub raw file) or paste JSON directly.
+      </div>
+      <label>URL</label>
+      <input type="text" id="token-url" placeholder="https://raw.githubusercontent.com/…/primitives.json" />
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-fetch">Fetch</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <label>Or paste DTCG JSON</label>
+      <textarea id="token-paste" placeholder='{"color": {"brand": {"indigo": {"$type": "color", "$value": "#4338CA"}}}}'></textarea>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-import">Import to Figma</button>
+      </div>
+    </div>
+
+    <div class="status" id="import-status"></div>
+  </div>
+
+  <!-- Export panel -->
+  <div class="panel" id="panel-export">
+    <div class="section">
+      <div class="section-title">Export Figma Variables</div>
+      <div class="section-desc">
+        Reads all local Variable collections and outputs DTCG JSON compatible
+        with <code>tools/token-pipeline/tokens/primitives.json</code>. Only the
+        first mode in each collection is exported; separate light/dark mode
+        export is not supported yet.
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-export">Export</button>
+        <button class="btn btn-secondary" id="btn-copy" style="display:none">Copy JSON</button>
+      </div>
+    </div>
+
+    <textarea id="export-output" style="height:180px; display:none" readonly></textarea>
+    <div class="status" id="export-status"></div>
+  </div>
+
+  <script>
+    // ── Tabs ──────────────────────────────────────────────────────────────────
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(`panel-${tab.dataset.tab}`).classList.add('active');
+      });
+    });
+
+    // ── Import ────────────────────────────────────────────────────────────────
+    document.getElementById('btn-fetch').addEventListener('click', async () => {
+      const url = document.getElementById('token-url').value.trim();
+      if (!url) return showStatus('import-status', 'error', 'Enter a URL first.');
+      showStatus('import-status', 'info', 'Fetching…');
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const text = await res.text();
+        document.getElementById('token-paste').value = text;
+        showStatus('import-status', 'success', 'Fetched. Click "Import to Figma" to apply.');
+      } catch (err) {
+        showStatus('import-status', 'error', `Fetch failed: ${err.message}`);
+      }
+    });
+
+    document.getElementById('btn-import').addEventListener('click', () => {
+      const raw = document.getElementById('token-paste').value.trim();
+      if (!raw) return showStatus('import-status', 'error', 'No JSON to import.');
+      let tokens;
+      try {
+        tokens = JSON.parse(raw);
+      } catch {
+        return showStatus('import-status', 'error', 'Invalid JSON.');
+      }
+      showStatus('import-status', 'info', 'Importing…');
+      parent.postMessage({ pluginMessage: { type: 'import', tokens } }, '*');
+    });
+
+    // ── Export ────────────────────────────────────────────────────────────────
+    document.getElementById('btn-export').addEventListener('click', () => {
+      showStatus('export-status', 'info', 'Reading variables…');
+      parent.postMessage({ pluginMessage: { type: 'export' } }, '*');
+    });
+
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      const text = document.getElementById('export-output').value;
+      navigator.clipboard.writeText(text).then(() => {
+        showStatus('export-status', 'success', 'Copied to clipboard.');
+      });
+    });
+
+    // ── Messages from plugin ──────────────────────────────────────────────────
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (!msg) return;
+
+      if (msg.type === 'import-done') {
+        const { created, updated, total } = msg.summary;
+        showStatus('import-status', 'success',
+          `Done. ${created} created, ${updated} updated (${total} tokens total).`);
+      }
+
+      if (msg.type === 'export-done') {
+        const out = document.getElementById('export-output');
+        out.value = msg.json;
+        out.style.display = 'block';
+        document.getElementById('btn-copy').style.display = 'inline-flex';
+        showStatus('export-status', 'success',
+          'Export ready. Copy the JSON and save to tools/token-pipeline/tokens/primitives.json, then run: npm run build:tokens');
+      }
+
+      if (msg.type === 'error') {
+        showStatus('import-status', 'error', msg.message);
+        showStatus('export-status', 'error', msg.message);
+      }
+    };
+
+    function showStatus(id, type, message) {
+      const el = document.getElementById(id);
+      el.className = `status ${type}`;
+      el.textContent = message;
+    }
+  </script>
+</body>
+</html>
