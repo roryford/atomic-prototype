@@ -69,6 +69,7 @@ npm run lint           # ESLint (TypeScript + templates)
 npm run lint:fix       # ESLint auto-fix
 npm run e2e            # Playwright E2E tests (headless)
 npm run e2e:ui         # Playwright E2E with UI
+npm run build:tokens   # Regenerate preset.ts from tools/token-pipeline/tokens/primitives.json
 ```
 
 ## Project Structure
@@ -116,7 +117,7 @@ This is a prototype scoped to demonstrate atomic design methodology, not a produ
 
 **Motion.** PrimeNG controls its own animation lifecycle. There are no custom duration tokens, easing tokens, or motion guidelines. Custom animation patterns would need to be layered on top.
 
-**Figma library.** This is a code-first prototype. There is no Figma file, token sync, or component specs in Figma. The [Designer's Guide](./docs/13-designers-guide.md) describes the handoff workflow, but the design artefacts themselves are not included.
+**Figma library.** This is a code-first prototype. There is no shared Figma file or component spec library in the repository. A local Figma plugin is included at [`tools/figma-plugin`](./tools/figma-plugin/) for manual primitive-token import/export, but it is a prototype workflow helper rather than a full design-library sync setup. The [Designer's Guide](./docs/13-designers-guide.md) describes the broader handoff workflow.
 
 **Distribution.** This is a reference repository, not a publishable npm package. There is no versioning strategy, monorepo structure, or release pipeline. See [production plan sketch](./docs/production-plan-sketch.md) for notes on what a production release pipeline would require.
 

@@ -38,7 +38,7 @@ export const AppPreset = definePreset(Aura, {
 
 ### Path 2: Semi-Automated (Prototype)
 
-Tokens Studio (free tier) reads/writes Figma Variables and exports DTCG-format JSON. The developer then transforms that JSON into the outputs the app needs.
+Tokens Studio (free tier) reads/writes Figma Variables and exports DTCG-format JSON. This repository also includes a small local Figma plugin at `tools/figma-plugin` for importing/exporting primitive DTCG JSON that matches `tools/token-pipeline/tokens/primitives.json`. The developer then transforms that JSON into the outputs the app needs.
 
 Two sub-options:
 
@@ -46,6 +46,8 @@ Two sub-options:
 2. **Custom script** — a simpler alternative. A 50–80 line Node script reads the exported JSON and writes `preset.ts` directly. Less general, but faster to stand up for a single target format.
 
 Either way, the developer runs the transform manually (`npm run build:tokens`) after each export.
+
+> **Repository note:** The local `tools/figma-plugin` helper is intentionally narrow. It imports/exports primitive tokens, can fetch raw GitHub JSON from `raw.githubusercontent.com`, and currently exports only the first Figma mode in each collection. It does **not** generate semantic `colorScheme.light` / `colorScheme.dark` output.
 
 > **Figma Variables vs. Tokens Studio:** Figma Variables are what designers work with day-to-day inside Figma. Tokens Studio is a plugin that reads/writes those same Variables and adds export capability (DTCG JSON, sync to Git). They are sequential — not competing.
 

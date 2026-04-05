@@ -52,7 +52,7 @@ At prototype stage (50-200 tokens), manual `definePreset()` authoring breaks dow
 
 | Step | Tool | Output |
 |------|------|--------|
-| 1. Define tokens | Tokens Studio free tier (Figma plugin) | DTCG-format JSON |
+| 1. Define tokens | Tokens Studio free tier (Figma plugin) or local `tools/figma-plugin` | Primitive DTCG JSON |
 | 2. Transform | Style Dictionary v5 + `@tokens-studio/sd-transforms` | Transformed tokens |
 | 3. Generate preset | Custom SD format (~50-100 lines) | `definePreset()` TypeScript |
 
@@ -61,9 +61,11 @@ At prototype stage (50-200 tokens), manual `definePreset()` authoring breaks dow
 - `@tokens-studio/sd-transforms` -- bridges Tokens Studio output to Style Dictionary
 - Custom format required -- no published SD format outputs PrimeNG's `definePreset()` structure
 
-**Workflow:** Designer updates tokens in Figma -> exports DTCG JSON via Tokens Studio -> developer runs `npm run build:tokens` (Style Dictionary) -> reviews generated `preset.ts` -> commits.
+**Workflow:** Designer updates tokens in Figma -> exports primitive DTCG JSON via Tokens Studio or the local `tools/figma-plugin` -> developer runs `npm run build:tokens` (Style Dictionary) -> reviews generated `preset.ts` -> commits.
 
-**Dark mode:** Developer must manually author the `colorScheme.dark` section in the custom SD format or maintain separate light/dark token files. The "hardest mapping" (flat DTCG -> nested `colorScheme`) must be handled in the custom format function.
+**Local plugin limits:** The local `tools/figma-plugin` helper expects JSON shaped like `tools/token-pipeline/tokens/primitives.json`, supports raw GitHub fetches from `raw.githubusercontent.com`, and exports only the first mode from each Figma variable collection.
+
+**Dark mode:** Developer must manually author the `colorScheme.dark` section in the custom SD format or maintain separate light/dark token files. The "hardest mapping" (flat DTCG -> nested `colorScheme`) must be handled in the custom format function. The local plugin does not generate light/dark `colorScheme` output.
 
 **Cost:** $0 + development time for the custom format (~50-100 lines JS).
 
