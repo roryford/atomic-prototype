@@ -24,6 +24,11 @@ prototype is useful for learning atomic design concepts, Angular 21 patterns
 > **Note:** This repository is shared as a reference implementation. It is not
 > actively accepting contributions.
 
+> **Educational reference only.** This is a prototype built to demonstrate atomic design
+> principles with Angular 21 and PrimeNG. It is not a production-ready library, not
+> actively maintained as open-source, and not accepting contributions. Use it as a
+> learning reference or fork it as a starting point — see [docs/14-replication-guide.md](docs/14-replication-guide.md).
+
 ## Screenshots
 
 | Dashboard (light) | Dashboard (dark) |
@@ -55,6 +60,9 @@ DsEmptyState
 ```
 
 ## Quick Start
+
+> **Note:** Node 25 is not a Long-Term Support (LTS) release. Plan to migrate to
+> Node 26 LTS when it becomes available (expected mid-2026).
 
 ```
 Prerequisites: Node 25+, npm 11+

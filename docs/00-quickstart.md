@@ -2,6 +2,11 @@
 
 > **Who is this for?** Anyone joining this project or evaluating this approach. Read time: 2 minutes.
 
+> **Learning reference, not a framework.** This prototype demonstrates Angular 21 atomic design
+> patterns for educational purposes. It is not a library to depend on, not actively maintained
+> as open-source, and not a production starter kit. Fork it or follow the
+> [replication guide](./14-replication-guide.md) to apply these patterns in your own project.
+
 Start here. This repo contains process documentation for building Angular 21 + PrimeNG 21 applications using Atomic Design principles, targeting small teams (2-4 people).
 
 ## Why Atomic Design?

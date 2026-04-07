@@ -70,21 +70,21 @@ import { DsInput } from '../../design-system/atoms/input/input';
           <p-divider />
 
           <div class="info-section">
-            <ds-form-field label="Project Name">
-              <ds-input [value]="p.name" placeholder="Project Name" />
+            <ds-form-field label="Project Name" inputId="field-name">
+              <ds-input [value]="p.name" placeholder="Project Name" id="field-name" />
             </ds-form-field>
-            <ds-form-field label="Owner">
-              <ds-input [value]="p.owner" placeholder="Owner" />
+            <ds-form-field label="Owner" inputId="field-owner">
+              <ds-input [value]="p.owner" placeholder="Owner" id="field-owner" />
             </ds-form-field>
-            <ds-form-field label="Created">
-              <ds-input [value]="p.createdDate" placeholder="Created" />
+            <ds-form-field label="Created" inputId="field-created">
+              <ds-input [value]="p.createdDate" placeholder="Created" id="field-created" />
             </ds-form-field>
-            <ds-form-field label="Category">
-              <ds-input [value]="p.category" placeholder="Category" />
+            <ds-form-field label="Category" inputId="field-category">
+              <ds-input [value]="p.category" placeholder="Category" id="field-category" />
             </ds-form-field>
             <div class="full-width">
-              <ds-form-field label="Description" [fullWidth]="true">
-                <ds-input [value]="p.description" placeholder="Description" />
+              <ds-form-field label="Description" [fullWidth]="true" inputId="field-description">
+                <ds-input [value]="p.description" placeholder="Description" id="field-description" />
               </ds-form-field>
             </div>
           </div>

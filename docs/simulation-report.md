@@ -183,6 +183,11 @@ The list chunk is disproportionately large due to PrimeNG's `TableModule` transi
 - `stylelint-declaration-use-css-custom-properties` plugin not available on npm (404).
 
 ### httpResource()
+
+> **Risk — Experimental API:** `httpResource()` is marked `@experimental` in Angular 21.
+> Its API may change in Angular 22+. Teams planning production migration should monitor
+> Angular release notes before building heavily on this API.
+
 - **Verdict:** Clean signal-based API, but experimental.
 - `httpResource` from `@angular/common/http` (marked `@experimental 19.2`) provides signal-based `.value()`, `.error()`, and `.isLoading()` accessors. For the full API reference, see [09-angular-direction](./09-angular-direction.md).
 - No `.data()` alias — documentation must reference `.value()`.

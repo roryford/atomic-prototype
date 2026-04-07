@@ -14,7 +14,9 @@
       "type": "chrome",
       "request": "launch",
       "preLaunchTask": "npm: test",
-      "url": "http://localhost:9876/debug.html"
+      // Tests run via Angular CLI's built-in Vitest runner (no separate vitest.config needed).
+      // There is no browser debug port — use `npm test` in the terminal to run tests.
+      "url": "http://localhost:4200/"
     }
   ]
 }

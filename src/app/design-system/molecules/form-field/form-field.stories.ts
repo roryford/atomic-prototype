@@ -16,24 +16,24 @@ export default meta;
 type Story = StoryObj<DsFormField>;
 
 export const Default: Story = {
-  args: { label: 'Project Name' },
+  args: { label: 'Project Name', inputId: 'story-project-name' },
   render: (args) => ({
     props: args,
     template: `
-      <ds-form-field [label]="label">
-        <ds-input placeholder="Enter project name" />
+      <ds-form-field [label]="label" [inputId]="inputId">
+        <ds-input placeholder="Enter project name" [id]="inputId" />
       </ds-form-field>
     `,
   }),
 };
 
 export const FullWidth: Story = {
-  args: { label: 'Description', fullWidth: true },
+  args: { label: 'Description', fullWidth: true, inputId: 'story-description' },
   render: (args) => ({
     props: args,
     template: `
-      <ds-form-field [label]="label" [fullWidth]="fullWidth">
-        <ds-input placeholder="Enter description" />
+      <ds-form-field [label]="label" [fullWidth]="fullWidth" [inputId]="inputId">
+        <ds-input placeholder="Enter description" [id]="inputId" />
       </ds-form-field>
     `,
   }),

@@ -164,7 +164,7 @@ Core items implemented in the enhanced prototype:
 ### Wave 3: Performance Budgets + Bundle Optimization
 
 - Enforce performance budgets in CI (Lighthouse CI on merge)
-- Apply `@defer` to the list page table (466KB lazy chunk)
+- Apply `@defer` to the list page table (466KB lazy chunk) — note: `@defer` defers the *loading* of a template block until a condition is met (e.g. viewport visibility), which delays the download to first interaction rather than eager load; it does not reduce the total bundle size shipped
 - Run `source-map-explorer` to identify remaining tree-shaking opportunities
 - Test with realistic data volumes (1,000+ items in tables/lists)
 - Verify virtual scrolling or pagination strategy at scale

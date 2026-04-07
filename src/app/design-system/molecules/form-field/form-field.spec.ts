@@ -5,8 +5,8 @@ import { DsFormField } from './form-field';
 @Component({
   imports: [DsFormField],
   template: `
-    <ds-form-field label="Project Name">
-      <input type="text" class="projected-input" />
+    <ds-form-field label="Project Name" inputId="test-name">
+      <input type="text" id="test-name" class="projected-input" />
     </ds-form-field>
   `,
 })
@@ -20,6 +20,7 @@ describe('DsFormField', () => {
     });
     const fixture = TestBed.createComponent(DsFormField);
     fixture.componentRef.setInput('label', 'Project Name');
+    fixture.componentRef.setInput('inputId', 'test-label');
     fixture.detectChanges();
 
     const label = fixture.nativeElement.querySelector('.form-field-label');

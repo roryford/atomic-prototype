@@ -20,6 +20,11 @@ type ButtonSeverity =
  *
  * Why wrap? Isolates consumers from PrimeNG API changes, enforces design constraints,
  * and makes it possible to swap the underlying library without touching every consumer.
+ *
+ * Output naming convention: generic actions on this atom use `clicked` because the
+ * component has no domain context. Composed molecules and organisms should use
+ * descriptive names (e.g. `actionClicked` on DsEmptyState, `retryClicked` on grids)
+ * so that parent templates read clearly at a glance.
  */
 @Component({
   selector: 'ds-button',

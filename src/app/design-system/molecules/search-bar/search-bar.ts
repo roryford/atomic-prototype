@@ -14,8 +14,7 @@ import { DsInput, DsButton } from '../../atoms';
   imports: [DsInput, DsButton],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <!-- eslint-disable-next-line @angular-eslint/template/interactive-supports-focus -->
-    <div class="search-bar" (keydown.enter)="searched.emit(value())">
+    <div class="search-bar" role="search" (keydown.enter)="searched.emit(value())">
       <ds-input [(value)]="value" [placeholder]="placeholder()" />
       <ds-button label="Search" severity="primary" (clicked)="searched.emit(value())" />
     </div>

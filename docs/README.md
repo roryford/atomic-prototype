@@ -1,5 +1,8 @@
 # Documentation
 
+> **Prototype — educational use only.** These docs describe a reference implementation.
+> Code patterns and APIs may not reflect production best practices in all cases.
+
 Process documentation for building Angular 21 + PrimeNG atomic design systems, paired with findings from a working prototype simulation.
 
 ## Start Here

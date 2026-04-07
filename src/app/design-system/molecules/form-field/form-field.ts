@@ -5,8 +5,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="form-field" [class.full-width]="fullWidth()">
-      <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
-      <label class="form-field-label">{{ label() }}</label>
+      <label class="form-field-label" [for]="inputId()">{{ label() }}</label>
       <ng-content />
     </div>
   `,
@@ -32,4 +31,6 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 export class DsFormField {
   label = input.required<string>();
   fullWidth = input(false);
+  /** Must match the `id` passed to the nested ds-input so the label is associated via for/id. */
+  inputId = input.required<string>();
 }

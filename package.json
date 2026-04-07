@@ -2,6 +2,14 @@
   "name": "atomic-prototype",
   "description": "Angular 21 + PrimeNG 21 atomic design prototype — component hierarchy, design tokens, and testing patterns for small teams",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/roryford/atomic-prototype"
+  },
+  "homepage": "https://roryford.github.io/atomic-prototype/",
+  "bugs": {
+    "url": "https://github.com/roryford/atomic-prototype/issues"
+  },
   "license": "MIT",
   "keywords": [
     "angular",
@@ -31,7 +39,9 @@
     "e2e:ui": "playwright test --ui",
     "screenshots": "playwright test e2e/screenshots.spec.ts",
     "screenshots:components": "playwright test --config=playwright.storybook.config.ts",
-    "build:tokens": "npm run build --prefix tools/token-pipeline && cp tools/token-pipeline/output/preset.ts src/app/design-system/tokens/preset.ts"
+    "build:tokens": "npm run build --prefix tools/token-pipeline && cp tools/token-pipeline/output/preset.ts src/app/design-system/tokens/preset.ts",
+    "clean": "rimraf dist .angular storybook-static coverage",
+    "test:coverage": "ng test --watch=false --code-coverage"
   },
   "packageManager": "npm@11.11.0",
   "dependencies": {
@@ -65,6 +75,7 @@
     "jsdom": "^29.0.1",
     "msw": "^2.12.14",
     "prettier": "^3.8.1",
+    "rimraf": "^6.0.1",
     "storybook": "^10.3.1",
     "stylelint": "^17.5.0",
     "stylelint-config-standard-scss": "^17.0.0",

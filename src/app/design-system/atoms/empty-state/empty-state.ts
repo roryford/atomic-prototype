@@ -7,7 +7,7 @@ import { DsButton } from '../button/button';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="empty-state">
-      <i class="pi {{ icon() }} empty-icon"></i>
+      <i class="pi {{ icon() }} empty-icon" aria-hidden="true"></i>
       <p class="empty-message">{{ message() }}</p>
       @if (actionLabel()) {
         <ds-button [label]="actionLabel()!" severity="primary" (clicked)="actionClicked.emit()" />

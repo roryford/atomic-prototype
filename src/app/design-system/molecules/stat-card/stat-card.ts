@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   template: `
     <div class="stat-card">
       <div class="stat-icon">
-        <i class="pi" [class]="icon()"></i>
+        <i class="pi" [class]="icon()" aria-hidden="true"></i>
       </div>
       <div class="stat-content">
         <span class="stat-value">{{ value() }}</span>

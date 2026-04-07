@@ -6,7 +6,7 @@ import { isDevMode } from '@angular/core';
 async function bootstrap() {
   if (isDevMode()) {
     const { worker } = await import('./app/mocks/browser');
-    await worker.start({ onUnhandledRequest: 'bypass' });
+    await worker.start({ onUnhandledRequest: 'warn' });
   }
   await bootstrapApplication(App, appConfig);
 }
