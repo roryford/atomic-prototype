@@ -1,7 +1,7 @@
 {
   "name": "atomic-prototype",
   "description": "Angular 21 + PrimeNG 21 atomic design prototype — component hierarchy, design tokens, and testing patterns for small teams",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/roryford/atomic-prototype"
