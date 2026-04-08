@@ -84,7 +84,11 @@ import { DsInput } from '../../design-system/atoms/input/input';
             </ds-form-field>
             <div class="full-width">
               <ds-form-field label="Description" [fullWidth]="true" inputId="field-description">
-                <ds-input [value]="p.description" placeholder="Description" id="field-description" />
+                <ds-input
+                  [value]="p.description"
+                  placeholder="Description"
+                  id="field-description"
+                />
               </ds-form-field>
             </div>
           </div>
