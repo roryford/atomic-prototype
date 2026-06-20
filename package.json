@@ -1,7 +1,7 @@
 {
   "name": "atomic-prototype",
   "description": "Angular 21 + PrimeNG 21 atomic design prototype — component hierarchy, design tokens, and testing patterns for small teams",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/roryford/atomic-prototype"
@@ -20,7 +20,8 @@
     "design-tokens"
   ],
   "engines": {
-    "node": ">=24.0.0"
+    "node": ">=24.0.0",
+    "npm": ">=11"
   },
   "scripts": {
     "ng": "ng",
@@ -33,14 +34,15 @@
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "lint:styles": "stylelint 'src/**/*.{scss,css}'",
-    "format": "prettier --write \"src/**/*.{ts,html,scss,json}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,html,scss,json}\"",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.spec.json",
+    "format": "prettier --write \"{src,e2e,.storybook}/**/*.{ts,html,scss,json,mjs}\" \"tools/figma-plugin/**/*.{html,json}\" \"tools/token-pipeline/{config.mjs,tokens/*.json}\" angular.json tsconfig*.json eslint.config.js playwright*.config.ts",
+    "format:check": "prettier --check \"{src,e2e,.storybook}/**/*.{ts,html,scss,json,mjs}\" \"tools/figma-plugin/**/*.{html,json}\" \"tools/token-pipeline/{config.mjs,tokens/*.json}\" angular.json tsconfig*.json eslint.config.js playwright*.config.ts",
     "e2e": "bddgen && playwright test --project=bdd",
     "e2e:ui": "bddgen && playwright test --project=bdd --ui",
     "e2e:bdd": "bddgen && playwright test --project=bdd",
     "screenshots": "playwright test e2e/screenshots.spec.ts",
     "screenshots:components": "playwright test --config=playwright.storybook.config.ts",
-    "build:tokens": "npm run build --prefix tools/token-pipeline && cp tools/token-pipeline/output/preset.ts src/app/design-system/tokens/preset.ts",
+    "build:tokens": "npm install --prefix tools/token-pipeline && npm run build --prefix tools/token-pipeline && cp tools/token-pipeline/output/preset.ts src/app/design-system/tokens/preset.ts",
     "clean": "rimraf dist .angular storybook-static coverage .features-gen",
     "test:coverage": "ng test --watch=false --code-coverage"
   },
@@ -74,7 +76,6 @@
     "@storybook/addon-docs": "^10.3.1",
     "@storybook/addon-onboarding": "^10.3.1",
     "@storybook/angular": "^10.3.1",
-    "@storybook/test": "^8.6.15",
     "angular-eslint": "21.3.1",
     "eslint": "^10.0.3",
     "eslint-config-prettier": "^10.1.8",
