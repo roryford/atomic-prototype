@@ -355,28 +355,30 @@ dropped almost verbatim into a `.feature` file and run as an end-to-end test —
 acceptance criteria a BA owns become living, executable documentation rather than prose
 that drifts from the code.
 
-The journey example above becomes:
+A journey criterion like *"opening a project that doesn't exist shows an error"*
+becomes a runnable scenario built entirely from existing catalog steps:
 
 ```gherkin
-Feature: Project dashboard
+Feature: Browsing projects
 
-  Scenario: Stats fail but projects still load
-    Given the stats service is failing
-    When I open the dashboard
-    Then the stats section shows an error with retry
-    And I should see the project cards
+  Scenario: Opening a project that doesn't exist
+    When I open project "999"
+    Then I should see an error message
 ```
 
+This is a real, passing scenario (see [`e2e/features/projects.feature`](../e2e/features/projects.feature)).
 A BA composes scenarios from a fixed menu of plain-English steps — no code. See
 [`e2e/STEP_CATALOG.md`](../e2e/STEP_CATALOG.md) for the available phrases,
 [`e2e/README.md`](../e2e/README.md) for how to author and run them (`npm run e2e:bdd`),
-and [`e2e/features/`](../e2e/features) for live examples. The steps are organized by
+and [`e2e/features/`](../e2e/features) for more examples. The steps are organized by
 atomic level (page / organism / atom), mirroring this guide.
 
 > **Authoring tip:** a journey criterion only becomes a runnable scenario if a matching
 > step exists in the catalog. If it doesn't, that's the BA-developer handoff: the BA
-> writes the intent, a developer adds the step. New criteria that have no step yet are a
-> useful backlog of test coverage to build.
+> writes the intent, a developer adds the step. For example, the *partial-failure* journey
+> ("stats fail but projects still load") has no step yet — writing that criterion is the
+> BA's cue to ask a developer to add a "stats service is failing" step. New criteria with
+> no step yet are a useful backlog of test coverage to build.
 
 ---
 

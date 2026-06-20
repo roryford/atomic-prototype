@@ -146,7 +146,7 @@ The simulation phase validated several tools against real Angular 21 + PrimeNG 2
 | MSW v2 | Seamless | Network-level interception works perfectly with `httpResource()` |
 | Storybook 10 | Works, with caveats | Must use `ng run`; CSS import workaround needed |
 | Stylelint | Partial coverage | Catches hex in `.scss` but blind to inline TypeScript styles |
-| Vitest | Fast, minimal setup | 36 tests in ~2s; jsdom limitation with PrimeNG clicks |
+| Vitest | Fast, minimal setup | 43 tests in ~2s; jsdom limitation with PrimeNG clicks |
 | `httpResource()` | Clean but experimental | `@experimental 19.2` — wrap behind service methods to isolate risk |
 | ESLint + angular-eslint | Smooth setup, valuable | Schematic handles config; needs `eslint-config-prettier` for Prettier coexistence; selector rules need both `app` and `ds` prefixes; two template a11y rules need inline suppression for `ng-content` and delegating wrappers |
 | Playwright | Seamless with MSW | MSW service worker intercepts transparently — no extra E2E mock setup; PrimeNG `p-button` with `[link]="true"` renders as `<button>`, not `<a>`; deterministic mock data enables hardcoded assertions |

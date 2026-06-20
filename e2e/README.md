@@ -33,13 +33,18 @@ generates from the features — you never edit it by hand.
 ## Running
 
 ```bash
-npm run e2e        # generate from features, then run everything (BDD + plain)
-npm run e2e:bdd    # run only the Gherkin/BDD scenarios
+npm run e2e        # generate from features, then run the BDD behavioral suite
+npm run e2e:bdd    # alias of the above (run only the Gherkin/BDD scenarios)
 npm run e2e:ui     # interactive Playwright UI
+npm run screenshots  # regenerate the doc screenshots in docs/screenshots/
 ```
 
-Each command runs `bddgen` first to turn `.feature` files into tests, then starts
-the app (`ng serve`) automatically and runs against it.
+Each `e2e` command runs `bddgen` first to turn `.feature` files into tests, then
+starts the app (`ng serve`) automatically and runs against it.
+
+`screenshots.spec.ts` is kept separate: it *captures* documentation images (it
+overwrites files in `docs/screenshots/`), so it is **not** part of the default
+`npm run e2e` run — regenerate those deliberately with `npm run screenshots`.
 
 ## Writing a scenario (no coding required)
 

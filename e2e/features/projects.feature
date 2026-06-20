@@ -15,7 +15,12 @@ Feature: Browsing projects
     When I open project "999"
     Then I should see an error message
 
-  Scenario: Returning to the list from a project
+  Scenario: Returning to the list from an open project
+    When I open project "1"
+    And I click the "Back to List" button
+    Then I should be on the "List" page
+
+  Scenario: Returning to the list from a missing project
     When I open project "999"
     And I click the "Back to List" button
     Then I should be on the "List" page

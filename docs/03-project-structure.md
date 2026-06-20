@@ -47,13 +47,10 @@ The prototype introduces Atomic Design folders, a real token pipeline, and (opti
 src/app/
 ├── design-system/
 │   ├── tokens/
-│   │   ├── primitives.json              # DTCG format: raw palette
-│   │   ├── semantic.json                # DTCG format: intent-based aliases
-│   │   ├── generated/
-│   │   │   ├── _primitives.scss         # Style Dictionary output
-│   │   │   ├── _semantic.scss
-│   │   │   └── preset.ts               # Generated definePreset()
-│   │   └── index.ts                     # Barrel export for generated outputs
+│   │   ├── preset.ts                    # Generated definePreset() (copied by build:tokens)
+│   │   ├── index.ts                     # Barrel export for the preset
+│   │   └── README.md                    # Token pipeline notes
+│   │   # Source DTCG tokens + Style Dictionary config live in tools/token-pipeline/
 │   ├── _shared.scss                       # Shared classes and mixins
 │   ├── atoms/
 │   │   ├── button/

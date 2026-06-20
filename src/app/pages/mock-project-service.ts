@@ -1,6 +1,8 @@
 import { signal } from '@angular/core';
 import { ProjectService } from '../services/project.service';
 import { Project, DashboardStats } from '../models';
+import projectsFixture from '../mocks/fixtures/projects.json';
+import statsFixture from '../mocks/fixtures/stats.json';
 
 /**
  * Test/story doubles for {@link ProjectService}.
@@ -29,60 +31,11 @@ function fakeResource<T>(state: FakeResourceState<T>) {
   };
 }
 
-export const mockProjects: Project[] = [
-  {
-    id: 1,
-    name: 'Project Alpha',
-    description: 'A next-generation platform for data analytics and visualization.',
-    owner: 'Sarah Chen',
-    ownerInitials: 'SC',
-    status: 'Active',
-    statusSeverity: 'success',
-    avatar: 'A',
-    color: '#4338CA',
-    members: 5,
-    deadline: '2026-06-15',
-    createdDate: '2025-01-10',
-    category: 'Engineering',
-  },
-  {
-    id: 2,
-    name: 'Project Beta',
-    description: 'Mobile application redesign with improved UX and accessibility.',
-    owner: 'James Wilson',
-    ownerInitials: 'JW',
-    status: 'Planning',
-    statusSeverity: 'info',
-    avatar: 'B',
-    color: '#0891B2',
-    members: 3,
-    deadline: '2026-08-01',
-    createdDate: '2025-03-05',
-    category: 'Design',
-  },
-  {
-    id: 3,
-    name: 'Project Gamma',
-    description: 'Infrastructure migration to cloud-native architecture.',
-    owner: 'Maria Lopez',
-    ownerInitials: 'ML',
-    status: 'At Risk',
-    statusSeverity: 'warn',
-    avatar: 'G',
-    color: '#DC2626',
-    members: 8,
-    deadline: '2026-04-30',
-    createdDate: '2025-02-20',
-    category: 'DevOps',
-  },
-];
-
-export const mockStats: DashboardStats[] = [
-  { label: 'Total Projects', value: '24', icon: 'pi pi-folder' },
-  { label: 'Active', value: '12', icon: 'pi pi-check-circle' },
-  { label: 'At Risk', value: '3', icon: 'pi pi-exclamation-triangle' },
-  { label: 'Members', value: '48', icon: 'pi pi-users' },
-];
+// Reuse the same fixtures the dev server (MSW) serves, so Storybook page stories
+// show the same data the app and e2e tests run against — one source of truth.
+// The JSON widens `statusSeverity` to `string`, so cast back to the domain types.
+export const mockProjects = projectsFixture as unknown as Project[];
+export const mockStats = statsFixture as unknown as DashboardStats[];
 
 export interface ProjectServiceMockState {
   projects?: FakeResourceState<Project[]>;

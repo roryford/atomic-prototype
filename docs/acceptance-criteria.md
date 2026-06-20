@@ -97,7 +97,7 @@ Written BEFORE implementation. Each criterion drives a Storybook play function, 
 - GIVEN user on /dashboard, WHEN page loads, THEN loading skeletons appear for ~300ms
 - GIVEN dashboard loaded, WHEN stats appear, THEN shows 4 stat cards with values
 - GIVEN dashboard loaded, WHEN project cards appear, THEN shows 3 project cards
-- GIVEN project card "Project Alpha", WHEN clicked, THEN navigates to /detail/1
+- GIVEN project card "Acme Redesign" (project 1), WHEN clicked, THEN navigates to /detail/1
 - GIVEN /detail/1 loaded, WHEN rendered, THEN shows project name, owner, status, description
 - GIVEN detail page, WHEN "Back to List" clicked, THEN navigates to /list
 

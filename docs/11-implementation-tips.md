@@ -315,7 +315,7 @@ For the full linting tool landscape, see [06-tooling-landscape](./06-tooling-lan
 
 ### Test Runner Setup
 
-If the project was scaffolded with `--skip-tests`, there is no `test` target in `angular.json`. Add the target manually using `@angular/build:unit-test` (Vitest-based). Install `vitest` and `jsdom` as dev dependencies. Use `--watch=false` flag for CI (e.g., `npm run test -- --watch=false`). Angular 21's default test runner completes 36 tests in ~2 seconds.
+If the project was scaffolded with `--skip-tests`, there is no `test` target in `angular.json`. Add the target manually using `@angular/build:unit-test` (Vitest-based). Install `vitest` and `jsdom` as dev dependencies. Use `--watch=false` flag for CI (e.g., `npm run test -- --watch=false`). Angular 21's default test runner completes the suite (43 tests) in ~2 seconds.
 
 ### PrimeNG Interaction Testing Limitation
 

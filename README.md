@@ -75,9 +75,9 @@ npm run storybook      # Component library at http://localhost:6006
 npm test               # Unit tests via Vitest
 npm run lint           # ESLint (TypeScript + templates)
 npm run lint:fix       # ESLint auto-fix
-npm run e2e            # Playwright E2E (Gherkin/BDD + plain specs, headless)
-npm run e2e:bdd        # Only the Gherkin/BDD scenarios (see e2e/README.md)
+npm run e2e            # Playwright E2E — Gherkin/BDD behavioral suite (headless)
 npm run e2e:ui         # Playwright E2E with UI
+npm run screenshots    # Regenerate doc screenshots (separate from the e2e run)
 npm run build:tokens   # Regenerate preset.ts from tools/token-pipeline/tokens/primitives.json
 ```
 
@@ -115,7 +115,7 @@ This is a prototype scoped to demonstrate atomic design methodology, not a produ
 
 **Theming.** One theme with light and dark modes. No multi-brand support, density modes, or high-contrast accessibility themes. The token architecture supports these — the preset structure allows multiple themes via `definePreset()` — but only one is implemented.
 
-**Layout primitives.** Pages use CSS grid and flex directly. There are no reusable layout components (grid, spacer, container, shell). The templates level in the atomic hierarchy is scaffolded but empty. A production system would need layout primitives before scaling past a handful of pages.
+**Layout primitives.** The templates level provides two page-level layout shells (DsDashboardLayout, DsFullWidthLayout), but there are no finer-grained reusable layout primitives (grid, spacer, container) — pages still use CSS grid and flex directly for intra-page layout. A production system would add these before scaling past a handful of pages.
 
 **Accessibility automation.** Manual a11y checklists exist (see [QA per atomic level](./docs/07-qa-per-atomic-level.md) and [manual test checklist](./docs/manual-test-checklist.md)), Storybook has the a11y addon installed, and keyboard navigation rules are documented per level. What's missing is automated enforcement — axe-core is not in CI. Manual review catches issues; automation prevents regressions.
 
