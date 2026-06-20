@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withDisabledInitialNavigation } from '@angular/router';
 import { Dashboard } from './dashboard';
 import { ProjectService } from '../../services/project.service';
 import { projectServiceMock, mockProjects, mockStats } from '../mock-project-service';
@@ -13,10 +13,15 @@ export default meta;
 type Story = StoryObj<Dashboard>;
 
 // Each story swaps in a ProjectService double driving the stat grid + card grid
-// into a specific render state. Router is provided for the page's navigation.
+// into a specific render state. Router is provided for the page's navigation;
+// withDisabledInitialNavigation() stops it from trying to match the Storybook
+// iframe URL on load (which throws NG04002 under a subpath like GitHub Pages).
 const withState = (service: ProjectService) =>
   applicationConfig({
-    providers: [provideRouter([]), { provide: ProjectService, useValue: service }],
+    providers: [
+      provideRouter([], withDisabledInitialNavigation()),
+      { provide: ProjectService, useValue: service },
+    ],
   });
 
 export const Loading: Story = {

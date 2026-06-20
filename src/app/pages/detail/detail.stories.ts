@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
-import { ActivatedRoute, provideRouter } from '@angular/router';
+import { ActivatedRoute, provideRouter, withDisabledInitialNavigation } from '@angular/router';
 import { Detail } from './detail';
 import { ProjectService } from '../../services/project.service';
 import { projectServiceMock, mockProjects } from '../mock-project-service';
@@ -22,7 +22,7 @@ const fakeRoute = {
 const withState = (service: ProjectService) =>
   applicationConfig({
     providers: [
-      provideRouter([]),
+      provideRouter([], withDisabledInitialNavigation()),
       { provide: ProjectService, useValue: service },
       { provide: ActivatedRoute, useValue: fakeRoute },
     ],
