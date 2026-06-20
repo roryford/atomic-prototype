@@ -13,6 +13,7 @@ concurrency:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
@@ -39,7 +40,9 @@ jobs:
         run: npm run test -- --watch=false
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        # No --with-deps: ubuntu-latest already ships the libs Chromium needs,
+        # and the apt step it triggers has hung the runner. Just fetch the browser.
+        run: npx playwright install chromium
 
       - name: E2E tests
         run: npm run e2e
