@@ -11,9 +11,7 @@ test.describe('Documentation screenshots', () => {
   test('dashboard light mode', async ({ page }) => {
     await page.goto('/dashboard');
     // Ensure dark mode is off
-    await page.evaluate(() =>
-      document.documentElement.classList.remove('dark-mode'),
-    );
+    await page.evaluate(() => document.documentElement.classList.remove('dark-mode'));
     // Wait for data to load
     await page.locator('.stat-card').first().waitFor();
     await page.locator('.project-card').first().waitFor();
@@ -29,9 +27,7 @@ test.describe('Documentation screenshots', () => {
     await page.locator('.stat-card').first().waitFor();
     await page.locator('.project-card').first().waitFor();
     // Toggle dark mode
-    await page.evaluate(() =>
-      document.documentElement.classList.add('dark-mode'),
-    );
+    await page.evaluate(() => document.documentElement.classList.add('dark-mode'));
     // Let PrimeNG CSS vars settle
     await page.waitForTimeout(300);
     await page.screenshot({
@@ -53,9 +49,7 @@ test.describe('Documentation screenshots', () => {
   // 4. Detail page
   test('detail page', async ({ page }) => {
     await page.goto('/detail/1');
-    await page
-      .getByRole('heading', { name: 'Acme Redesign' })
-      .waitFor();
+    await page.getByRole('heading', { name: 'Acme Redesign' }).waitFor();
     await page.screenshot({
       path: 'docs/screenshots/detail-page.png',
       fullPage: true,

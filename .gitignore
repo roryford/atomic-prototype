@@ -60,3 +60,4 @@ tools/token-pipeline/output/
 # Playwright
 playwright-report/
 test-results/
+.features-gen/

@@ -22,38 +22,13 @@ const stories: [string, string, string, string][] = [
   ['atoms', 'Tag', 'design-system-atoms-tag--info', 'tag-info'],
   ['atoms', 'Input', 'design-system-atoms-input--default', 'input-default'],
   ['atoms', 'Input', 'design-system-atoms-input--with-placeholder', 'input-placeholder'],
-  [
-    'atoms',
-    'EmptyState',
-    'design-system-atoms-emptystate--default',
-    'empty-state-default',
-  ],
-  [
-    'atoms',
-    'EmptyState',
-    'design-system-atoms-emptystate--with-action',
-    'empty-state-action',
-  ],
+  ['atoms', 'EmptyState', 'design-system-atoms-emptystate--default', 'empty-state-default'],
+  ['atoms', 'EmptyState', 'design-system-atoms-emptystate--with-action', 'empty-state-action'],
 
   // Molecules
-  [
-    'molecules',
-    'StatCard',
-    'design-system-molecules-statcard--default',
-    'stat-card-default',
-  ],
-  [
-    'molecules',
-    'SearchBar',
-    'design-system-molecules-searchbar--default',
-    'search-bar-default',
-  ],
-  [
-    'molecules',
-    'FormField',
-    'design-system-molecules-formfield--default',
-    'form-field-default',
-  ],
+  ['molecules', 'StatCard', 'design-system-molecules-statcard--default', 'stat-card-default'],
+  ['molecules', 'SearchBar', 'design-system-molecules-searchbar--default', 'search-bar-default'],
+  ['molecules', 'FormField', 'design-system-molecules-formfield--default', 'form-field-default'],
   [
     'molecules',
     'FormField',
@@ -62,30 +37,10 @@ const stories: [string, string, string, string][] = [
   ],
 
   // Organisms — all states
-  [
-    'organisms',
-    'StatGrid',
-    'design-system-organisms-statgrid--loading',
-    'stat-grid-loading',
-  ],
-  [
-    'organisms',
-    'StatGrid',
-    'design-system-organisms-statgrid--error',
-    'stat-grid-error',
-  ],
-  [
-    'organisms',
-    'StatGrid',
-    'design-system-organisms-statgrid--empty',
-    'stat-grid-empty',
-  ],
-  [
-    'organisms',
-    'StatGrid',
-    'design-system-organisms-statgrid--with-data',
-    'stat-grid-data',
-  ],
+  ['organisms', 'StatGrid', 'design-system-organisms-statgrid--loading', 'stat-grid-loading'],
+  ['organisms', 'StatGrid', 'design-system-organisms-statgrid--error', 'stat-grid-error'],
+  ['organisms', 'StatGrid', 'design-system-organisms-statgrid--empty', 'stat-grid-empty'],
+  ['organisms', 'StatGrid', 'design-system-organisms-statgrid--with-data', 'stat-grid-data'],
   [
     'organisms',
     'ProjectCardGrid',
@@ -110,30 +65,10 @@ const stories: [string, string, string, string][] = [
     'design-system-organisms-projectcardgrid--with-data',
     'card-grid-data',
   ],
-  [
-    'organisms',
-    'ProjectTable',
-    'design-system-organisms-projecttable--loading',
-    'table-loading',
-  ],
-  [
-    'organisms',
-    'ProjectTable',
-    'design-system-organisms-projecttable--error',
-    'table-error',
-  ],
-  [
-    'organisms',
-    'ProjectTable',
-    'design-system-organisms-projecttable--empty',
-    'table-empty',
-  ],
-  [
-    'organisms',
-    'ProjectTable',
-    'design-system-organisms-projecttable--with-data',
-    'table-data',
-  ],
+  ['organisms', 'ProjectTable', 'design-system-organisms-projecttable--loading', 'table-loading'],
+  ['organisms', 'ProjectTable', 'design-system-organisms-projecttable--error', 'table-error'],
+  ['organisms', 'ProjectTable', 'design-system-organisms-projecttable--empty', 'table-empty'],
+  ['organisms', 'ProjectTable', 'design-system-organisms-projecttable--with-data', 'table-data'],
   [
     'organisms',
     'ProjectTable',
@@ -145,9 +80,7 @@ const stories: [string, string, string, string][] = [
 for (const [category, component, storyId, filename] of stories) {
   test(`${category}/${component}: ${filename}`, async ({ page }) => {
     // Use iframe URL for clean component-only rendering (no Storybook chrome)
-    await page.goto(
-      `${STORYBOOK}/iframe.html?id=${storyId}&viewMode=story`,
-    );
+    await page.goto(`${STORYBOOK}/iframe.html?id=${storyId}&viewMode=story`);
     // Wait for Storybook to render the component (domcontentloaded + settle time)
     await page.waitForLoadState('domcontentloaded');
     await page.waitForTimeout(1500);

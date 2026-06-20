@@ -91,12 +91,14 @@ Page-level layout shells built with **`ng-content` projection**. Templates defin
 
 **Business logic vs. layout behavior logic:** Templates must contain no business logic (data fetching, domain rules, API calls). However, layout behavior logic is allowed -- for example a `collapsed` signal that controls whether a sidebar is expanded or collapsed. If the logic governs spatial arrangement, it belongs in the template.
 
-| Template | Structure | Slots |
-|----------|-----------|-------|
-| Dashboard Layout | Top bar + sidebar + main grid | `header`, `sidebar`, `content` |
-| Settings Layout | Left nav + right detail pane | `nav`, `detail` |
-| Two-Column | Equal or weighted split | `left`, `right` |
-| Full-Width | Single centered column | `content` |
+| Template | Structure | Slots | Status |
+|----------|-----------|-------|--------|
+| [Dashboard Layout](../src/app/design-system/templates/dashboard-layout/dashboard-layout.ts) | Full-height padded surface; header bar above a stacked content region | `[header]`, default | Implemented |
+| [Full-Width](../src/app/design-system/templates/full-width-layout/full-width-layout.ts) | Centered single column; `maxWidth` input, optional `title` | default | Implemented |
+| Settings Layout | Left nav + right detail pane | `nav`, `detail` | Planned |
+| Two-Column | Equal or weighted split | `left`, `right` | Planned |
+
+Planned shells are deferred until a real screen needs them (the same "minimum inputs needed" discipline applied to atoms).
 
 **Key principle:** Data-free scaffolding. Named `ng-content` slots let pages project organisms without the template knowing what fills them.
 
@@ -108,10 +110,9 @@ Routed components that wire real data to templates and organisms. The **only** l
 
 | Page | Route | Template | Key Organisms |
 |------|-------|----------|---------------|
-| Dashboard | `/dashboard` | Dashboard Layout | Card Grid, Data Table |
-| User Settings | `/settings/user` | Settings Layout | Form Section |
-| Search Results | `/search` | Two-Column | Data Table, Sidebar Nav |
-| Detail View | `/entity/:id` | Full-Width | Card Header, Form Section |
+| [Dashboard](../src/app/pages/dashboard/dashboard.ts) | `/dashboard` | Dashboard Layout | DsStatGrid, DsProjectCardGrid |
+| [List](../src/app/pages/list/list.ts) | `/list` | Full-Width | DsProjectTable |
+| [Detail](../src/app/pages/detail/detail.ts) | `/detail/:id` | Full-Width (narrow) | DsFormField, DsTag, DsButton |
 
 **Key principle:** Pages orchestrate but do not render UI primitives directly. All visual output is delegated to organisms composed of molecules composed of atoms.
 
@@ -149,4 +150,5 @@ This repo is a working prototype. Explore these files to see the hierarchy in pr
 - **Atom:** [`src/app/design-system/atoms/button/button.ts`](../src/app/design-system/atoms/button/button.ts) -- thin wrapper around PrimeNG p-button
 - **Molecule:** [`src/app/design-system/molecules/search-bar/search-bar.ts`](../src/app/design-system/molecules/search-bar/search-bar.ts) -- composes DsInput + DsButton
 - **Organism:** [`src/app/design-system/organisms/project-table/project-table.ts`](../src/app/design-system/organisms/project-table/project-table.ts) -- 5-state data-aware table
-- **Page:** [`src/app/pages/dashboard/dashboard.ts`](../src/app/pages/dashboard/dashboard.ts) -- wires services to organisms
+- **Template:** [`src/app/design-system/templates/dashboard-layout/dashboard-layout.ts`](../src/app/design-system/templates/dashboard-layout/dashboard-layout.ts) -- data-free layout shell with `ng-content` slots
+- **Page:** [`src/app/pages/dashboard/dashboard.ts`](../src/app/pages/dashboard/dashboard.ts) -- projects organisms into a template shell and wires services to them

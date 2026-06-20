@@ -7,6 +7,16 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+### Added
+- Templates layer (Level 4): `DsDashboardLayout` and `DsFullWidthLayout` — data-free `ng-content` layout shells, each with Storybook stories and unit tests
+- Storybook stories for all pages (Dashboard, List, Detail) covering loading/error/empty/data states via a `projectServiceMock`
+- Gherkin/BDD end-to-end testing with [`playwright-bdd`](./e2e/README.md): `.feature` files (navigation, dashboard, projects), a step library organized by atomic level (page/organism/atom), `e2e/STEP_CATALOG.md`, and `npm run e2e:bdd`
+
+### Changed
+- Pages now compose organisms into template layout shells (honoring the cascade rule) instead of owning page layout directly
+- Node target realigned to 24 LTS (`.nvmrc`, `engines.node`)
+- Documentation synced with the above: atomic-hierarchy templates/pages tables, design-system and pages READMEs, root README, and regenerated detail/list screenshots
+
 ## [1.0.2] - 2026-04-08
 
 ### Added

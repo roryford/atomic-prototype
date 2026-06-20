@@ -17,7 +17,7 @@ describe('Dashboard', () => {
   it('should render without error', () => {
     fixture.detectChanges();
     const el = fixture.nativeElement;
-    expect(el.querySelector('.dashboard')).toBeTruthy();
+    expect(el.querySelector('.dashboard-layout')).toBeTruthy();
     expect(el.querySelector('.dashboard-title').textContent).toContain('Dashboard');
   });
 });

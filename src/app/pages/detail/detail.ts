@@ -9,13 +9,24 @@ import { DsFormField } from '../../design-system/molecules/form-field/form-field
 import { DsButton } from '../../design-system/atoms/button/button';
 import { DsTag } from '../../design-system/atoms/tag/tag';
 import { DsInput } from '../../design-system/atoms/input/input';
+import { DsFullWidthLayout } from '../../design-system/templates/full-width-layout/full-width-layout';
 
 @Component({
   selector: 'app-detail',
-  imports: [Avatar, Divider, Skeleton, Message, DsFormField, DsButton, DsTag, DsInput],
+  imports: [
+    Avatar,
+    Divider,
+    Skeleton,
+    Message,
+    DsFormField,
+    DsButton,
+    DsTag,
+    DsInput,
+    DsFullWidthLayout,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="detail-page">
+    <ds-full-width-layout [maxWidth]="'720px'">
       @if (project.isLoading()) {
         <div class="detail-card">
           <div class="skeleton-header">
@@ -107,15 +118,9 @@ import { DsInput } from '../../design-system/atoms/input/input';
           </div>
         </div>
       }
-    </div>
+    </ds-full-width-layout>
   `,
   styles: `
-    .detail-page {
-      max-width: 720px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
     .detail-card {
       background: var(--p-content-background);
       border: 1px solid var(--p-content-border-color);

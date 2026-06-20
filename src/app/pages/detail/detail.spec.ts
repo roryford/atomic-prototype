@@ -31,6 +31,6 @@ describe('Detail', () => {
   it('should render without error', () => {
     fixture.detectChanges();
     const el = fixture.nativeElement;
-    expect(el.querySelector('.detail-page')).toBeTruthy();
+    expect(el.querySelector('.full-width-layout')).toBeTruthy();
   });
 });

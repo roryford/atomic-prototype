@@ -4,26 +4,26 @@ import { ProjectService } from '../../services/project.service';
 import { DsStatGrid } from '../../design-system/organisms/stat-grid/stat-grid';
 import { DsProjectCardGrid } from '../../design-system/organisms/project-card-grid/project-card-grid';
 import { DsButton } from '../../design-system/atoms/button/button';
+import { DsDashboardLayout } from '../../design-system/templates/dashboard-layout/dashboard-layout';
 import { Project } from '../../models';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [DsStatGrid, DsProjectCardGrid, DsButton],
+  imports: [DsStatGrid, DsProjectCardGrid, DsButton, DsDashboardLayout],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="dashboard">
-      <header class="dashboard-header">
-        <div>
-          <h1 class="dashboard-title">Dashboard</h1>
-          <p class="dashboard-subtitle">Welcome back. Here's what's happening today.</p>
-        </div>
-        <ds-button
-          label="Toggle Dark Mode"
-          severity="secondary"
-          [outlined]="true"
-          (clicked)="toggleDarkMode()"
-        />
-      </header>
+    <ds-dashboard-layout>
+      <div header>
+        <h1 class="dashboard-title">Dashboard</h1>
+        <p class="dashboard-subtitle">Welcome back. Here's what's happening today.</p>
+      </div>
+      <ds-button
+        header
+        label="Toggle Dark Mode"
+        severity="secondary"
+        [outlined]="true"
+        (clicked)="toggleDarkMode()"
+      />
 
       <ds-stat-grid
         [stats]="projectService.stats.value() ?? []"
@@ -42,25 +42,9 @@ import { Project } from '../../models';
           (retryClicked)="projectService.projects.reload()"
         />
       </section>
-    </div>
+    </ds-dashboard-layout>
   `,
   styles: `
-    .dashboard {
-      padding: 32px;
-      background: var(--p-content-background);
-      min-height: 100vh;
-      font-family: Inter, sans-serif;
-    }
-
-    .dashboard-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
     .dashboard-title {
       font-size: 28px;
       font-weight: 700;

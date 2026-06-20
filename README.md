@@ -72,10 +72,11 @@ cd atomic-prototype
 npm install
 npm start              # Dev server at http://localhost:4200
 npm run storybook      # Component library at http://localhost:6006
-npm test               # 36 unit tests via Vitest
+npm test               # Unit tests via Vitest
 npm run lint           # ESLint (TypeScript + templates)
 npm run lint:fix       # ESLint auto-fix
-npm run e2e            # Playwright E2E tests (headless)
+npm run e2e            # Playwright E2E (Gherkin/BDD + plain specs, headless)
+npm run e2e:bdd        # Only the Gherkin/BDD scenarios (see e2e/README.md)
 npm run e2e:ui         # Playwright E2E with UI
 npm run build:tokens   # Regenerate preset.ts from tools/token-pipeline/tokens/primitives.json
 ```
@@ -88,10 +89,12 @@ src/app/
     atoms/        — Button, Input, Tag, EmptyState
     molecules/    — SearchBar, StatCard, FormField
     organisms/    — StatGrid, ProjectCardGrid, ProjectTable
+    templates/    — DashboardLayout, FullWidthLayout (ng-content layout shells)
     tokens/       — PrimeNG theme preset, design tokens
   pages/          — Dashboard, List, Detail
   services/       — ProjectService (httpResource-based)
   mocks/          — MSW handlers + fixture data
+e2e/              — Playwright tests (Gherkin/BDD features + plain specs)
 docs/             — Process guides (00-14) + prototype findings
 ```
 
@@ -100,10 +103,11 @@ docs/             — Process guides (00-14) + prototype findings
 - **4 atoms:** DsButton, DsTag, DsInput, DsEmptyState
 - **3 molecules:** DsStatCard, DsSearchBar, DsFormField
 - **3 organisms:** DsStatGrid, DsProjectCardGrid, DsProjectTable
-- **3 pages:** Dashboard, List, Detail
-- **Tooling:** CI (GitHub Actions), ESLint, Stylelint, Playwright E2E, Storybook, Vitest, MSW mocks
+- **2 templates:** DsDashboardLayout, DsFullWidthLayout (data-free `ng-content` shells)
+- **3 pages:** Dashboard, List, Detail (each composed into a template shell)
+- **Tooling:** CI (GitHub Actions), ESLint, Stylelint, Playwright E2E with Gherkin/BDD ([`playwright-bdd`](./e2e/README.md)), Storybook, Vitest, MSW mocks
 
-Not yet implemented: templates (directory exists as placeholder), real API integration, authentication, visual regression testing, axe-core in CI, performance budgets in CI.
+Not yet implemented: real API integration, authentication, visual regression testing, axe-core in CI, performance budgets in CI.
 
 ## Known Limitations
 
