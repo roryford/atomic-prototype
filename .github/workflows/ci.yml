@@ -24,8 +24,21 @@ jobs:
 
       - run: npm ci
 
+      # Audit threshold is `critical` (not `high`) deliberately.
+      # `npm audit fix` (non-breaking) resolves nothing here, and the only
+      # remaining advisories are HIGH/MODERATE in build-chain *devDependencies*
+      # that are never shipped to users: @angular/build, @angular-devkit/build-angular,
+      # @compodoc/compodoc, webpack-dev-server, esbuild, vite, undici, piscina,
+      # picomatch, http-proxy-middleware, @babel/core and uuid. The only available
+      # fixes require breaking downgrades (e.g. @angular-devkit/build-angular@0.802.2),
+      # which would regress the toolchain by years. Until upstream Angular ships
+      # patched ranges, `high` cannot pass; `critical` is the lowest level that does.
+      # Re-evaluate (and tighten toward `high`) on each Angular/toolchain bump.
       - name: Audit dependencies
         run: npm audit --audit-level=critical
+
+      - name: Typecheck
+        run: npm run typecheck
 
       - name: Prettier format check
         run: npm run format:check
@@ -35,6 +48,15 @@ jobs:
 
       - name: ESLint
         run: npm run lint
+
+      # Build the design tokens from source and fail if the committed preset.ts
+      # is stale. Catches drift between tools/token-pipeline and the generated
+      # output, and proves the pipeline runs from a clean checkout.
+      - name: Validate generated design tokens
+        run: |
+          npm ci --prefix tools/token-pipeline
+          npm run build:tokens
+          git diff --exit-code -- src/app/design-system/tokens/preset.ts
 
       - name: Unit tests
         run: npm run test -- --watch=false

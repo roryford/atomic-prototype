@@ -16,22 +16,18 @@ StyleDictionary.registerFormat({
   name: 'primeng/definePreset',
   format: ({ dictionary }) => {
     // ── Helpers ──────────────────────────────────────────────────────
-    const colorTokens = dictionary.allTokens.filter(t => t.$type === 'color');
-    const dimensionTokens = dictionary.allTokens.filter(t => t.$type === 'dimension');
+    const colorTokens = dictionary.allTokens.filter((t) => t.$type === 'color');
+    const dimensionTokens = dictionary.allTokens.filter((t) => t.$type === 'dimension');
 
     /** Find a token value by its path segments (e.g. 'color','brand','indigo'). */
     const val = (...segments) => {
-      const token = colorTokens.find(
-        t => t.path.join('.') === segments.join('.')
-      );
-      return token ? token.$value ?? token.value : undefined;
+      const token = colorTokens.find((t) => t.path.join('.') === segments.join('.'));
+      return token ? (token.$value ?? token.value) : undefined;
     };
 
     const dimVal = (...segments) => {
-      const token = dimensionTokens.find(
-        t => t.path.join('.') === segments.join('.')
-      );
-      return token ? token.$value ?? token.value : undefined;
+      const token = dimensionTokens.find((t) => t.path.join('.') === segments.join('.'));
+      return token ? (token.$value ?? token.value) : undefined;
     };
 
     // ── Primitive tier ───────────────────────────────────────────────
@@ -77,10 +73,29 @@ StyleDictionary.registerFormat({
     // Border radius
     const radiusDefault = dimVal('borderRadius', 'default');
     const radiusRounded = dimVal('borderRadius', 'rounded');
-    if (radiusDefault || radiusRounded) {
+    const radiusPill = dimVal('borderRadius', 'pill');
+    if (radiusDefault || radiusRounded || radiusPill) {
       primitive.borderRadius = {};
       if (radiusDefault) primitive.borderRadius.md = `'${radiusDefault}'`;
       if (radiusRounded) primitive.borderRadius.lg = `'${radiusRounded}'`;
+      if (radiusPill) primitive.borderRadius.xl = `'${radiusPill}'`;
+    }
+
+    // Spacing scale — PrimeNG's `Primitive` type has no `spacing` slot, so we
+    // emit it under the preset's `extend` key (Record<string, ...>), which is the
+    // supported escape hatch for custom design tokens. This exposes
+    // --p-spacing-xs … --p-spacing-lg CSS variables without breaking typings.
+    const extend = {};
+    const spacingXs = dimVal('spacing', 'xs');
+    const spacingSm = dimVal('spacing', 'sm');
+    const spacingMd = dimVal('spacing', 'md');
+    const spacingLg = dimVal('spacing', 'lg');
+    if (spacingXs || spacingSm || spacingMd || spacingLg) {
+      extend.spacing = {};
+      if (spacingXs) extend.spacing.xs = `'${spacingXs}'`;
+      if (spacingSm) extend.spacing.sm = `'${spacingSm}'`;
+      if (spacingMd) extend.spacing.md = `'${spacingMd}'`;
+      if (spacingLg) extend.spacing.lg = `'${spacingLg}'`;
     }
 
     // ── Semantic tier ────────────────────────────────────────────────
@@ -89,6 +104,17 @@ StyleDictionary.registerFormat({
     const surfaceCard = val('color', 'surface', 'card');
     const textPrimary = val('color', 'text', 'primary');
     const textSecondary = val('color', 'text', 'secondary');
+
+    // Dark scheme values (defined under color.dark.* in primitives.json)
+    const darkPrimary = val('color', 'dark', 'primary');
+    const darkPrimaryHover = val('color', 'dark', 'primary-hover');
+    const darkPrimaryActive = val('color', 'dark', 'primary-active');
+    const darkSurfaceCard = val('color', 'dark', 'surface', 'card');
+    const darkSurfaceWarm = val('color', 'dark', 'surface', 'warm');
+    const darkSurfaceMuted = val('color', 'dark', 'surface', 'muted');
+    const darkSurfaceBorder = val('color', 'dark', 'surface', 'border');
+    const darkTextPrimary = val('color', 'dark', 'text', 'primary');
+    const darkTextSecondary = val('color', 'dark', 'text', 'secondary');
 
     const semantic = {
       colorScheme: {
@@ -107,6 +133,23 @@ StyleDictionary.registerFormat({
           text: {
             color: textPrimary ? `'${textPrimary}'` : undefined,
             mutedColor: textSecondary ? `'${textSecondary}'` : undefined,
+          },
+        },
+        dark: {
+          primary: {
+            color: darkPrimary ? `'${darkPrimary}'` : undefined,
+            hoverColor: darkPrimaryHover ? `'${darkPrimaryHover}'` : undefined,
+            activeColor: darkPrimaryActive ? `'${darkPrimaryActive}'` : undefined,
+          },
+          surface: {
+            0: darkSurfaceCard ? `'${darkSurfaceCard}'` : undefined,
+            50: darkSurfaceWarm ? `'${darkSurfaceWarm}'` : undefined,
+            100: darkSurfaceMuted ? `'${darkSurfaceMuted}'` : undefined,
+            200: darkSurfaceBorder ? `'${darkSurfaceBorder}'` : undefined,
+          },
+          text: {
+            color: darkTextPrimary ? `'${darkTextPrimary}'` : undefined,
+            mutedColor: darkTextSecondary ? `'${darkTextSecondary}'` : undefined,
           },
         },
       },
@@ -144,6 +187,7 @@ StyleDictionary.registerFormat({
       `export default definePreset(Aura, ${renderObj({
         primitive,
         semantic,
+        extend: Object.keys(extend).length > 0 ? extend : undefined,
       })});`,
       '',
     ].join('\n');

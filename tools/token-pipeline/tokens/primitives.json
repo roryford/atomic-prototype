@@ -36,6 +36,22 @@
     "text": {
       "primary": { "$type": "color", "$value": "#1C1917" },
       "secondary": { "$type": "color", "$value": "#78716C" }
+    },
+    "dark": {
+      "$description": "Dark color scheme values mapped to the same UI roles as the light scheme",
+      "primary": { "$type": "color", "$value": "#818CF8" },
+      "primary-hover": { "$type": "color", "$value": "#A5B4FC" },
+      "primary-active": { "$type": "color", "$value": "#6366F1" },
+      "surface": {
+        "card": { "$type": "color", "$value": "#1C1917" },
+        "warm": { "$type": "color", "$value": "#292524" },
+        "muted": { "$type": "color", "$value": "#44403C" },
+        "border": { "$type": "color", "$value": "#57534E" }
+      },
+      "text": {
+        "primary": { "$type": "color", "$value": "#FAFAF9" },
+        "secondary": { "$type": "color", "$value": "#A8A29E" }
+      }
     }
   },
   "spacing": {
