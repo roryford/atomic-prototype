@@ -44,7 +44,7 @@ At minimum, complete all Tier 1 checks. These are the correctness and safety che
 
 This document describes both practices that are **demonstrated** in the prototype codebase and practices that are **recommended** but not yet implemented. When following the checklists, be aware of the distinction:
 
-- **Demonstrated in the prototype:** Vitest unit tests, Storybook stories, Playwright E2E tests, manual accessibility checklist.
+- **Demonstrated in the prototype:** Vitest unit tests, Storybook stories, Playwright E2E tests (including Gherkin/BDD `.feature` files), manual accessibility checklist.
 - **Recommended but not yet implemented:** Storybook play functions (interaction tests), ESLint boundary rules, Stylelint token-audit rule, axe-core in CI.
 
 Recommended practices are included because they represent the target QA posture. Adopt them as the team and codebase mature.
@@ -393,7 +393,7 @@ Merge to main
 Same checks + Storybook deploy (GitHub Pages)
 ```
 
-E2E tests (Playwright) are available via `npm run e2e` and can be added to CI when the team decides on the trigger policy (every PR vs merge-only).
+E2E tests (Playwright) are available via `npm run e2e` and can be added to CI when the team decides on the trigger policy (every PR vs merge-only). Behavioral flows are written as Gherkin `.feature` files (run via `npm run e2e:bdd`) so non-technical testers and BAs can read and author them — see [e2e/README.md](../e2e/README.md). Page-level journeys map to the acceptance criteria in [acceptance-criteria.md](./acceptance-criteria.md); the page certification gate below ("reviews against acceptance criteria") is exactly where those scenarios pay off.
 
 That is the whole pipeline for a small team. Add complexity only when you have evidence you need it. The enhanced prototype implements this pipeline in `.github/workflows/ci.yml`.
 

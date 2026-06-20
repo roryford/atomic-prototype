@@ -166,27 +166,39 @@ AC:
 ```
 Template: DsDashboardLayout
 Selector: ds-dashboard-layout
-Inputs:
-  - title: string (page heading)
-  - subtitle: string (page subheading)
+Inputs: none — this shell takes no inputs (add layout inputs only when a real screen needs one)
 Slots:
-  - header-action: projected into header area (e.g., export button, dark mode toggle)
-  - content: main body area (organisms projected here)
+  - [header]: the header bar — title block + actions (e.g. dark mode toggle),
+              arranged as a space-between row
+  - default:  main body area (organisms projected here)
 
 Constraint: Zero data binding. No services. Layout behavior only.
-            Collapsed/expanded state is OK (layout behavior). Data fetching is NOT.
+            Layout state (e.g. a future collapsed sidebar) is OK. Data fetching is NOT.
 
-Responsive:
-  - >= 1024px: header (full width) + content with 24px padding
-  - 640-1023px: 16px padding
-  - < 640px: 8px padding, title font-size reduced to 22px
-
-Landmarks: <header role="banner">, <main role="main">
+Landmarks: <header> wraps the header bar
 
 AC:
-  - GIVEN any content projected, WHEN at 375px, THEN content stacks vertically with 8px padding
-  - GIVEN title="Dashboard", WHEN rendered, THEN shows heading with title
-  - GIVEN no header-action projected, WHEN rendered, THEN header area shows title only (no empty space)
+  - GIVEN elements tagged [header], WHEN rendered, THEN they appear in the header bar
+  - GIVEN default content, WHEN rendered, THEN it appears in the content region below the header
+  - GIVEN the shell, WHEN inspected, THEN it binds no data and injects no services
+```
+
+The sibling template `DsFullWidthLayout` shows the other valid shape — a shell that
+*does* take layout inputs (layout values only, never data):
+
+```
+Template: DsFullWidthLayout
+Selector: ds-full-width-layout
+Inputs:
+  - title: string (optional page heading, rendered above the content)
+  - maxWidth: string (CSS value, default 'none'; e.g. '720px' for a narrow reading column)
+Slots:
+  - default: the page's content
+
+AC:
+  - GIVEN title="Projects", WHEN rendered, THEN shows the heading above the content
+  - GIVEN no title, WHEN rendered, THEN renders content only (no empty heading)
+  - GIVEN maxWidth="720px", WHEN rendered, THEN the column is centered at 720px max width
 ```
 
 ### 3.5 Page: Dashboard
@@ -194,7 +206,7 @@ AC:
 ```
 Page: Dashboard
 Route: /dashboard (default redirect from /)
-Template: DsDashboardLayout (title="Dashboard", subtitle="Welcome back")
+Template: DsDashboardLayout — title block + dark mode toggle projected into the [header] slot
 Organisms:
   - DsStatGrid: stats from ProjectService.stats
   - DsProjectCardGrid: projects from ProjectService.projects
@@ -204,7 +216,7 @@ Journey: Journey 1 (Browse Projects) — this page is the entry point
 Behavior:
   - Stats and projects load independently (partial failure OK — one can error while other renders)
   - Click project card -> navigate to /detail/:id
-  - Dark mode toggle in header-action slot
+  - Dark mode toggle projected into the [header] slot
 
 NOT in scope: data filtering (that's in DsProjectTable on List page), pagination, export
 
@@ -336,6 +348,36 @@ WHEN dashboard loads,
 THEN stats section shows error+retry, projects section renders normally
 ```
 
+### 5.1 From acceptance criteria to executable Gherkin
+
+The GIVEN/WHEN/THEN you already write **is Gherkin**. Journey-level criteria can be
+dropped almost verbatim into a `.feature` file and run as an end-to-end test — so the
+acceptance criteria a BA owns become living, executable documentation rather than prose
+that drifts from the code.
+
+The journey example above becomes:
+
+```gherkin
+Feature: Project dashboard
+
+  Scenario: Stats fail but projects still load
+    Given the stats service is failing
+    When I open the dashboard
+    Then the stats section shows an error with retry
+    And I should see the project cards
+```
+
+A BA composes scenarios from a fixed menu of plain-English steps — no code. See
+[`e2e/STEP_CATALOG.md`](../e2e/STEP_CATALOG.md) for the available phrases,
+[`e2e/README.md`](../e2e/README.md) for how to author and run them (`npm run e2e:bdd`),
+and [`e2e/features/`](../e2e/features) for live examples. The steps are organized by
+atomic level (page / organism / atom), mirroring this guide.
+
+> **Authoring tip:** a journey criterion only becomes a runnable scenario if a matching
+> step exists in the catalog. If it doesn't, that's the BA-developer handoff: the BA
+> writes the intent, a developer adds the step. New criteria that have no step yet are a
+> useful backlog of test coverage to build.
+
 ---
 
 ## 6. State Discovery Checklist
@@ -370,3 +412,4 @@ The principle stays the same at every size: someone must ask "what happens when 
 - For atomic level definitions, see [01-atomic-hierarchy](./01-atomic-hierarchy.md)
 - For QA criteria per level, see [07-qa-per-atomic-level](./07-qa-per-atomic-level.md)
 - For implementation tips, see [11-implementation-tips](./11-implementation-tips.md)
+- For turning acceptance criteria into runnable tests, see [e2e/README.md](../e2e/README.md) and [e2e/STEP_CATALOG.md](../e2e/STEP_CATALOG.md)

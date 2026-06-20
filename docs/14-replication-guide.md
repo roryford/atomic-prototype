@@ -2,7 +2,7 @@
 
 > **Who is this for?** A developer (or small team) who wants to build a project like this from scratch, not fork this repo. Read time: ~25 minutes. Working time: 2-4 hours to reach a running app with one atom, one story, one test, and MSW mocking.
 >
-> **Time estimate:** Teams already on Node 25 and Angular 21 can reach a running app in 2-4 hours. Teams that need to upgrade their environment should budget an additional half-day for setup.
+> **Time estimate:** Teams already on Node 24 and Angular 21 can reach a running app in 2-4 hours. Teams that need to upgrade their environment should budget an additional half-day for setup.
 
 This guide walks through every step to replicate this prototype's architecture in a new Angular 21 + PrimeNG 21 project. Each section builds on the previous one. By the end, you will have a working atomic design system with Storybook, Vitest, and Mock Service Worker -- the same foundation this repo demonstrates.
 
@@ -28,27 +28,27 @@ For what the end state looks like, browse this prototype's `src/` directory alon
 
 ## 1. Prerequisites
 
-You need exact version alignment. Angular 21 requires Node 25+.
+You need version alignment. This project targets Node 24 (the active LTS); Angular 21 supports Node `^20.19`, `^22.12`, or `>= 24`.
 
 > **Team prerequisite:** This guide assumes at least one team member has prior Angular experience. Teams new to both Angular and atomic design should learn Angular fundamentals first.
 
 | Tool | Version | How to verify |
 |------|---------|---------------|
-| Node.js | >= 25.0.0 | `node -v` |
+| Node.js | >= 24.0.0 | `node -v` |
 | npm | >= 11.11.0 | `npm -v` |
 | Angular CLI | ^21.2.3 | `npx @angular/cli version` |
 
-Install Node 25 via [nvm](https://github.com/nvm-sh/nvm):
+Install Node 24 via [nvm](https://github.com/nvm-sh/nvm):
 
 ```bash
-nvm install 25
-nvm use 25
+nvm install 24
+nvm use 24
 ```
 
 Lock the version for your team by creating `.nvmrc` at the project root:
 
 ```
-25
+24
 ```
 
 Install the Angular CLI globally (optional but convenient):
@@ -93,7 +93,7 @@ Lock the package manager version in `package.json`:
 {
   "packageManager": "npm@11.11.0",
   "engines": {
-    "node": ">=25.0.0"
+    "node": ">=24.0.0"
   }
 }
 ```

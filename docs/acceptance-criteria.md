@@ -1,8 +1,13 @@
 # Acceptance Criteria
 
-Written BEFORE implementation. Each criterion drives a Storybook play function, a unit test, or a manual test checklist item.
+Written BEFORE implementation. Each criterion drives a Storybook play function, a unit test, a manual test checklist item, or — for journeys — an executable Gherkin scenario.
 
 > These acceptance criteria are examples from the prototype simulation. Your criteria will reflect your own domain and user journeys. Use these as templates for the level of detail expected, not as literal requirements.
+
+> **These GIVEN/WHEN/THEN criteria are Gherkin.** The journey criteria below map directly to
+> the runnable `.feature` files in [`e2e/features/`](../e2e/features) — Journey 1 → `dashboard.feature`
+> + `navigation.feature`, Journeys 2-3 → `projects.feature`. See [08-pbi-and-ba-guide § 5.1](./08-pbi-and-ba-guide.md#51-from-acceptance-criteria-to-executable-gherkin)
+> for turning a criterion into a scenario, and [`e2e/STEP_CATALOG.md`](../e2e/STEP_CATALOG.md) for the available steps.
 
 ---
 

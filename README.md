@@ -61,11 +61,11 @@ DsEmptyState
 
 ## Quick Start
 
-> **Note:** Node 25 is not a Long-Term Support (LTS) release. Plan to migrate to
-> Node 26 LTS when it becomes available (expected mid-2026).
+> **Note:** The project targets Node 24 (the active LTS). Node 26 LTS will be a
+> straightforward bump when it lands (expected late 2026).
 
 ```
-Prerequisites: Node 25+, npm 11+
+Prerequisites: Node 24+, npm 11+
 
 git clone https://github.com/roryford/atomic-prototype.git
 cd atomic-prototype

@@ -79,8 +79,10 @@ src/app/
 │   │   │   ├── project-table.spec.ts
 │   │   │   └── project-table.stories.ts
 │   │   └── index.ts
-│   └── templates/                       # Only if layout patterns emerge
-│       └── index.ts                     # Barrel — empty until templates are created
+│   └── templates/                       # Layout shells (ng-content slots, no data)
+│       ├── dashboard-layout/
+│       ├── full-width-layout/
+│       └── index.ts                     # Barrel — exports the template shells
 ├── pages/
 │   ├── dashboard/
 │   ├── detail/
@@ -118,11 +120,19 @@ CI, linting, and E2E testing additions at enhanced prototype stage:
 
 ```
 eslint.config.js                         # ESLint flat config (angular-eslint + prettier)
-playwright.config.ts                     # Playwright E2E configuration
-e2e/                                     # Playwright test files
-├── navigation.spec.ts
-├── dashboard.spec.ts
-└── projects.spec.ts
+playwright.config.ts                     # Playwright E2E config (BDD + plain projects)
+e2e/                                     # End-to-end tests
+├── features/                            # Gherkin .feature files (plain English)
+│   ├── navigation.feature
+│   ├── dashboard.feature
+│   └── projects.feature
+├── steps/                               # Step definitions, by atomic level
+│   ├── page.steps.ts                    #   Level 5 — pages & navigation
+│   ├── organism.steps.ts                #   Level 3 — sections within a page
+│   └── atom.steps.ts                    #   Level 1 — buttons & headings
+├── STEP_CATALOG.md                      # Menu of steps for scenario authors
+├── README.md                            # How to write & run BDD tests
+└── screenshots.spec.ts                  # Plain Playwright (doc screenshots)
 .github/workflows/ci.yml                # PR checks + Storybook deploy
 .npmrc                                   # legacy-peer-deps for Storybook 10 compat
 ```

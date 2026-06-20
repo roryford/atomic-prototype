@@ -54,7 +54,7 @@ Every function below can be done manually. Tools are accelerators you adopt when
 | Component development | Build and test in the app directly | Storybook 10 (free, open source). **Angular caveat:** use `ng run <project>:storybook`, not `storybook dev` directly. CSS imports in `preview.ts` fail — use `angular.json` styles array or CDN link in `preview-head.html`. | Prototype — when reviewing components in isolation matters |
 | Visual regression | Manual side-by-side review (Storybook vs Figma) | Chromatic (easiest, free tier 5K snapshots/month, Modes feature for dark mode), Percy (free tier available), BackstopJS (open source, self-hosted), Playwright `toHaveScreenshot()` (built-in, no external service) | Production — when manual visual review does not scale |
 | Unit testing | Angular CLI default (Vitest in v21). **Note:** PrimeNG `(onClick)` does not fire via DOM click in jsdom. Full interaction testing requires Storybook play functions or Playwright. | Already bundled — no procurement needed | Day 1 |
-| E2E testing | Manual testing of user flows | Cypress (free), Playwright (free) | Prototype — when core flows are stable enough to automate |
+| E2E testing | Manual testing of user flows | Cypress (free), Playwright (free), Playwright + playwright-bdd (free; Gherkin `.feature` files so BAs/testers can read and write user-flow tests in English) | Prototype — when core flows are stable enough to automate |
 | Accessibility testing | Manual keyboard + screen reader testing | axe-core (free, recommended standard), pa11y (free), Storybook a11y addon (free). **Gate:** zero critical/serious violations. | Prototype — from first atom |
 | CSS/SCSS linting | Manual code review | Stylelint + `color-no-hex` rule. Note: `stylelint-declaration-use-css-custom-properties` was evaluated but is not available on npm. | POC — from first component |
 | Code formatting | Manual style adherence | Prettier (free) | POC — from first component |
@@ -150,7 +150,8 @@ The simulation phase validated several tools against real Angular 21 + PrimeNG 2
 | `httpResource()` | Clean but experimental | `@experimental 19.2` — wrap behind service methods to isolate risk |
 | ESLint + angular-eslint | Smooth setup, valuable | Schematic handles config; needs `eslint-config-prettier` for Prettier coexistence; selector rules need both `app` and `ds` prefixes; two template a11y rules need inline suppression for `ng-content` and delegating wrappers |
 | Playwright | Seamless with MSW | MSW service worker intercepts transparently — no extra E2E mock setup; PrimeNG `p-button` with `[link]="true"` renders as `<button>`, not `<a>`; deterministic mock data enables hardcoded assertions |
-| GitHub Actions CI | Straightforward | Node 25 via `.nvmrc`; `ng test` needs `--watch=false` for CI; Storybook deploys to GitHub Pages on merge to main |
+| playwright-bdd (Gherkin) | Low-friction add-on to Playwright | Reuses the existing `playwright.config.ts` (webServer, reporters, traces); needs a `bddgen` step before `playwright test` (wired into `npm run e2e`); runs as a separate Playwright project alongside plain specs; Cucumber VS Code extension gives step autocomplete |
+| GitHub Actions CI | Straightforward | Node 24 (LTS) via `.nvmrc`; `ng test` needs `--watch=false` for CI; Storybook deploys to GitHub Pages on merge to main |
 
 These verdicts informed the "Evaluate When" column in Section 2. None of the tools required significant configuration effort, but each had at least one gotcha worth knowing in advance. ESLint, Playwright, and GitHub Actions CI were adopted during the enhanced prototype phase, confirming their "Evaluate When" recommendations.
 
