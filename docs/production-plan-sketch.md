@@ -14,7 +14,7 @@ From the maturity stages documentation, the prototype-to-production transition a
 |------|-------------------|-----------------|
 | Data source | MSW mocked services | Real API calls with auth, pagination, caching |
 | Error handling | `httpResource().error()` with retry buttons | Error boundaries, fallback UI, retry logic, global `ErrorHandler` |
-| Test coverage | 36 unit tests + 10 Storybook stories, manual walkthroughs | Automated unit, integration, E2E, visual regression |
+| Test coverage | 74 unit tests + 15 Storybook story files, manual walkthroughs | Automated unit, integration, E2E, visual regression |
 | Accessibility | Basic keyboard nav, manual checks | axe-core in CI, screen reader tested, ARIA complete |
 | Performance | "Seems fast enough" (540KB initial, 122KB gzip) | Measured against budgets, optimized (500KB warn / 800KB error raw) |
 | Dark mode | Developer-invented `colorScheme.dark` values | Designer-specified dark palette, automated visual verification |

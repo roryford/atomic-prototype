@@ -13,7 +13,7 @@ needs to adopt atomic design without guesswork.
 
 The repository includes process documentation (15 guides covering hierarchy,
 tokens, QA, tooling, decision-making, and maturity stages) alongside working
-code (4 atoms, 3 molecules, 3 organisms, and 3 pages). Every component is exercised in
+code (4 atoms, 3 molecules, 4 organisms, and 3 pages). Every component is exercised in
 Storybook and covered by Vitest unit tests.
 
 Target audience: small teams (2-4 developers) building design systems. This
@@ -51,7 +51,7 @@ Atoms                    Molecules                 Organisms
 DsButton                 DsSearchBar               DsStatGrid
 DsInput                  DsStatCard                DsProjectCardGrid
 DsTag                    DsFormField               DsProjectTable
-DsEmptyState
+DsEmptyState                                       DsProjectDetailCard
                                                    Pages
                                                    -------------------------
                                                    Dashboard
@@ -65,7 +65,7 @@ DsEmptyState
 > straightforward bump when it lands (expected late 2026).
 
 ```
-Prerequisites: Node 24+, npm 11+
+Prerequisites: Node 24+, npm 11+ (both enforced via package.json "engines")
 
 git clone https://github.com/roryford/atomic-prototype.git
 cd atomic-prototype
@@ -75,7 +75,7 @@ npm run storybook      # Component library at http://localhost:6006
 npm test               # Unit tests via Vitest
 npm run lint           # ESLint (TypeScript + templates)
 npm run lint:fix       # ESLint auto-fix
-npm run e2e            # Playwright E2E — Gherkin/BDD behavioral suite (headless)
+npm run e2e            # Playwright E2E — Gherkin/BDD behavioral suite (headless; LOCAL ONLY, not run in CI)
 npm run e2e:ui         # Playwright E2E with UI
 npm run screenshots    # Regenerate doc screenshots (separate from the e2e run)
 npm run build:tokens   # Regenerate preset.ts from tools/token-pipeline/tokens/primitives.json
@@ -88,7 +88,7 @@ src/app/
   design-system/
     atoms/        — Button, Input, Tag, EmptyState
     molecules/    — SearchBar, StatCard, FormField
-    organisms/    — StatGrid, ProjectCardGrid, ProjectTable
+    organisms/    — StatGrid, ProjectCardGrid, ProjectTable, ProjectDetailCard
     templates/    — DashboardLayout, FullWidthLayout (ng-content layout shells)
     tokens/       — PrimeNG theme preset, design tokens
   pages/          — Dashboard, List, Detail
@@ -102,12 +102,18 @@ docs/             — Process guides (00-14) + prototype findings
 
 - **4 atoms:** DsButton, DsTag, DsInput, DsEmptyState
 - **3 molecules:** DsStatCard, DsSearchBar, DsFormField
-- **3 organisms:** DsStatGrid, DsProjectCardGrid, DsProjectTable
+- **4 organisms:** DsStatGrid, DsProjectCardGrid, DsProjectTable, DsProjectDetailCard
 - **2 templates:** DsDashboardLayout, DsFullWidthLayout (data-free `ng-content` shells)
 - **3 pages:** Dashboard, List, Detail (each composed into a template shell)
-- **Tooling:** CI (GitHub Actions), ESLint, Stylelint, Playwright E2E with Gherkin/BDD ([`playwright-bdd`](./e2e/README.md)), Storybook, Vitest, MSW mocks
+- **Tooling:** CI (GitHub Actions), ESLint, Stylelint, Playwright E2E with Gherkin/BDD ([`playwright-bdd`](./e2e/README.md)) — **run locally, not in CI** (see below), Storybook, Vitest, MSW mocks
 
-Not yet implemented: real API integration, authentication, visual regression testing, axe-core in CI, performance budgets in CI.
+### Continuous Integration
+
+The GitHub Actions CI pipeline ([`.github/workflows/ci.yml`](./.github/workflows/ci.yml)) runs: dependency audit, Prettier format check, Stylelint, ESLint, Vitest unit tests, and a production build, plus a Storybook build-and-deploy to GitHub Pages on `main`.
+
+**Playwright E2E is intentionally NOT part of CI.** The hosted runner's cold-Chromium download stalls indefinitely, so the BDD/e2e suite runs **locally only** via `npm run e2e`. Run it before pushing changes that affect user-facing behavior.
+
+Not yet implemented: real API integration, authentication, visual regression testing, axe-core in CI, performance budgets in CI, and E2E in CI (runs locally only — see above).
 
 ## Known Limitations
 

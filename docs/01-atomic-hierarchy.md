@@ -19,7 +19,6 @@ Thin wrappers around a single PrimeNG primitive or native HTML element. They app
 | Input | `p-inputtext` | Single-line text entry |
 | Label | native `<label>` | Accessible form labeling |
 | Badge | `p-badge` | Numeric or status indicator |
-| Icon | PrimeIcons | Iconography via design-token sizing |
 | Avatar | `p-avatar` | User or entity image/initials |
 | Checkbox | `p-checkbox` | Boolean toggle |
 | Tag | `p-tag` | Categorical label with severity color |
@@ -27,9 +26,11 @@ Thin wrappers around a single PrimeNG primitive or native HTML element. They app
 | Divider | `p-divider` | Visual separator between sections |
 | Link | native `<a>` / `routerLink` | Styled navigation anchor |
 | Toggle | `p-toggleswitch` | On/off binary control |
-| Empty State | native HTML | Reusable empty state composition (icon + message + optional action button) |
+| Empty State | native HTML + Button atom | Reusable empty state composition (icon + message + optional action button) |
 
-> **Empty State note:** Unlike most atoms which wrap a PrimeNG primitive, Empty State is a custom atom built from native HTML. PrimeNG does not provide a built-in empty state component.
+> **Icons (no Icon atom):** There is no `DsIcon` atom. Icons are rendered inline via PrimeIcons `pi` classes (e.g. `<i class="pi pi-inbox" aria-hidden="true"></i>`) wherever they are needed. The convention is: decorative icons carry `aria-hidden="true"`, and icon names are passed as inputs (e.g. `DsEmptyState`'s `icon` input defaults to `pi-inbox`). Sizing/color come from design tokens via component styles. A dedicated Icon atom is deliberately not introduced until a real need (custom icon set, icon tokens) justifies it — the same "minimum needed" discipline applied to other atoms.
+
+> **Empty State note:** PrimeNG does not provide a built-in empty state component, so Empty State is a custom atom. Its markup is native HTML for the icon and message, but the optional action **composes the Button atom** (`DsButton`) rather than re-implementing a button. This is a deliberate, documented exception to the strict "atoms wrap a single primitive and never compose other atoms" boundary: reusing the certified Button atom is more correct than duplicating button styling/behavior in native HTML. Treat Empty State as a pragmatic atom-composing-an-atom case, not a precedent for routinely nesting atoms — when composition grows beyond one optional action, it should graduate to a molecule.
 
 ### Organism primitives -- configured at organism level, not decomposed
 
@@ -133,6 +134,8 @@ Molecules        (consume Atoms only)
 Atoms            (consume PrimeNG primitives + native HTML)
 ```
 The strict one-level-below rule applies to structural composition, not content projection. A page projects an organism into a template slot -- this is not a cascade violation because the template does not depend on the organism; it simply provides the slot. An atom never imports a molecule. A molecule never imports an organism. A template never fetches data.
+
+**Documented exception (Empty State):** atoms normally do not import other atoms. `DsEmptyState` is the one sanctioned exception — it imports the `DsButton` atom for its optional action rather than duplicating button markup (see the Empty State note under Level 1). This is an intentional, narrowly-scoped deviation, not license to nest atoms freely.
 
 ---
 

@@ -7,6 +7,35 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-06-20
+
+Adversarial gap audit and remediation: 34 confirmed findings fixed across bugs, test coverage, accessibility, tooling, and documentation accuracy.
+
+### Fixed
+- **Detail page no longer shows stale data when navigating between projects.** The route `:id` is now bound to a signal input (`withComponentInputBinding`) driving a reactive `httpResource`, so `/detail/1 → /detail/2` re-fetches. Previously the resource was built once from a one-time `route.snapshot` read and never refreshed (covered by a param-change regression test).
+- `ProjectService.projectById` now takes a reactive id accessor instead of a plain number, removing the injection-context hazard.
+- Detail view fields render as read-only (`DsInput` gained a `readonly` input) instead of editable text inputs for display-only data.
+
+### Added
+- **`DsProjectDetailCard` organism** — the detail page now delegates its card rendering to an organism instead of composing raw PrimeNG primitives directly (honoring the "pages delegate rendering to organisms" rule).
+- Vitest HTTP backend (`src/app/mocks/server.ts`, MSW node) so page specs exercise loading/error/data branches, not just the loading state.
+- Dark color scheme, `spacing.*`, and `borderRadius` tokens now flow through the token pipeline into `preset.ts` (previously dropped).
+- `typecheck` npm script and CI step; CI now validates the generated token preset is in sync.
+
+### Changed
+- Unit coverage expanded from 43 to 74 tests: real DOM/interaction assertions replace tautological `emit()`/signal-readback tests; filter branches (name/owner/status), output emitters, and keyboard handlers are now covered.
+- Search field has an accessible name; project cards expose a descriptive label; the dark-mode toggle reflects state via label + `aria-pressed`.
+- PrimeIcon rendering standardized to a single inline `class="pi {{ icon }}"` form across components.
+- Lint/format scope expanded to cover `e2e/`, `tools/`, `.storybook/`, and root config files.
+- `@storybook/test` (stranded on v8) replaced with the canonical `storybook/test` entry point from Storybook 10.
+- Figma plugin validates fetch origins against the manifest allow-list and validates parsed token JSON before import.
+- `engines.npm` (`>=11`) added so the documented npm prerequisite is enforced; `tools/token-pipeline` package gained `version` and MIT `license`.
+- E2E (Playwright) decoupled from CI — the GitHub Actions runner's cold-Chromium download stalls indefinitely, so the e2e/BDD suite now runs **locally only** (`npm run e2e`). This supersedes the 1.0.2 "E2E Playwright step added to CI pipeline" entry, which no longer reflects `ci.yml`.
+- Documentation accuracy: reconciled component/test/story counts to verified numbers; documented import (barrel), template/style authoring, and icon conventions; corrected the Empty State "native HTML" claim and removed the non-existent Icon atom from the hierarchy.
+
+### Removed
+- Non-functional `<meta http-equiv>` security headers from `index.html` (browsers ignore them; real headers must be set at the host/CDN layer).
+
 ## [1.1.0] - 2026-06-20
 
 ### Added
@@ -42,7 +71,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Security
 - GitHub Actions pinned to full commit SHAs
-- E2E Playwright step added to CI pipeline
+- E2E Playwright step added to CI pipeline _(later reverted — see [Unreleased]; e2e now runs locally only because the CI runner's cold-Chromium download stalls)_
 - HTTP security headers added to `index.html` (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`)
 
 ## [1.0.1] - 2026-04-08

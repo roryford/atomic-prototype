@@ -184,7 +184,7 @@ Manual verification items that cannot be fully covered by unit tests or Storyboo
 ## Storybook Verification
 
 - [ ] Run Storybook: `ng run atomic-prototype:storybook`
-- [ ] All 10 story files load without errors
+- [ ] All 15 story files load without errors
 - [ ] Each atom story renders all variants (default, severity, outlined, disabled)
 - [ ] Each organism story renders all states (loading, error, empty, data)
 - [ ] PrimeIcons display correctly (loaded via CDN in preview-head.html)

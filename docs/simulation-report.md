@@ -15,8 +15,8 @@ This report covers the prototype phase of an Angular 21 atomic design simulation
 - Implementing lazy loading for all three page routes
 - Enforcing design token usage via Stylelint `color-no-hex`
 - Remediating 11 hardcoded hex values in inline styles
-- Writing 36 unit tests across 13 spec files
-- Creating 10 Storybook story files
+- Writing 74 unit tests across 16 spec files
+- Creating 15 Storybook story files
 
 **What was not simulated:**
 
@@ -32,11 +32,12 @@ This report covers the prototype phase of an Angular 21 atomic design simulation
 |--------|-------|
 | Atoms | 4 (DsButton, DsTag, DsInput, DsEmptyState) |
 | Molecules | 3 (DsStatCard, DsSearchBar, DsFormField) |
-| Organisms | 3 (DsStatGrid, DsProjectCardGrid, DsProjectTable) |
+| Organisms | 4 (DsStatGrid, DsProjectCardGrid, DsProjectTable, DsProjectDetailCard) |
+| Templates | 2 (DsDashboardLayout, DsFullWidthLayout) |
 | Pages | 3 (Dashboard, List, Detail) |
 | Services | 1 (ProjectService) |
-| Unit tests | 36 across 13 spec files |
-| Story files | 10 |
+| Unit tests | 74 across 16 spec files |
+| Story files | 15 |
 | MSW endpoints | 4 |
 | Findings logged | 8 |
 | Hypotheses tested | 9 (6 confirmed, 2 confirmed with caveats, 1 partial) |
@@ -137,11 +138,14 @@ Three additional states were discovered during implementation:
 | DsStatGrid | Organism | `ds-stat-grid` | `stats`, `isLoading`, `error` | `retryClicked` | loading, error, empty, data | 4 | Yes |
 | DsProjectCardGrid | Organism | `ds-project-card-grid` | `projects`, `isLoading`, `error` | `projectSelected`, `retryClicked` | loading, error, empty, data | 4 | Yes |
 | DsProjectTable | Organism | `ds-project-table` | `projects`, `isLoading`, `error` | `projectSelected`, `retryClicked` | loading, error, empty, data, search-no-results | 5 | Yes |
+| DsProjectDetailCard | Organism | `ds-project-detail-card` | `project` | `backClicked` | data | 2 | — |
+| DsDashboardLayout | Template | `ds-dashboard-layout` | — (`ng-content` slots) | — | content projection | 3 | Yes |
+| DsFullWidthLayout | Template | `ds-full-width-layout` | — (`ng-content` slots) | — | content projection | 4 | Yes |
 | Dashboard | Page | `app-dashboard` | — (uses services) | — | loading, data, partial-failure | 1 | — |
 | ListPage | Page | `app-list` | — (uses services) | — | loading, data, filtered, search-no-results | 1 | — |
 | Detail | Page | `app-detail` | — (route param) | — | loading, data, not-found | 1 | — |
 
-**Totals:** 36 tests across 13 spec files, 10 story files.
+**Totals:** 74 tests across 16 spec files, 15 story files.
 
 ---
 
@@ -173,7 +177,7 @@ The list chunk is disproportionately large due to PrimeNG's `TableModule` transi
 - Must use `ng run <project>:storybook`, not `storybook dev` directly. Direct invocation fails with `SB_FRAMEWORK_ANGULAR_0001 (AngularLegacyBuildOptionsError)`.
 - CSS imports in `preview.ts` fail with webpack parse error (`Unexpected character '@'` on `@font-face`) — use CDN link in `preview-head.html` or `angular.json` styles array.
 - Compodoc integration auto-generates component documentation via `documentation.json`.
-- 10 story files cover all design-system components across atoms, molecules, and organisms.
+- 15 story files cover design-system components across atoms, molecules, organisms, and templates.
 
 ### Stylelint
 - **Verdict:** Effective for `.scss`/`.css` files, blind to inline TypeScript styles.
@@ -196,7 +200,7 @@ The list chunk is disproportionately large due to PrimeNG's `TableModule` transi
 ### Vitest
 - **Verdict:** Fast, minimal setup with Angular 21.
 - Angular 21's `@angular/build:unit-test` builder defaults to Vitest.
-- 36 tests run in ~2 seconds.
+- 74 tests run in ~2 seconds.
 - jsdom environment works for rendering tests; PrimeNG `(onClick)` does not fire via DOM click dispatch — full click-through requires Storybook play functions or Playwright.
 - No zone.js or custom polyfills required. Standard `TestBed` works out of the box.
 
@@ -240,13 +244,13 @@ The list chunk is disproportionately large due to PrimeNG's `TableModule` transi
 
 ### Storybook Play Functions as Executable Specs
 
-10 story files provide visual validation of all component states (loading, error, empty, data). Play functions can exercise interactions (click, type, navigate) that unit tests in jsdom cannot cover (e.g., PrimeNG button clicks).
+15 story files provide visual validation of all component states (loading, error, empty, data). Play functions can exercise interactions (click, type, navigate) that unit tests in jsdom cannot cover (e.g., PrimeNG button clicks).
 
 **Assessment:** Works well as a complement to unit tests. The two together cover rendering (unit) and interaction (Storybook) without requiring a full E2E runner during the prototype phase.
 
 ### Unit Tests Map to Acceptance Criteria
 
-36 tests across 13 spec files map directly to acceptance criteria. Each organism has tests for all four core states (loading, error, empty, data). Page smoke tests confirm render-without-error for all three pages.
+74 tests across 16 spec files map directly to acceptance criteria. Each organism has tests for all four core states (loading, error, empty, data). Page smoke tests confirm render-without-error for all three pages.
 
 **Assessment:** Clear traceability from criteria to tests. The GIVEN/WHEN/THEN format in acceptance criteria translates directly to test structure, making it straightforward to verify that every criterion has a corresponding test.
 
@@ -436,12 +440,13 @@ MSW adds two new lazy chunks to the dev build: `chunk-N64DA4IT.js` (249.63 kB ra
 
 - **Doc ref:** acceptance-criteria.md, all sections
 - **Type:** confirmed-works
-- **Detail:** Wrote 36 tests across 13 spec files covering atoms (13 tests), molecules (7 tests), organisms (13 tests), and page smoke tests (3 tests). All tests pass via `npx ng test --no-watch` using Vitest 4.1.0 + jsdom 29.0.1.
+- **Detail:** Wrote 74 tests across 16 spec files covering atoms (15 tests), molecules (9 tests), organisms (26 tests), templates (7 tests), and page tests (17 tests). All tests pass via `npx ng test --no-watch` using Vitest 4.1.0 + jsdom 29.0.1.
 - **Test breakdown:**
-  - **Atoms:** DsButton (4), DsTag (3), DsInput (3), DsEmptyState (3)
-  - **Molecules:** DsStatCard (2), DsSearchBar (3), DsFormField (2)
-  - **Organisms:** DsStatGrid (4), DsProjectCardGrid (4), DsProjectTable (5) — each covers loading/error/empty/data states
-  - **Pages:** Dashboard (1), ListPage (1), Detail (1) — smoke tests confirming render without error
+  - **Atoms:** DsButton (5), DsTag (3), DsInput (3), DsEmptyState (4)
+  - **Molecules:** DsStatCard (2), DsSearchBar (3), DsFormField (4)
+  - **Organisms:** DsStatGrid (5), DsProjectCardGrid (8), DsProjectTable (11), DsProjectDetailCard (2) — each grid/table covers loading/error/empty/data states
+  - **Templates:** DsDashboardLayout (3), DsFullWidthLayout (4) — content-projection shells
+  - **Pages:** Dashboard (6), ListPage (5), Detail (6) — smoke and behaviour tests confirming render without error
 - **Notable findings:**
   1. **PrimeNG p-button (onClick) does not fire via DOM click in jsdom.** The `(onClick)` output on PrimeNG's `p-button` component requires PrimeNG's internal click handling, which does not trigger from `MouseEvent('click')` dispatches in jsdom. Button emission is tested by verifying the output wiring. Full click-through behavior should be validated in Storybook play functions or Playwright.
   2. **Standard DOM events on PrimeNG p-card work fine.** The `(click)` binding on `p-card` in ProjectCardGrid fires correctly from dispatched DOM events.
@@ -528,5 +533,5 @@ Search-no-results (distinct from empty — user took an action), partial failure
 | Storybook 10 | Works with friction | Use `ng run`, CDN for icons, `applicationConfig` for providers |
 | Stylelint | Partial | Blind to inline TypeScript styles — supplement with PR review |
 | httpResource() | Promising but experimental | Wrap behind services, have toSignal fallback ready |
-| Vitest | Fast | 36 tests in 2 seconds, Angular 21 default runner |
+| Vitest | Fast | 74 tests in 2 seconds, Angular 21 default runner |
 | source-map-explorer | Essential | Revealed TableModule pulling 11 unused transitive deps |

@@ -1,6 +1,6 @@
 # Organisms
 
-Data-aware sections that handle multiple render states. Every organism follows the same state machine pattern:
+Data-aware sections that handle multiple render states. List/collection organisms follow the same state machine pattern:
 
 1. **Loading** — skeleton placeholders
 2. **Error** — error message + retry button
@@ -9,6 +9,8 @@ Data-aware sections that handle multiple render states. Every organism follows t
 
 Some organisms add additional states (e.g., search-no-results).
 
+Detail/single-record organisms (e.g. `DsProjectDetailCard`) take a guaranteed input and render only the **data** state — the page that resolves the record owns the loading/error/empty handling before the organism is shown.
+
 ## Components
 
 | Component | Key Feature | States |
@@ -16,6 +18,7 @@ Some organisms add additional states (e.g., search-no-results).
 | [DsStatGrid](./stat-grid/stat-grid.ts) | KPI card grid | loading, error, empty, data |
 | [DsProjectCardGrid](./project-card-grid/project-card-grid.ts) | Clickable project cards | loading, error, empty, data |
 | [DsProjectTable](./project-table/project-table.ts) | Searchable, sortable table | loading, error, empty, search-no-results, data |
+| [DsProjectDetailCard](./project-detail-card/project-detail-card.ts) | Single-project detail card (Avatar, Divider, fields, back action) | data (page owns loading/error/empty) |
 
 ## Key Pattern
 
