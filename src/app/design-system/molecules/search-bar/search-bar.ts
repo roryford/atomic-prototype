@@ -15,7 +15,12 @@ import { DsInput, DsButton } from '../../atoms';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="search-bar" role="search" (keydown.enter)="searched.emit(value())">
-      <ds-input [(value)]="value" [placeholder]="placeholder()" />
+      <ds-input
+        [(value)]="value"
+        [placeholder]="placeholder()"
+        id="search-projects"
+        ariaLabel="Search projects"
+      />
       <ds-button label="Search" severity="primary" (clicked)="searched.emit(value())" />
     </div>
   `,

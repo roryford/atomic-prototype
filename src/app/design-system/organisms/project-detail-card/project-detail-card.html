@@ -1,0 +1,60 @@
+@let p = project();
+<div class="detail-card">
+  <div class="entity-header">
+    <p-avatar
+      [label]="p.ownerInitials"
+      size="xlarge"
+      shape="circle"
+      [style]="{ 'background-color': p.color, color: 'var(--p-surface-0)' }"
+    />
+    <div class="entity-title">
+      <h1>{{ p.name }}</h1>
+      <ds-tag [value]="p.status" [severity]="p.statusSeverity" />
+    </div>
+  </div>
+
+  <p-divider />
+
+  <div class="info-section">
+    <ds-form-field label="Project Name" inputId="field-name">
+      <ds-input [value]="p.name" placeholder="Project Name" id="field-name" [readonly]="true" />
+    </ds-form-field>
+    <ds-form-field label="Owner" inputId="field-owner">
+      <ds-input [value]="p.owner" placeholder="Owner" id="field-owner" [readonly]="true" />
+    </ds-form-field>
+    <ds-form-field label="Created" inputId="field-created">
+      <ds-input
+        [value]="p.createdDate"
+        placeholder="Created"
+        id="field-created"
+        [readonly]="true"
+      />
+    </ds-form-field>
+    <ds-form-field label="Category" inputId="field-category">
+      <ds-input [value]="p.category" placeholder="Category" id="field-category" [readonly]="true" />
+    </ds-form-field>
+    <div class="full-width">
+      <ds-form-field label="Description" [fullWidth]="true" inputId="field-description">
+        <ds-input
+          [value]="p.description"
+          placeholder="Description"
+          id="field-description"
+          [readonly]="true"
+        />
+      </ds-form-field>
+    </div>
+  </div>
+
+  <p-divider />
+
+  <div class="action-buttons">
+    <ds-button label="Edit" severity="primary" />
+    <ds-button label="Delete" severity="danger" />
+    <ds-button
+      label="Back to List"
+      severity="secondary"
+      [outlined]="true"
+      (clicked)="backClicked.emit()"
+    />
+  </div>
+</div>

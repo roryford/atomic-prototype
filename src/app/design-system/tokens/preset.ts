@@ -26,6 +26,7 @@ export default definePreset(Aura, {
     borderRadius: {
       md: '6px',
       lg: '12px',
+      xl: '9999px',
     },
   },
   semantic: {
@@ -47,6 +48,31 @@ export default definePreset(Aura, {
           mutedColor: '#78716C',
         },
       },
+      dark: {
+        primary: {
+          color: '#818CF8',
+          hoverColor: '#A5B4FC',
+          activeColor: '#6366F1',
+        },
+        surface: {
+          '0': '#1C1917',
+          '50': '#292524',
+          '100': '#44403C',
+          '200': '#57534E',
+        },
+        text: {
+          color: '#FAFAF9',
+          mutedColor: '#A8A29E',
+        },
+      },
+    },
+  },
+  extend: {
+    spacing: {
+      xs: '4px',
+      sm: '8px',
+      md: '16px',
+      lg: '24px',
     },
   },
 });

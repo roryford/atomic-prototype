@@ -13,10 +13,23 @@ import { InputText } from 'primeng/inputtext';
   selector: 'ds-input',
   imports: [InputText, FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: ` <input pInputText [(ngModel)]="value" [placeholder]="placeholder()" [id]="id()" /> `,
+  template: `
+    <input
+      pInputText
+      [(ngModel)]="value"
+      [placeholder]="placeholder()"
+      [id]="id()"
+      [readonly]="readonly()"
+      [attr.aria-readonly]="readonly() ? 'true' : null"
+      [attr.aria-label]="ariaLabel() || null"
+    />
+  `,
 })
 export class DsInput {
   value = model<string>('');
   placeholder = input<string>('');
   id = input<string>('');
+  readonly = input<boolean>(false);
+  /** Accessible name for the field when there is no associated visible label. */
+  ariaLabel = input<string>('');
 }

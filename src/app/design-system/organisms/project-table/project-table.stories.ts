@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { within, userEvent } from '@storybook/test';
+import { within, userEvent } from 'storybook/test';
 import { DsProjectTable } from './project-table';
 import type { Project } from '../../../models';
 

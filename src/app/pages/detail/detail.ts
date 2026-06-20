@@ -1,29 +1,16 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Avatar } from 'primeng/avatar';
-import { Divider } from 'primeng/divider';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { Router } from '@angular/router';
 import { Skeleton } from 'primeng/skeleton';
 import { Message } from 'primeng/message';
+import { Divider } from 'primeng/divider';
 import { ProjectService } from '../../services/project.service';
-import { DsFormField } from '../../design-system/molecules/form-field/form-field';
 import { DsButton } from '../../design-system/atoms/button/button';
-import { DsTag } from '../../design-system/atoms/tag/tag';
-import { DsInput } from '../../design-system/atoms/input/input';
+import { DsProjectDetailCard } from '../../design-system/organisms/project-detail-card/project-detail-card';
 import { DsFullWidthLayout } from '../../design-system/templates/full-width-layout/full-width-layout';
 
 @Component({
   selector: 'app-detail',
-  imports: [
-    Avatar,
-    Divider,
-    Skeleton,
-    Message,
-    DsFormField,
-    DsButton,
-    DsTag,
-    DsInput,
-    DsFullWidthLayout,
-  ],
+  imports: [Skeleton, Message, Divider, DsButton, DsProjectDetailCard, DsFullWidthLayout],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ds-full-width-layout [maxWidth]="'720px'">
@@ -64,59 +51,7 @@ import { DsFullWidthLayout } from '../../design-system/templates/full-width-layo
           />
         </div>
       } @else if (project.value(); as p) {
-        <div class="detail-card">
-          <div class="entity-header">
-            <p-avatar
-              [label]="p.ownerInitials"
-              size="xlarge"
-              shape="circle"
-              [style]="{ 'background-color': p.color, color: 'var(--p-surface-0)' }"
-            />
-            <div class="entity-title">
-              <h1>{{ p.name }}</h1>
-              <ds-tag [value]="p.status" [severity]="p.statusSeverity" />
-            </div>
-          </div>
-
-          <p-divider />
-
-          <div class="info-section">
-            <ds-form-field label="Project Name" inputId="field-name">
-              <ds-input [value]="p.name" placeholder="Project Name" id="field-name" />
-            </ds-form-field>
-            <ds-form-field label="Owner" inputId="field-owner">
-              <ds-input [value]="p.owner" placeholder="Owner" id="field-owner" />
-            </ds-form-field>
-            <ds-form-field label="Created" inputId="field-created">
-              <ds-input [value]="p.createdDate" placeholder="Created" id="field-created" />
-            </ds-form-field>
-            <ds-form-field label="Category" inputId="field-category">
-              <ds-input [value]="p.category" placeholder="Category" id="field-category" />
-            </ds-form-field>
-            <div class="full-width">
-              <ds-form-field label="Description" [fullWidth]="true" inputId="field-description">
-                <ds-input
-                  [value]="p.description"
-                  placeholder="Description"
-                  id="field-description"
-                />
-              </ds-form-field>
-            </div>
-          </div>
-
-          <p-divider />
-
-          <div class="action-buttons">
-            <ds-button label="Edit" severity="primary" />
-            <ds-button label="Delete" severity="danger" />
-            <ds-button
-              label="Back to List"
-              severity="secondary"
-              [outlined]="true"
-              (clicked)="goBack()"
-            />
-          </div>
-        </div>
+        <ds-project-detail-card [project]="p" (backClicked)="goBack()" />
       }
     </ds-full-width-layout>
   `,
@@ -139,25 +74,6 @@ import { DsFullWidthLayout } from '../../design-system/templates/full-width-layo
     .error-detail {
       color: var(--p-text-muted-color);
       margin: 0;
-    }
-
-    .entity-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .entity-title {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .entity-title h1 {
-      margin: 0;
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--p-text-color);
     }
 
     .skeleton-header {
@@ -191,19 +107,18 @@ import { DsFullWidthLayout } from '../../design-system/templates/full-width-layo
     .field.full-width {
       grid-column: 1 / -1;
     }
-
-    .action-buttons {
-      display: flex;
-      gap: 0.75rem;
-    }
   `,
 })
 export class Detail {
-  private route = inject(ActivatedRoute);
   private router = inject(Router);
   private projectService = inject(ProjectService);
 
-  project = this.projectService.projectById(Number(this.route.snapshot.paramMap.get('id')));
+  /** Bound to the `:id` route param via withComponentInputBinding(). */
+  id = input.required<string>();
+
+  private numericId = computed(() => Number(this.id()));
+
+  project = this.projectService.projectById(this.numericId);
 
   goBack() {
     this.router.navigate(['/list']);

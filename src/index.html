@@ -6,9 +6,14 @@
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <!-- Security headers -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <!--
+      Real security headers (X-Frame-Options, X-Content-Type-Options,
+      Content-Security-Policy, etc.) MUST be set as HTTP response headers at the
+      host/CDN layer. Browsers ignore http-equiv <meta> for these, so they are
+      not declared here. GitHub Pages (this app's host) cannot set custom
+      headers; a CDN/reverse proxy is required to enforce them in production.
+      The referrer policy below is one of the few directives browsers honour via meta.
+    -->
     <meta name="referrer" content="strict-origin-when-cross-origin" />
   </head>
   <body>

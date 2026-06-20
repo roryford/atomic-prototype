@@ -7,7 +7,12 @@ export class ProjectService {
   projects = httpResource<Project[]>(() => '/api/projects');
   stats = httpResource<DashboardStats[]>(() => '/api/stats');
 
-  projectById(id: number) {
-    return httpResource<Project>(() => `/api/projects/${id}`);
+  /**
+   * Builds a reactive resource for a single project. The `id` is a reactive
+   * accessor (e.g. a signal) so the request re-runs whenever the id changes,
+   * which makes /detail/1 -> /detail/2 re-fetch.
+   */
+  projectById(id: () => number | string) {
+    return httpResource<Project>(() => `/api/projects/${id()}`);
   }
 }

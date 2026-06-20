@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { DsStatGrid } from '../../design-system/organisms/stat-grid/stat-grid';
@@ -19,7 +19,8 @@ import { Project } from '../../models';
       </div>
       <ds-button
         header
-        label="Toggle Dark Mode"
+        [label]="darkModeLabel()"
+        [attr.aria-pressed]="isDarkMode()"
         severity="secondary"
         [outlined]="true"
         (clicked)="toggleDarkMode()"
@@ -74,12 +75,18 @@ export class Dashboard {
   projectService = inject(ProjectService);
   private router = inject(Router);
 
+  protected readonly isDarkMode = signal(document.documentElement.classList.contains('dark-mode'));
+  protected readonly darkModeLabel = computed(() =>
+    this.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode',
+  );
+
   onProjectSelected(project: Project) {
     this.router.navigate(['/detail', project.id]);
   }
 
   toggleDarkMode() {
     const isDark = document.documentElement.classList.toggle('dark-mode');
+    this.isDarkMode.set(isDark);
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }
 }
