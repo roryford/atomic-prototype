@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { DsSearchBar } from './search-bar';
+import { DsButton } from '../../atoms';
 
 describe('DsSearchBar', () => {
   let fixture: ComponentFixture<DsSearchBar>;
@@ -21,18 +23,24 @@ describe('DsSearchBar', () => {
   });
 
   // PrimeNG's p-button (onClick) doesn't fire via DOM click dispatch in jsdom,
-  // so ds-button (clicked) never propagates up in this test environment.
-  // This test verifies the output exists and can emit. Full click-through
-  // testing requires Storybook play functions or Playwright.
-  it('should expose searched output on button click (PrimeNG onClick cannot be triggered in jsdom — verify in Storybook)', () => {
+  // so we trigger the rendered ds-button's `clicked` output directly to exercise
+  // the real (clicked)="searched.emit(value())" template binding.
+  it('should emit searched when the search button is clicked', () => {
     fixture.detectChanges();
     const spy = vi.fn();
     component.searched.subscribe(spy);
 
-    component.value.set('Alpha');
+    // Type a real value into the rendered input.
+    const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
+    input.value = 'Alpha';
+    input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
-    component.searched.emit(component.value());
+    // Click the rendered ds-button via its `clicked` output (its onClick handler).
+    const button = fixture.debugElement.query(By.directive(DsButton));
+    button.componentInstance.clicked.emit();
+    fixture.detectChanges();
+
     expect(spy).toHaveBeenCalledWith('Alpha');
   });
 
@@ -42,11 +50,14 @@ describe('DsSearchBar', () => {
     const spy = vi.fn();
     component.searched.subscribe(spy);
 
-    component.value.set('Alpha');
+    // Type a real value into the rendered input.
+    const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
+    input.value = 'Alpha';
+    input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
     const searchBar = fixture.nativeElement.querySelector('.search-bar');
-    searchBar.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    searchBar.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     fixture.detectChanges();
 
     expect(spy).toHaveBeenCalledWith('Alpha');

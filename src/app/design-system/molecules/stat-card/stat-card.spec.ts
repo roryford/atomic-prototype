@@ -31,6 +31,9 @@ describe('DsStatCard', () => {
     fixture.detectChanges();
 
     const icon = fixture.nativeElement.querySelector('.stat-icon i');
+    // Icon markup is class="pi {{ icon() }}" — must carry BOTH the 'pi' base
+    // class and the specific glyph class.
+    expect(icon.classList.contains('pi')).toBe(true);
     expect(icon.classList.contains('pi-users')).toBe(true);
   });
 });

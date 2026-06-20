@@ -74,4 +74,62 @@ describe('DsProjectCardGrid', () => {
 
     expect(spy).toHaveBeenCalledWith(projects[0]);
   });
+
+  // AC: GIVEN a card, WHEN it carries an accessible name, THEN aria-label names the project
+  it('should expose an aria-label naming the project', () => {
+    const projects = [mockProject(1)];
+    fixture.componentRef.setInput('projects', projects);
+    fixture.detectChanges();
+
+    const card = fixture.nativeElement.querySelector('p-card');
+    expect(card.getAttribute('aria-label')).toBe('View project Project 1');
+  });
+
+  // AC: GIVEN keyboard focus on a card, WHEN Enter pressed, THEN emits projectSelected
+  it('should emit projectSelected on Enter keydown', () => {
+    const projects = [mockProject(1), mockProject(2)];
+    fixture.componentRef.setInput('projects', projects);
+    fixture.detectChanges();
+
+    const spy = vi.fn();
+    component.projectSelected.subscribe(spy);
+
+    const card = fixture.nativeElement.querySelector('p-card');
+    card.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(spy).toHaveBeenCalledWith(projects[0]);
+  });
+
+  // AC: GIVEN keyboard focus on a card, WHEN Space pressed, THEN emits projectSelected
+  it('should emit projectSelected on Space keydown', () => {
+    const projects = [mockProject(1), mockProject(2)];
+    fixture.componentRef.setInput('projects', projects);
+    fixture.detectChanges();
+
+    const spy = vi.fn();
+    component.projectSelected.subscribe(spy);
+
+    const card = fixture.nativeElement.querySelector('p-card');
+    card.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(spy).toHaveBeenCalledWith(projects[0]);
+  });
+
+  // AC: GIVEN keyboard focus on a card, WHEN a non-activating key pressed, THEN no emit
+  it('should not emit projectSelected for other keys', () => {
+    const projects = [mockProject(1)];
+    fixture.componentRef.setInput('projects', projects);
+    fixture.detectChanges();
+
+    const spy = vi.fn();
+    component.projectSelected.subscribe(spy);
+
+    const card = fixture.nativeElement.querySelector('p-card');
+    card.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(spy).not.toHaveBeenCalled();
+  });
 });

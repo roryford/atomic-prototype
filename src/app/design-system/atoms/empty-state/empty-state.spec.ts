@@ -43,4 +43,21 @@ describe('DsEmptyState', () => {
     const button = fixture.nativeElement.querySelector('ds-button');
     expect(button).toBeFalsy();
   });
+
+  // AC: GIVEN the action button, WHEN clicked, THEN actionClicked emits
+  it('should emit actionClicked when the action button is clicked', () => {
+    fixture.componentRef.setInput('message', 'Empty');
+    fixture.componentRef.setInput('actionLabel', 'Create');
+    fixture.detectChanges();
+
+    const spy = vi.fn();
+    fixture.componentInstance.actionClicked.subscribe(spy);
+
+    const button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
+    expect(button).toBeTruthy();
+    button.click();
+    fixture.detectChanges();
+
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
 });

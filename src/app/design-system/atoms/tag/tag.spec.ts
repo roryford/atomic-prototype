@@ -3,37 +3,40 @@ import { DsTag } from './tag';
 
 describe('DsTag', () => {
   let fixture: ComponentFixture<DsTag>;
-  let component: DsTag;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DsTag],
     }).compileComponents();
     fixture = TestBed.createComponent(DsTag);
-    component = fixture.componentInstance;
   });
 
   // AC: GIVEN value="Active", WHEN rendered, THEN displays "Active" text
-  it('should render the tag value', () => {
+  it('should render the tag value in the DOM', () => {
     fixture.componentRef.setInput('value', 'Active');
     fixture.detectChanges();
-    expect(component.value()).toBe('Active');
-    const el = fixture.nativeElement;
-    expect(el.querySelector('p-tag')).toBeTruthy();
+    const tag: HTMLElement = fixture.nativeElement.querySelector('.p-tag');
+    expect(tag).toBeTruthy();
+    expect(tag.textContent).toContain('Active');
   });
 
   // AC: GIVEN severity="success", WHEN rendered, THEN shows success styling
-  it('should render with severity', () => {
+  it('should reflect severity on the rendered tag', () => {
     fixture.componentRef.setInput('value', 'Done');
     fixture.componentRef.setInput('severity', 'success');
     fixture.detectChanges();
-    expect(component.severity()).toBe('success');
+    const tag: HTMLElement = fixture.nativeElement.querySelector('.p-tag');
+    expect(tag.className).toContain('p-tag-success');
   });
 
-  // AC: GIVEN no severity, WHEN rendered, THEN renders without severity
-  it('should render without severity when not provided', () => {
+  // AC: GIVEN no severity, WHEN rendered, THEN renders without a severity class
+  it('should render without a severity class when not provided', () => {
     fixture.componentRef.setInput('value', 'Neutral');
     fixture.detectChanges();
-    expect(component.severity()).toBeUndefined();
+    const tag: HTMLElement = fixture.nativeElement.querySelector('.p-tag');
+    expect(tag).toBeTruthy();
+    expect(tag.className).not.toContain('p-tag-success');
+    expect(tag.className).not.toContain('p-tag-info');
+    expect(tag.className).not.toContain('p-tag-danger');
   });
 });

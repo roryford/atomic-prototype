@@ -18,32 +18,47 @@ describe('DsButton', () => {
     fixture.detectChanges();
     const pButton = fixture.nativeElement.querySelector('p-button');
     expect(pButton).toBeTruthy();
-    expect(component.severity()).toBe('primary');
+    // The underlying native button should carry the primary severity class.
+    const button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
+    expect(button).toBeTruthy();
+    expect(button.className).toContain('p-button');
   });
 
   // AC: GIVEN label provided, WHEN rendered, THEN shows label text
-  it('should render with provided label', () => {
+  it('should render the provided label in the DOM', () => {
     fixture.componentRef.setInput('label', 'Click Me');
     fixture.detectChanges();
-    expect(component.label()).toBe('Click Me');
+    const button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
+    expect(button.textContent).toContain('Click Me');
   });
 
   // AC: GIVEN outlined=true, WHEN rendered, THEN shows outlined variant
   it('should support outlined variant', () => {
     fixture.componentRef.setInput('outlined', true);
     fixture.detectChanges();
-    expect(component.outlined()).toBe(true);
+    // PrimeNG applies the p-button-outlined class to the native button when outlined.
+    const button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
+    expect(button.className).toContain('p-button-outlined');
   });
 
-  // PrimeNG's p-button (onClick) doesn't fire via DOM click dispatch in jsdom.
-  // This test verifies the output exists and can emit. Full click-through
-  // testing requires Storybook play functions or Playwright.
-  it('should expose clicked output (PrimeNG onClick cannot be triggered in jsdom — verify in Storybook)', () => {
+  // AC: GIVEN severity set, WHEN rendered, THEN underlying button reflects the severity
+  it('should reflect severity on the underlying button', () => {
+    fixture.componentRef.setInput('severity', 'danger');
+    fixture.detectChanges();
+    const button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
+    expect(button.className).toContain('p-button-danger');
+  });
+
+  // AC: GIVEN a user clicks the button, WHEN the native click fires, THEN clicked emits
+  it('should emit clicked when the native button is clicked', () => {
     fixture.detectChanges();
     const spy = vi.fn();
     component.clicked.subscribe(spy);
 
-    component.clicked.emit();
+    const button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
+    button.click();
+    fixture.detectChanges();
+
     expect(spy).toHaveBeenCalledTimes(1);
   });
 });

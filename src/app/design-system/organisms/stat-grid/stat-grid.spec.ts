@@ -1,14 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { DsStatGrid } from './stat-grid';
+import { DsButton } from '../../atoms';
 import { DashboardStats } from '../../../models';
 
 describe('DsStatGrid', () => {
   let fixture: ComponentFixture<DsStatGrid>;
+  let component: DsStatGrid;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DsStatGrid],
     }).compileComponents();
     fixture = TestBed.createComponent(DsStatGrid);
+    component = fixture.componentInstance;
   });
 
   // AC: GIVEN isLoading=true, WHEN rendered, THEN shows 4 skeleton rectangles (88px height)
@@ -29,6 +33,24 @@ describe('DsStatGrid', () => {
     expect(message).toBeTruthy();
     const retryBtn = fixture.nativeElement.querySelector('ds-button');
     expect(retryBtn).toBeTruthy();
+  });
+
+  // AC: GIVEN error state, WHEN retry button activated, THEN emits retryClicked
+  it('should emit retryClicked when the retry button is clicked', () => {
+    fixture.componentRef.setInput('error', 'Unable to load stats');
+    fixture.detectChanges();
+
+    const spy = vi.fn();
+    component.retryClicked.subscribe(spy);
+
+    // PrimeNG p-button onClick doesn't fire via DOM dispatch in jsdom; trigger
+    // the rendered ds-button's `clicked` output to exercise the real
+    // (clicked)="retryClicked.emit()" template binding.
+    const retryBtn = fixture.debugElement.query(By.directive(DsButton));
+    retryBtn.componentInstance.clicked.emit();
+    fixture.detectChanges();
+
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 
   // AC: GIVEN stats=[] (empty), WHEN rendered, THEN shows empty state
