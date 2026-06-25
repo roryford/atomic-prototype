@@ -113,9 +113,9 @@ Routed components that wire real data to templates and organisms. The **only** l
 |------|-------|----------|---------------|
 | [Dashboard](../src/app/pages/dashboard/dashboard.ts) | `/dashboard` | Dashboard Layout | DsStatGrid, DsProjectCardGrid |
 | [List](../src/app/pages/list/list.ts) | `/list` | Full-Width | DsProjectTable |
-| [Detail](../src/app/pages/detail/detail.ts) | `/detail/:id` | Full-Width (narrow) | DsFormField, DsTag, DsButton |
+| [Detail](../src/app/pages/detail/detail.ts) | `/detail/:id` | Full-Width (narrow) | DsProjectDetailCard, DsProjectDetailCardSkeleton |
 
-**Key principle:** Pages orchestrate but do not render UI primitives directly. All visual output is delegated to organisms composed of molecules composed of atoms.
+**Key principle:** Pages orchestrate but do not render UI primitives directly. All visual output is delegated to organisms composed of molecules composed of atoms. The Detail page is the worked example: its three resource states map to one design-system component each — loading → `DsProjectDetailCardSkeleton`, error → `DsMessage` + `DsButton`, data → `DsProjectDetailCard`. It imports nothing from `primeng/*`.
 
 ---
 

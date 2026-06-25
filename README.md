@@ -13,7 +13,7 @@ needs to adopt atomic design without guesswork.
 
 The repository includes process documentation (15 guides covering hierarchy,
 tokens, QA, tooling, decision-making, and maturity stages) alongside working
-code (4 atoms, 3 molecules, 4 organisms, and 3 pages). Every component is exercised in
+code (7 atoms, 3 molecules, 5 organisms, and 3 pages). Every component is exercised in
 Storybook and covered by Vitest unit tests.
 
 Target audience: small teams (2-4 developers) building design systems. This
@@ -52,7 +52,9 @@ DsButton                 DsSearchBar               DsStatGrid
 DsInput                  DsStatCard                DsProjectCardGrid
 DsTag                    DsFormField               DsProjectTable
 DsEmptyState                                       DsProjectDetailCard
-                                                   Pages
+DsSkeleton                                         DsProjectDetailCardSkeleton
+DsMessage                                          Pages
+DsDivider                                          -------------------------
                                                    -------------------------
                                                    Dashboard
                                                    List
@@ -86,9 +88,9 @@ npm run build:tokens   # Regenerate preset.ts from tools/token-pipeline/tokens/p
 ```
 src/app/
   design-system/
-    atoms/        — Button, Input, Tag, EmptyState
+    atoms/        — Button, Input, Tag, EmptyState, Skeleton, Message, Divider
     molecules/    — SearchBar, StatCard, FormField
-    organisms/    — StatGrid, ProjectCardGrid, ProjectTable, ProjectDetailCard
+    organisms/    — StatGrid, ProjectCardGrid, ProjectTable, ProjectDetailCard, ProjectDetailCardSkeleton
     templates/    — DashboardLayout, FullWidthLayout (ng-content layout shells)
     tokens/       — PrimeNG theme preset, design tokens
   pages/          — Dashboard, List, Detail
@@ -100,9 +102,9 @@ docs/             — Process guides (00-14) + prototype findings
 
 ## What's Implemented
 
-- **4 atoms:** DsButton, DsTag, DsInput, DsEmptyState
+- **7 atoms:** DsButton, DsTag, DsInput, DsEmptyState, DsSkeleton, DsMessage, DsDivider
 - **3 molecules:** DsStatCard, DsSearchBar, DsFormField
-- **4 organisms:** DsStatGrid, DsProjectCardGrid, DsProjectTable, DsProjectDetailCard
+- **5 organisms:** DsStatGrid, DsProjectCardGrid, DsProjectTable, DsProjectDetailCard, DsProjectDetailCardSkeleton
 - **2 templates:** DsDashboardLayout, DsFullWidthLayout (data-free `ng-content` shells)
 - **3 pages:** Dashboard, List, Detail (each composed into a template shell)
 - **Tooling:** CI (GitHub Actions), ESLint, Stylelint, Playwright E2E with Gherkin/BDD ([`playwright-bdd`](./e2e/README.md)) — **run locally, not in CI** (see below), Storybook, Vitest, MSW mocks

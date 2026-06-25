@@ -7,6 +7,15 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+### Added
+- **`DsSkeleton`, `DsMessage`, and `DsDivider` atoms** — thin wrappers around the PrimeNG primitives the Detail page previously imported directly.
+- **`DsProjectDetailCardSkeleton` organism** — loading placeholder mirroring `DsProjectDetailCard`'s layout, composed from `DsSkeleton` + `DsDivider`.
+- Storybook stories, Vitest specs, and screenshot-catalogue entries for all four new components (84 unit tests total).
+
+### Changed
+- **Detail page now consumes only design-system components** — its loading/error/data states map to `DsProjectDetailCardSkeleton` / `DsMessage` + `DsButton` / `DsProjectDetailCard`. It no longer imports anything from `primeng/*`, completing the "pages delegate rendering, never touch primitives" rule.
+- Documentation reconciled to the new inventory (7 atoms, 5 organisms) across README, component catalogue, and the atomic hierarchy guide.
+
 ## [1.1.1] - 2026-06-20
 
 Adversarial gap audit and remediation: 34 confirmed findings fixed across bugs, test coverage, accessibility, tooling, and documentation accuracy.

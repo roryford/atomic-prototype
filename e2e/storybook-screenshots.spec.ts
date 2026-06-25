@@ -24,6 +24,12 @@ const stories: [string, string, string, string][] = [
   ['atoms', 'Input', 'design-system-atoms-input--with-placeholder', 'input-placeholder'],
   ['atoms', 'EmptyState', 'design-system-atoms-emptystate--default', 'empty-state-default'],
   ['atoms', 'EmptyState', 'design-system-atoms-emptystate--with-action', 'empty-state-action'],
+  ['atoms', 'Skeleton', 'design-system-atoms-skeleton--text', 'skeleton-text'],
+  ['atoms', 'Skeleton', 'design-system-atoms-skeleton--circle', 'skeleton-circle'],
+  ['atoms', 'Message', 'design-system-atoms-message--error-message', 'message-error'],
+  ['atoms', 'Message', 'design-system-atoms-message--info', 'message-info'],
+  ['atoms', 'Divider', 'design-system-atoms-divider--horizontal', 'divider-horizontal'],
+  ['atoms', 'Divider', 'design-system-atoms-divider--dashed', 'divider-dashed'],
 
   // Molecules
   ['molecules', 'StatCard', 'design-system-molecules-statcard--default', 'stat-card-default'],
@@ -74,6 +80,12 @@ const stories: [string, string, string, string][] = [
     'ProjectTable',
     'design-system-organisms-projecttable--search-no-results',
     'table-no-results',
+  ],
+  [
+    'organisms',
+    'ProjectDetailCardSkeleton',
+    'design-system-organisms-projectdetailcardskeleton--default',
+    'detail-card-skeleton',
   ],
 ];
 

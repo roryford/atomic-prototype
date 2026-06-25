@@ -315,7 +315,7 @@ For the full linting tool landscape, see [06-tooling-landscape](./06-tooling-lan
 
 ### Test Runner Setup
 
-If the project was scaffolded with `--skip-tests`, there is no `test` target in `angular.json`. Add the target manually using `@angular/build:unit-test` (Vitest-based). Install `vitest` and `jsdom` as dev dependencies. Use `--watch=false` flag for CI (e.g., `npm run test -- --watch=false`). Angular 21's default test runner completes the suite (43 tests) in ~2 seconds.
+If the project was scaffolded with `--skip-tests`, there is no `test` target in `angular.json`. Add the target manually using `@angular/build:unit-test` (Vitest-based). Install `vitest` and `jsdom` as dev dependencies. Use `--watch=false` flag for CI (e.g., `npm run test -- --watch=false`). Angular 21's default test runner completes the suite (84 tests) in ~2 seconds.
 
 ### PrimeNG Interaction Testing Limitation
 
@@ -335,7 +335,7 @@ PrimeNG's `(onClick)` output on `p-button` does not fire from native DOM click e
 
 ## Enhanced Prototype Learnings
 
-- **OnPush + signals is the expected default.** All 14 components in the prototype use `ChangeDetectionStrategy.OnPush`. With signal-based inputs and zoneless change detection, OnPush adds no behavioral change -- it's a free performance guarantee and signals intent. New components should always set it.
+- **OnPush + signals is the expected default.** All 18 components in the prototype use `ChangeDetectionStrategy.OnPush`. With signal-based inputs and zoneless change detection, OnPush adds no behavioral change -- it's a free performance guarantee and signals intent. New components should always set it.
 
   ```typescript
   @Component({

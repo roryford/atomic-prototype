@@ -111,7 +111,7 @@ OnPush-like behavior is the default.
 > direction but not confirmed at time of writing. In practice, zoneless already
 > provides equivalent granular re-rendering.
 
-> **Prototype practice:** The enhanced prototype explicitly sets `ChangeDetectionStrategy.OnPush` on all 14 components as a best practice. With signals, OnPush adds no behavioral change but documents intent and provides a safety net if the framework ever changes the default.
+> **Prototype practice:** The enhanced prototype explicitly sets `ChangeDetectionStrategy.OnPush` on all 18 components as a best practice. With signals, OnPush adds no behavioral change but documents intent and provides a safety net if the framework ever changes the default.
 
 - **Atoms with signals "just work"** -- a signal write triggers re-render of
   exactly the components that read it.
